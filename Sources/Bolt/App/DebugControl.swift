@@ -48,16 +48,6 @@ final class DebugControl {
         }
     }
 
-    /// When the kernel started this process, so launch time includes dyld and AppKit setup.
-    private static let processStart: Date = {
-        var info = kinfo_proc()
-        var size = MemoryLayout<kinfo_proc>.size
-        var name: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
-        guard sysctl(&name, 4, &info, &size, nil, 0) == 0 else { return Date() }
-        let start = info.kp_proc.p_un.__p_starttime
-        return Date(timeIntervalSince1970: TimeInterval(start.tv_sec) + TimeInterval(start.tv_usec) / 1_000_000)
-    }()
-
     private var controller: ViewerWindowController? {
         session.activeController ?? session.controllers.last
     }
@@ -186,7 +176,7 @@ final class DebugControl {
             "undo": controller.session.history.undoLabel ?? "",
             "windows": controller.session.controllers.count,
             "gridVisibleRect": NSStringFromRect(controller.root.grid.contentView.documentVisibleRect),
-            "launchToFirstFrameMs": ImageCanvasView.firstFrameShownAt.map { Int($0.timeIntervalSince(Self.processStart) * 1000) } ?? -1,
+            "launchToFirstFrameMs": LaunchTimeline.firstFrameMilliseconds ?? -1,
         ]
         if let data = try? JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted, .sortedKeys]) {
             try? data.write(to: url)

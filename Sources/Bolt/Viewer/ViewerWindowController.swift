@@ -50,9 +50,13 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     private(set) var lastDisplayDuration: Duration = .zero
     private let signposter = OSSignposter(subsystem: "org.boltviewer.Bolt", category: "Display")
 
-    init(session: Session) {
+    /// With a `url`, the photo starts decoding before the window is even built: that's what a double-click
+    /// in Finder waits for.
+    init(session: Session, opening url: URL? = nil) {
         self.session = session
         loader = FrameLoader(budget: Preferences.cacheBytes)
+        if let screen = NSScreen.main { loader.fit(to: screen) }
+        if let url, !url.isFolder { loader.schedule([(FrameLoader.Request(url: url, kind: .screen), .current)]) }
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1100, height: 760),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
                               backing: .buffered, defer: false)
@@ -68,15 +72,16 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
         canvas.delegate = self
         root.delegate = self
-        root.grid.delegate = self
-        root.strip.delegate = self
-        root.compare.delegate = self
         statusBar.onSortClick = { [weak self] view in self?.showSortMenu(from: view) }
         loader.onFrame = { [weak self] url, frame in self?.frameDidArrive(url, frame) }
         loader.onFailure = { [weak self] url in self?.frameDidFail(url) }
         gallery.sort(by: Preferences.sortOrder)
         applyPreferences()
-        displayCurrent()
+        if let url {
+            open(url)
+        } else {
+            displayCurrent()
+        }
     }
 
     required init?(coder: NSCoder) { fatalError("not used") }
@@ -96,7 +101,8 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         let folder = isFolder ? url : url.deletingLastPathComponent()
         let focus = isFolder ? nil : url
         if folder != gallery.folder {
-            loader.clear()
+            // A new window has no frames to forget, and keeps the decode its `init` started.
+            if gallery.folder != nil { loader.clear() }
             labels = [:]
             labelFilter = .all
             gallery.setFilter(nil)
@@ -384,10 +390,7 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     // MARK: - Preferences
 
     func applyPreferences() {
-        canvas.background = Preferences.background.color
-        root.compare.background = Preferences.background.color
-        root.grid.background = Preferences.background.color
-        root.strip.background = Preferences.background.color
+        root.background = Preferences.background.color
         loader.setBudget(Preferences.cacheBytes)
         applyChromeVisibility()
     }
@@ -417,18 +420,15 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
     override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
+        // A window opened with a photo already has its first frame.
+        if let frame = canvas.currentFrame { LaunchTimeline.frameShown(sharp: frame.kind != .preview) }
         updateScreenTarget()
         window?.makeFirstResponder(canvas)
     }
 
     /// Frames are decoded for the whole screen, so resizing the window or going full screen costs nothing.
     func updateScreenTarget() {
-        guard let screen = visibleWindow?.screen ?? NSScreen.main else { return }
-        let scale = screen.backingScaleFactor
-        let target = CGSize(width: screen.frame.width * scale, height: screen.frame.height * scale)
-        loader.decodesHDR = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
-        guard target != loader.screenTarget else { return }
-        loader.screenTarget = target
+        guard let screen = visibleWindow?.screen ?? NSScreen.main, loader.fit(to: screen) else { return }
         scheduleFrames()
     }
 }

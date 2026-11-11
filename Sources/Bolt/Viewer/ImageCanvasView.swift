@@ -98,11 +98,8 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         return max(imageFrame.width, imageFrame.height) * backingScale > CGFloat(frame.longSide) * 1.05
     }
 
-    /// When the first photo of this run reached the screen; for measuring cold start.
-    static private(set) var firstFrameShownAt: Date?
-
     func show(_ newFrame: DecodedFrame, for newURL: URL) {
-        if Self.firstFrameShownAt == nil { Self.firstFrameShownAt = Date() }
+        if window?.isVisible == true { LaunchTimeline.frameShown(sharp: newFrame.kind != .preview) }
         currentURL = newURL
         currentFrame = newFrame
         setAccessibilityLabel(newURL.lastPathComponent)

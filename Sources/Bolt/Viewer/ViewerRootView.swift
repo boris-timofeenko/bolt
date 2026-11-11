@@ -1,22 +1,37 @@
 import AppKit
 
+/// Also the delegate of the grid, the strip and the comparison.
 @MainActor
-protocol ViewerRootViewDelegate: AnyObject {
+protocol ViewerRootViewDelegate: PhotoGridDelegate, CompareViewDelegate {
     func rootView(_ view: ViewerRootView, didReceive urls: [URL])
 }
 
 /// Lays out the photo, the status bar and whatever floats above them, and accepts dropped files.
 final class ViewerRootView: NSView {
-    weak var delegate: ViewerRootViewDelegate?
+    weak var delegate: ViewerRootViewDelegate? {
+        didSet { connectPanels() }
+    }
 
     let canvas = ImageCanvasView()
-    let grid = PhotoGridView(style: .grid)
-    let strip = PhotoGridView(style: .strip)
-    let info = InfoPanelView()
-    let compare = CompareView()
     let statusBar = StatusBarView()
     let toast = ToastView()
     private let performanceLabel = NSTextField(labelWithString: "")
+
+    // The grid, the strip, the info panel and the comparison are made the first time they're shown:
+    // a window opened from Finder shows only the photo, and shouldn't build the rest before it.
+    private var loadedGrid: PhotoGridView?
+    private var loadedStrip: PhotoGridView?
+    private var loadedInfo: InfoPanelView?
+    private var loadedCompare: CompareView?
+
+    var grid: PhotoGridView { loadedGrid ?? install(PhotoGridView(style: .grid), as: \.loadedGrid) }
+    var strip: PhotoGridView { loadedStrip ?? install(PhotoGridView(style: .strip), as: \.loadedStrip) }
+    var info: InfoPanelView { loadedInfo ?? install(InfoPanelView(), as: \.loadedInfo) }
+    var compare: CompareView { loadedCompare ?? install(CompareView(), as: \.loadedCompare) }
+
+    var background = NSColor.windowBackgroundColor {
+        didSet { applyBackground() }
+    }
 
     var showsStatusBar = true {
         didSet { needsLayout = true }
@@ -58,10 +73,6 @@ final class ViewerRootView: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         addSubview(canvas)
-        addSubview(grid)
-        addSubview(strip)
-        addSubview(info)
-        addSubview(compare)
         addSubview(statusBar)
         addSubview(performanceLabel)
         addSubview(toast)
@@ -80,24 +91,52 @@ final class ViewerRootView: NSView {
 
     override var isFlipped: Bool { true }
 
+    private func install<Panel: NSView>(_ panel: Panel, as slot: ReferenceWritableKeyPath<ViewerRootView, Panel?>) -> Panel {
+        self[keyPath: slot] = panel
+        // Under the status bar and anything floating above the photo.
+        addSubview(panel, positioned: .below, relativeTo: statusBar)
+        connectPanels()
+        applyBackground()
+        needsLayout = true
+        return panel
+    }
+
+    private func connectPanels() {
+        loadedGrid?.delegate = delegate
+        loadedStrip?.delegate = delegate
+        loadedCompare?.delegate = delegate
+    }
+
+    private func applyBackground() {
+        canvas.background = background
+        loadedGrid?.background = background
+        loadedStrip?.background = background
+        loadedCompare?.background = background
+    }
+
     override func layout() {
         super.layout()
         let barVisible = showsStatusBar || forceStatusBar
         let barHeight = barVisible ? StatusBarView.height : 0
         statusBar.isHidden = !barVisible
         let infoWidth = showsInfo ? InfoPanelView.width : 0
-        info.isHidden = !showsInfo
-        info.frame = NSRect(x: bounds.width - infoWidth, y: 0, width: InfoPanelView.width, height: bounds.height - barHeight)
+        let info = showsInfo ? self.info : loadedInfo
+        info?.isHidden = !showsInfo
+        info?.frame = NSRect(x: bounds.width - infoWidth, y: 0, width: InfoPanelView.width, height: bounds.height - barHeight)
         let content = NSRect(x: 0, y: 0, width: bounds.width - infoWidth, height: bounds.height - barHeight)
         let stripHeight = showsStrip && !showsGrid ? PhotoGridView.stripHeight : 0
-        grid.isHidden = !showsGrid
         canvas.isHidden = showsGrid || showsCompare
-        compare.isHidden = showsGrid || !showsCompare
-        strip.isHidden = stripHeight == 0
-        grid.frame = content
         canvas.frame = NSRect(x: 0, y: 0, width: content.width, height: content.height - stripHeight)
-        compare.frame = canvas.frame
-        strip.frame = NSRect(x: 0, y: content.maxY - stripHeight, width: content.width, height: PhotoGridView.stripHeight)
+        let grid = showsGrid ? self.grid : loadedGrid
+        grid?.isHidden = !showsGrid
+        grid?.frame = content
+        let compareShown = showsCompare && !showsGrid
+        let compare = compareShown ? self.compare : loadedCompare
+        compare?.isHidden = !compareShown
+        compare?.frame = canvas.frame
+        let strip = stripHeight > 0 ? self.strip : loadedStrip
+        strip?.isHidden = stripHeight == 0
+        strip?.frame = NSRect(x: 0, y: content.maxY - stripHeight, width: content.width, height: PhotoGridView.stripHeight)
         statusBar.frame = NSRect(x: 0, y: bounds.height - barHeight, width: bounds.width, height: StatusBarView.height)
         // Overlays cover the photo; in the grid there's no photo, so they take the whole area.
         overlay?.frame = showsGrid ? content : canvas.frame

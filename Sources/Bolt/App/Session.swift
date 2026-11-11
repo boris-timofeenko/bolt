@@ -21,8 +21,9 @@ final class Session {
     // MARK: - Windows
 
     @discardableResult
-    func newWindow() -> ViewerWindowController {
-        let controller = ViewerWindowController(session: self)
+    func newWindow(opening url: URL? = nil) -> ViewerWindowController {
+        let controller = ViewerWindowController(session: self, opening: url)
+        LaunchTimeline.mark("window created")
         if let previous = controllers.last?.window, let window = controller.window {
             window.setFrame(previous.frame, display: false)
             window.setFrameTopLeftPoint(window.cascadeTopLeft(from: NSPoint(x: previous.frame.minX,
@@ -34,6 +35,10 @@ final class Session {
         controller.window?.setFrameAutosaveName("Viewer")
         controllers.append(controller)
         controller.showWindow(nil)
+        // The window appears with its first committed frame. Commit it now rather than after the rest of
+        // launch (the menu, the key monitor): ~15 ms sooner on screen.
+        CATransaction.flush()
+        LaunchTimeline.mark("window shown")
         return controller
     }
 
@@ -55,9 +60,12 @@ final class Session {
             existing.visibleWindow?.makeKeyAndOrderFront(nil)
             return
         }
-        let controller = controllers.first { $0.gallery.folder == nil } ?? newWindow()
-        controller.open(url)
-        controller.visibleWindow?.makeKeyAndOrderFront(nil)
+        if let empty = controllers.first(where: { $0.gallery.folder == nil }) {
+            empty.open(url)
+            empty.visibleWindow?.makeKeyAndOrderFront(nil)
+        } else {
+            newWindow(opening: url)
+        }
     }
 
     func windowDidClose(_ controller: ViewerWindowController) {

@@ -30,6 +30,10 @@ struct Options {
     var checkOnly = false
     /// Posts one press of the next key, to see whether key events reach other apps.
     var probeKey = false
+    /// Only the cold-open runs, for tuning startup.
+    var openOnly = false
+    /// Environment for the launched viewer, e.g. BOLT_LAUNCH_TIMELINE=/tmp/timeline.
+    var launchEnvironment: [String: String] = [:]
 
     init(_ arguments: [String]) {
         var iterator = arguments.dropFirst().makeIterator()
@@ -45,6 +49,10 @@ struct Options {
             case "--snapshots": snapshots = iterator.next().map { URL(fileURLWithPath: $0) }
             case "--check": checkOnly = true
             case "--probe-key": probeKey = true
+            case "--open-only": openOnly = true
+            case "--launch-env":
+                let pair = (iterator.next() ?? "").split(separator: "=", maxSplits: 1).map(String.init)
+                if pair.count == 2 { launchEnvironment[pair[0]] = pair[1] }
             default: break
             }
         }
@@ -300,6 +308,7 @@ final class Driver {
         configuration.activates = true
         // Don't reopen whatever windows the previous run left: every run starts clean.
         configuration.arguments = ["-ApplePersistenceIgnoreState", "YES"]
+        configuration.environment = options.launchEnvironment
         let files = options.openAll ? photos : [photos[0]]
         let start = now()
         _ = try await NSWorkspace.shared.open(files, withApplicationAt: options.app, configuration: configuration)
@@ -436,6 +445,15 @@ func run(_ options: Options) async -> [String: Any] {
         if let visible = measured.visible { openVisible.append(visible) }
         if let sharp = measured.sharp { openSharp.append(sharp) }
         await driver.snapshot("open-\(run)")
+    }
+
+    if options.openOnly {
+        await driver.quitViewer()
+        try? await driver.stream?.stopCapture()
+        return ["app": options.app.deletingPathExtension().lastPathComponent,
+                "openVisibleMs": openVisible, "openSharpMs": openSharp,
+                "openVisible": summary(openVisible), "openSharp": summary(openSharp),
+                "captureDelayMs": summary(calibration)]
     }
 
     await driver.activateViewer()

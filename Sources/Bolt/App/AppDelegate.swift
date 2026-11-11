@@ -8,13 +8,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     private var debugControl: DebugControl?
 
     func applicationWillFinishLaunching(_ notification: Notification) {
-        Self.warmUpDecoder()
+        LaunchTimeline.mark("will finish launching")
         Preferences.registerDefaults()
-        rebuildMenu()
         session.onKeyMapChange = { [weak self] in self?.rebuildMenu() }
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        LaunchTimeline.mark("did finish launching")
+        // Opened from Finder, the photo is already on screen by now: the menu (~10 ms) doesn't delay it.
+        rebuildMenu()
         installKeyMonitor()
         session.startMemoryPressureMonitoring()
         NSApp.servicesProvider = self
@@ -30,16 +32,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         }
     }
 
-    /// The first HEIC decode in a process spends ~100 ms setting up the HEVC decoder. Doing it on a tiny
-    /// bundled file while AppKit is still starting means the photo the user double-clicked doesn't wait for it.
-    private static func warmUpDecoder() {
-        guard let url = Bundle.main.url(forResource: "warmup", withExtension: "heic") else { return }
-        DispatchQueue.global(qos: .userInteractive).async {
-            _ = ImageDecoder.screen(at: url, fitting: CGSize(width: 16, height: 16))
-        }
-    }
-
     func application(_ application: NSApplication, open urls: [URL]) {
+        LaunchTimeline.mark("open request")
         session.open(urls)
     }
 

@@ -46,9 +46,9 @@ final class FrameLoader {
     var onFrame: ((URL, DecodedFrame) -> Void)?
     var onFailure: ((URL) -> Void)?
     /// Pixel size frames are decoded to: the screen, so going full screen needs no new decode.
-    var screenTarget = CGSize(width: 2560, height: 1600)
+    private(set) var screenTarget = CGSize(width: 2560, height: 1600)
     /// True on screens that can show HDR; photos with HDR data are then decoded with it.
-    var decodesHDR = false
+    private(set) var decodesHDR = false
     private(set) var stats = Stats()
 
     private let cache: LRUCache<Request, DecodedFrame>
@@ -68,6 +68,21 @@ final class FrameLoader {
     }
 
     var cachedBytes: Int { cache.totalCost }
+
+    /// Decodes for this screen from now on. True if the frame size changed.
+    @discardableResult
+    func fit(to screen: NSScreen) -> Bool {
+        decodesHDR = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
+        let scale = screen.backingScaleFactor
+        let target = CGSize(width: screen.frame.width * scale, height: screen.frame.height * scale)
+        guard target != screenTarget else { return false }
+        screenTarget = target
+        // Decodes already running are for the old size. Their frames still arrive, but the next
+        // `schedule` starts these photos again at the new one.
+        for operation in pending.values { operation.cancel() }
+        pending.removeAll()
+        return true
+    }
 
     func setBudget(_ bytes: Int) {
         cache.setBudget(bytes)
