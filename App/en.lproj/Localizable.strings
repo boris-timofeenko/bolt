@@ -1,0 +1,16 @@
+/* English text is the key itself; only keys that aren't plain English live here. */
+
+/* Undo history labels: "Undo Move to Trash", "Undone: Move to Trash". */
+"history.trash" = "Move to Trash";
+"history.move %@" = "Move to “%@”";
+"history.copy %@" = "Copy to “%@”";
+"history.rename" = "Rename";
+"history.rotate" = "Rotate";
+"history.flip" = "Flip";
+"history.label" = "Label Change";
+"history.export %@" = "Export as “%@”";
+"history.convert" = "Convert";
+"history.batchRename" = "Rename Photos";
+"history.clean" = "Remove Location";
+"history.crop" = "Crop";
+"history.dateFolders" = "Sort into Date Folders";
