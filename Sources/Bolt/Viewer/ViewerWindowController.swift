@@ -269,8 +269,9 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         return gallery.items[lower...upper].map(\.url)
     }
 
-    /// While an arrow key is held only embedded previews are shown, read a few photos ahead;
-    /// real decoding starts 80 ms after the key is released, so no backlog builds up.
+    /// While an arrow key is held only embedded previews are shown, read a few photos ahead, so no backlog
+    /// builds up. Real decoding starts when the key is released (`finishFastScroll`), or 80 ms after the
+    /// last repeat if the release never comes.
     private func scheduleAfterFastScroll() {
         let ahead = (1...8).map { gallery.currentIndex + direction * $0 }.filter { gallery.items.indices.contains($0) }
         loader.schedule(ahead.map { (FrameLoader.Request(url: gallery.items[$0].url, kind: .preview), .next) })
@@ -278,6 +279,12 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         let work = DispatchWorkItem { [weak self] in self?.scheduleFrames() }
         settleWork = work
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.08, execute: work)
+    }
+
+    /// The held key was released: decode the photo it stopped on now instead of waiting out the pause.
+    func finishFastScroll() {
+        guard settleWork != nil else { return }
+        scheduleFrames()
     }
 
     private func frameDidArrive(_ url: URL, _ frame: DecodedFrame) {

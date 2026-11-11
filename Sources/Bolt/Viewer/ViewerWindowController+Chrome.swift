@@ -23,11 +23,15 @@ extension ViewerWindowController {
         return true
     }
 
-    /// Releasing V stops a Live Photo.
+    /// Releasing V stops a Live Photo; releasing a held arrow gets the photo it stopped on decoded at once.
     func handleKeyUp(_ event: NSEvent) -> Bool {
-        guard livePhotoLayer != nil, session.keyMap.command(for: KeyChord(event: event)) == .livePhoto else { return false }
-        stopLivePhoto()
-        return true
+        let command = session.keyMap.command(for: KeyChord(event: event))
+        if command == .livePhoto, livePhotoLayer != nil {
+            stopLivePhoto()
+            return true
+        }
+        if command?.group == .navigation { finishFastScroll() }
+        return false
     }
 
     func perform(_ command: Command, isRepeat: Bool = false) {
