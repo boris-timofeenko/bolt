@@ -102,15 +102,22 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         if window?.isVisible == true { LaunchTimeline.frameShown(sharp: newFrame.kind != .preview) }
         currentURL = newURL
         currentFrame = newFrame
-        setAccessibilityLabel(newURL.lastPathComponent)
         messageLabel.isHidden = true
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         imageLayer.contents = newFrame.image
         imageLayer.isHidden = false
         setHighDynamicRange(newFrame.isHDR)
-        layoutImage()
+        placeImage()
         CATransaction.commit()
+        // The photo goes to the window server in a commit of its own. The title, the status bar and whatever
+        // else the delegate changes follow in the next one, a frame later at most: committed together, the
+        // photo waited for their text to be laid out and drawn and usually missed a frame.
+        // If something earlier in this event already opened an implicit transaction, the commit above only
+        // nested in it; flushing sends the photo now anyway.
+        if window?.isVisible == true { CATransaction.flush() }
+        setAccessibilityLabel(newURL.lastPathComponent)
+        delegate?.canvasViewportDidChange(self)
         if newFrame.info.isAnimated, newFrame.kind != .preview {
             animate(newURL)
         } else {
@@ -177,6 +184,13 @@ final class ImageCanvasView: NSView, NSDraggingSource {
     }
 
     private func layoutImage() {
+        guard currentFrame != nil else { return }
+        placeImage()
+        delegate?.canvasViewportDidChange(self)
+    }
+
+    /// Size, position and filtering of the image layer for the current frame and viewport.
+    private func placeImage() {
         guard let frame = currentFrame else { return }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -187,7 +201,6 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         let screenPixelsPerBitmapPixel = rect.width * backingScale / CGFloat(frame.image.width)
         imageLayer.magnificationFilter = screenPixelsPerBitmapPixel > 1.5 && frame.isFullResolution ? .nearest : .linear
         CATransaction.commit()
-        delegate?.canvasViewportDidChange(self)
     }
 
     private func backingAligned(_ rect: CGRect) -> CGRect {
