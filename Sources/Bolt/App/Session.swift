@@ -22,17 +22,8 @@ final class Session {
 
     @discardableResult
     func newWindow(opening url: URL? = nil) -> ViewerWindowController {
-        let controller = ViewerWindowController(session: self, opening: url)
+        let controller = ViewerWindowController(session: self, opening: url, after: controllers.last?.window)
         LaunchTimeline.mark("window created")
-        if let previous = controllers.last?.window, let window = controller.window {
-            window.setFrame(previous.frame, display: false)
-            window.setFrameTopLeftPoint(window.cascadeTopLeft(from: NSPoint(x: previous.frame.minX,
-                                                                              y: previous.frame.maxY)))
-        } else if let window = controller.window, !window.setFrameUsingName("Viewer") {
-            window.center()
-        }
-        // Only one window can own the name; the others just cascade.
-        controller.window?.setFrameAutosaveName("Viewer")
         controllers.append(controller)
         controller.showWindow(nil)
         // The window appears with its first committed frame. Commit it now rather than after the rest of

@@ -108,6 +108,13 @@ final class FrameLoader {
     func previewNow(_ url: URL) -> DecodedFrame? {
         let request = Request(url: url, kind: .preview)
         if let cached = cache.value(for: request) { return cached }
+        // Being read in the background already (a new window does that): it's done or nearly done,
+        // whereas one still waiting in the queue could be stuck behind screen-sized decodes.
+        if let operation = pending[request], operation.isExecuting || operation.isFinished, !operation.isCancelled {
+            operation.waitUntilFinished()
+            if let frame = operation.result { cache.insert(frame, for: request, cost: frame.cost) }
+            return operation.result
+        }
         guard let frame = ImageDecoder.preview(at: url) else { return nil }
         cache.insert(frame, for: request, cost: frame.cost)
         return frame
@@ -267,6 +274,8 @@ private final class DecodeOperation: Operation, @unchecked Sendable {
     private let hdr: Bool
     private let completion: @Sendable (DecodeOperation, DecodedFrame?) -> Void
     var signposter: OSSignposter?
+    /// Set before the operation finishes, so it can be read after `waitUntilFinished`.
+    private(set) var result: DecodedFrame?
 
     init(request: FrameLoader.Request, target: CGSize, hdr: Bool,
          completion: @escaping @Sendable (DecodeOperation, DecodedFrame?) -> Void) {
@@ -285,6 +294,7 @@ private final class DecodeOperation: Operation, @unchecked Sendable {
         case .full: ImageDecoder.full(at: request.url, hdr: hdr)
         }
         if let state { signposter?.endInterval("decode", state) }
+        result = frame
         completion(self, frame)
     }
 }

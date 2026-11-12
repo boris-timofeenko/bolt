@@ -24,8 +24,12 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
     private let zoomLabel = StatusBarView.label()
     private let progressLabel = StatusBarView.label(color: .labelColor)
     private let sortButton = NSButton(title: "", target: nil, action: nil)
-    private let leading = NSStackView()
-    private let trailing = NSStackView()
+    /// Thin vertical rules between fields, like the dividers in IrfanView's status bar. Laid out by hand
+    /// with the fields: stack views ran the constraint solver on every photo change and on launch.
+    private var separators: [CALayer] = []
+
+    private var leadingFields: [NSView] { [positionLabel, nameField, labelsField] + detailLabels }
+    private var trailingFields: [NSView] { [progressLabel, zoomLabel, sortButton] }
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -33,11 +37,7 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
 
         nameField.delegate = self
         nameField.lineBreakMode = .byTruncatingMiddle
-        nameField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        for label in detailLabels {
-            label.lineBreakMode = .byTruncatingTail
-            label.setContentCompressionResistancePriority(.init(100), for: .horizontal)
-        }
+        for label in detailLabels { label.lineBreakMode = .byTruncatingTail }
 
         sortButton.isBordered = false
         sortButton.font = .systemFont(ofSize: 11)
@@ -45,14 +45,7 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
         sortButton.target = self
         sortButton.action = #selector(sortClicked)
 
-        for stack in [leading, trailing] {
-            stack.orientation = .horizontal
-            stack.spacing = 0
-            stack.alignment = .centerY
-            addSubview(stack)
-        }
-        add([positionLabel, nameField, labelsField] + detailLabels, to: leading)
-        add([progressLabel, zoomLabel, sortButton], to: trailing)
+        (leadingFields + trailingFields).forEach(addSubview)
         setProgress(nil)
     }
 
@@ -63,13 +56,108 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
 
     override func updateLayer() {
         layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        for separator in separators { separator.backgroundColor = NSColor.separatorColor.cgColor }
     }
+
+    // MARK: - Layout
+
+    // Frames include the 2 pt a text field keeps around its text, so these are 2 pt less than the gaps seen.
+    private static let leftInset: CGFloat = 2
+    private static let rightInset: CGFloat = 4
+    /// A separator with the space around it.
+    private static let separatorWidth: CGFloat = 13
+    /// Narrower than this, a detail is dropped rather than shown as "…".
+    private static let minimumDetailWidth: CGFloat = 40
+    private static let minimumNameWidth: CGFloat = 60
 
     override func layout() {
         super.layout()
-        let trailingWidth = trailing.fittingSize.width
-        trailing.frame = NSRect(x: bounds.width - trailingWidth - 6, y: 0, width: trailingWidth, height: bounds.height)
-        leading.frame = NSRect(x: 4, y: 0, width: max(bounds.width - trailingWidth - 16, 0), height: bounds.height)
+        var rules: [CGFloat] = []
+
+        // Trailing fields keep their full width, right to left.
+        var x = bounds.width - Self.rightInset
+        for (index, field) in trailingFields.filter({ !$0.isHidden }).reversed().enumerated() {
+            if index > 0 {
+                x -= Self.separatorWidth
+                rules.append(x + Self.separatorWidth / 2)
+            }
+            let width = Self.naturalSize(of: field).width
+            x -= width
+            place(field, x: x, width: width)
+        }
+
+        // Leading fields share what's left: details give way first, from the last one, then the name.
+        let available = x - Self.leftInset - 6
+        let fields = leadingFields.filter { !$0.isHidden }
+        var widths = fields.map { $0 === nameField && isRenaming ? renameFieldWidth() : Self.naturalSize(of: $0).width }
+        var shown = Array(repeating: true, count: fields.count)
+        func total() -> CGFloat {
+            zip(widths, shown).reduce(0) { $0 + ($1.1 ? $1.0 : 0) }
+                + CGFloat(max(shown.filter { $0 }.count - 1, 0)) * Self.separatorWidth
+        }
+        for index in fields.indices.reversed() where detailLabels.contains(where: { $0 === fields[index] }) {
+            let excess = total() - available
+            guard excess > 0 else { break }
+            if widths[index] - excess >= Self.minimumDetailWidth {
+                widths[index] -= excess
+            } else {
+                shown[index] = false
+            }
+        }
+        if let name = fields.firstIndex(where: { $0 === nameField }), total() > available {
+            widths[name] = max(widths[name] - (total() - available), Self.minimumNameWidth)
+        }
+
+        x = Self.leftInset
+        var first = true
+        for (index, field) in fields.enumerated() {
+            guard shown[index] else {
+                field.frame = .zero
+                continue
+            }
+            if !first {
+                rules.append(x + Self.separatorWidth / 2)
+                x += Self.separatorWidth
+            }
+            first = false
+            place(field, x: x, width: widths[index])
+            x += widths[index]
+        }
+        placeSeparators(at: rules)
+    }
+
+    /// An editable field has no width of its own: the text's, plus room to type.
+    private func renameFieldWidth() -> CGFloat {
+        max(ceil(nameField.cell?.cellSize.width ?? 0) + 24, 160)
+    }
+
+    /// The intrinsic size plus the padding a control keeps outside it.
+    private static func naturalSize(of field: NSView) -> NSSize {
+        let frame = field.frame(forAlignmentRect: NSRect(origin: .zero, size: field.intrinsicContentSize))
+        return NSSize(width: ceil(frame.width), height: ceil(frame.height))
+    }
+
+    private func place(_ field: NSView, x: CGFloat, width: CGFloat) {
+        let height = Self.naturalSize(of: field).height
+        field.frame = NSRect(x: x, y: floor((bounds.height - height) / 2), width: width, height: height)
+    }
+
+    private func placeSeparators(at positions: [CGFloat]) {
+        while separators.count < positions.count {
+            let separator = CALayer()
+            layer?.addSublayer(separator)
+            separators.append(separator)
+            // The colour depends on the appearance; `updateLayer` sets it.
+            needsDisplay = true
+        }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for (index, separator) in separators.enumerated() {
+            separator.isHidden = index >= positions.count
+            guard index < positions.count else { continue }
+            separator.frame = CGRect(x: floor(positions[index]), y: (bounds.height - 12) / 2, width: 1, height: 12)
+        }
+        CATransaction.commit()
     }
 
     var isRenaming: Bool { renameHandler != nil }
@@ -78,21 +166,18 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
     func setProgress(_ text: String?) {
         progressLabel.stringValue = text ?? ""
         progressLabel.isHidden = text == nil
-        if let index = trailing.arrangedSubviews.firstIndex(of: progressLabel) {
-            trailing.arrangedSubviews[index + 1].isHidden = text == nil
-        }
         needsLayout = true
     }
 
     func update(_ content: Content) {
         positionLabel.stringValue = content.position
         if !isRenaming { nameField.stringValue = content.name }
-        setField(nameField, visible: !content.name.isEmpty)
+        nameField.isHidden = content.name.isEmpty
         labelsField.attributedStringValue = content.labels
-        setField(labelsField, visible: content.labels.length > 0)
+        labelsField.isHidden = content.labels.length == 0
         for (index, label) in detailLabels.enumerated() {
             label.stringValue = index < content.details.count ? content.details[index] : ""
-            setField(label, visible: index < content.details.count)
+            label.isHidden = index >= content.details.count
         }
         zoomLabel.stringValue = content.zoom
         sortButton.title = content.sort
@@ -131,6 +216,10 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
         }
     }
 
+    func controlTextDidChange(_ notification: Notification) {
+        needsLayout = true
+    }
+
     func controlTextDidEndEditing(_ notification: Notification) {
         // Clicking elsewhere keeps what was typed, like Finder.
         if isRenaming { finishRename(with: nameField.stringValue) }
@@ -143,28 +232,14 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
         nameField.isSelectable = false
         nameField.isBezeled = false
         nameField.drawsBackground = false
+        needsLayout = true
         handler(name)
     }
 
     // MARK: - Building blocks
 
-    /// Hides a field together with the divider in front of it.
-    private func setField(_ field: NSView, visible: Bool) {
-        field.isHidden = !visible
-        if let index = leading.arrangedSubviews.firstIndex(of: field), index > 0 {
-            leading.arrangedSubviews[index - 1].isHidden = !visible
-        }
-    }
-
     @objc private func sortClicked() {
         onSortClick?(sortButton)
-    }
-
-    private func add(_ views: [NSView], to stack: NSStackView) {
-        for (index, view) in views.enumerated() {
-            if index > 0 { stack.addArrangedSubview(Self.separator()) }
-            stack.addArrangedSubview(view)
-        }
     }
 
     private static func label(color: NSColor = .secondaryLabelColor) -> NSTextField {
@@ -173,24 +248,5 @@ final class StatusBarView: NSView, NSTextFieldDelegate {
         label.textColor = color
         label.cell?.usesSingleLineMode = true
         return label
-    }
-
-    /// A thin vertical rule with padding, like the dividers in IrfanView's status bar.
-    private static func separator() -> NSView {
-        let container = NSView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        let line = NSBox()
-        line.boxType = .separator
-        line.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(line)
-        NSLayoutConstraint.activate([
-            container.widthAnchor.constraint(equalToConstant: 17),
-            container.heightAnchor.constraint(equalToConstant: 12),
-            line.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            line.topAnchor.constraint(equalTo: container.topAnchor),
-            line.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            line.widthAnchor.constraint(equalToConstant: 1),
-        ])
-        return container
     }
 }

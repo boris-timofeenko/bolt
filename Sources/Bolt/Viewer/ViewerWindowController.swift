@@ -13,7 +13,7 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     let gallery = Gallery()
     let session: Session
     let loader: FrameLoader
-    let root = ViewerRootView()
+    let root: ViewerRootView
 
     var canvas: ImageCanvasView { root.canvas }
     var statusBar: StatusBarView { root.statusBar }
@@ -51,12 +51,17 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     private let signposter = OSSignposter(subsystem: "org.boltviewer.Bolt", category: "Display")
 
     /// With a `url`, the photo starts decoding before the window is even built: that's what a double-click
-    /// in Finder waits for.
-    init(session: Session, opening url: URL? = nil) {
+    /// in Finder waits for. A window opened while others are open cascades from `previous`.
+    init(session: Session, opening url: URL? = nil, after previous: NSWindow? = nil) {
         self.session = session
         loader = FrameLoader(budget: Preferences.cacheBytes)
         if let screen = NSScreen.main { loader.fit(to: screen) }
-        if let url, !url.isFolder { loader.schedule([(FrameLoader.Request(url: url, kind: .screen), .current)]) }
+        if let url, !url.isFolder {
+            // The embedded preview is read on another core too; `displayCurrent` picks it up.
+            loader.schedule([(FrameLoader.Request(url: url, kind: .preview), .current),
+                             (FrameLoader.Request(url: url, kind: .screen), .current)])
+        }
+        root = ViewerRootView()
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1100, height: 760),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
                               backing: .buffered, defer: false)
@@ -66,6 +71,8 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         window.tabbingMode = .disallowed
         window.isReleasedWhenClosed = false
         window.title = "Bolt"
+        // Placed before the photo and the status bar go in: moved after, it would lay them out a second time.
+        Self.place(window, after: previous)
         window.contentView = root
         super.init(window: window)
         window.delegate = self
@@ -85,6 +92,19 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     required init?(coder: NSCoder) { fatalError("not used") }
+
+    /// Cascaded from the previous window, or where the first window was left last time.
+    private static func place(_ window: NSWindow, after previous: NSWindow?) {
+        if let previous {
+            window.setFrame(previous.frame, display: false)
+            window.setFrameTopLeftPoint(window.cascadeTopLeft(from: NSPoint(x: previous.frame.minX,
+                                                                              y: previous.frame.maxY)))
+        } else if !window.setFrameUsingName("Viewer") {
+            window.center()
+        }
+        // Only one window can own the name; the others just cascade.
+        window.setFrameAutosaveName("Viewer")
+    }
 
     /// True for both the normal window and the full-screen one.
     func owns(_ window: NSWindow?) -> Bool {
