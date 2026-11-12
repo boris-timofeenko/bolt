@@ -169,7 +169,7 @@ final class DebugControl {
             "selection": gallery.selection.map(\.lastPathComponent).sorted(),
             "shownURL": canvas.currentURL?.lastPathComponent ?? "",
             "frameKind": canvas.currentFrame.map { "\($0.kind)" } ?? "",
-            "frameSize": canvas.currentFrame.map { "\($0.image.width)x\($0.image.height)" } ?? "",
+            "frameSize": canvas.currentFrame.map { "\($0.width)x\($0.height)" } ?? "",
             "zoom": canvas.zoomRatio,
             "fullscreen": controller.fullscreenWindow != nil,
             "grid": controller.showsGrid,

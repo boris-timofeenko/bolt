@@ -47,8 +47,9 @@ final class FrameLoader {
     var onFailure: ((URL) -> Void)?
     /// Pixel size frames are decoded to: the screen, so going full screen needs no new decode.
     private(set) var screenTarget = CGSize(width: 2560, height: 1600)
-    /// True on screens that can show HDR; photos with HDR data are then decoded with it.
-    private(set) var decodesHDR = false
+    /// How much brighter than white the screen can go: above 1, photos with HDR data are decoded with it.
+    private(set) var headroom: CGFloat = 1
+    var decodesHDR: Bool { headroom > 1 }
     private(set) var stats = Stats()
 
     private let cache: LRUCache<Request, DecodedFrame>
@@ -72,7 +73,7 @@ final class FrameLoader {
     /// Decodes for this screen from now on. True if the frame size changed.
     @discardableResult
     func fit(to screen: NSScreen) -> Bool {
-        decodesHDR = screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1
+        headroom = screen.maximumPotentialExtendedDynamicRangeColorComponentValue
         let scale = screen.backingScaleFactor
         let target = CGSize(width: screen.frame.width * scale, height: screen.frame.height * scale)
         guard target != screenTarget else { return false }
@@ -168,7 +169,7 @@ final class FrameLoader {
         let generation = generations[request.url, default: 0]
         let target = screenTarget
         let signposter = signposter
-        let operation = DecodeOperation(request: request, target: target, hdr: decodesHDR) { [weak self] operation, frame in
+        let operation = DecodeOperation(request: request, target: target, headroom: headroom) { [weak self] operation, frame in
             DispatchQueue.main.async {
                 MainActor.assumeIsolated {
                     self?.finish(operation, frame: frame, generation: generation)
@@ -271,17 +272,17 @@ final class FrameLoader {
 private final class DecodeOperation: Operation, @unchecked Sendable {
     let request: FrameLoader.Request
     private let target: CGSize
-    private let hdr: Bool
+    private let headroom: CGFloat
     private let completion: @Sendable (DecodeOperation, DecodedFrame?) -> Void
     var signposter: OSSignposter?
     /// Set before the operation finishes, so it can be read after `waitUntilFinished`.
     private(set) var result: DecodedFrame?
 
-    init(request: FrameLoader.Request, target: CGSize, hdr: Bool,
+    init(request: FrameLoader.Request, target: CGSize, headroom: CGFloat,
          completion: @escaping @Sendable (DecodeOperation, DecodedFrame?) -> Void) {
         self.request = request
         self.target = target
-        self.hdr = hdr
+        self.headroom = headroom
         self.completion = completion
     }
 
@@ -290,8 +291,8 @@ private final class DecodeOperation: Operation, @unchecked Sendable {
         let state = signposter?.beginInterval("decode", "\(self.request.url.lastPathComponent, privacy: .public)")
         let frame: DecodedFrame? = switch request.kind {
         case .preview: ImageDecoder.preview(at: request.url)
-        case .screen: ImageDecoder.screen(at: request.url, fitting: target, hdr: hdr)
-        case .full: ImageDecoder.full(at: request.url, hdr: hdr)
+        case .screen: ImageDecoder.screen(at: request.url, fitting: target, headroom: headroom)
+        case .full: ImageDecoder.full(at: request.url, hdr: headroom > 1)
         }
         if let state { signposter?.endInterval("decode", state) }
         result = frame

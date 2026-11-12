@@ -53,6 +53,11 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         imageLayer.actions = ["contents": NSNull(), "bounds": NSNull(), "position": NSNull(), "frame": NSNull()]
         imageLayer.contentsGravity = .resize
         imageLayer.minificationFilter = .trilinear
+        if #available(macOS 15, *) {
+            // HDR frames from Core Image are half floats tagged with their headroom; without this the layer
+            // would clip what the screen can't show instead of tone mapping it, as it does for ImageIO's frames.
+            imageLayer.toneMapMode = .ifSupported
+        }
         layer?.addSublayer(imageLayer)
 
         messageLabel.font = .systemFont(ofSize: 13)
@@ -114,7 +119,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         messageLabel.isHidden = true
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        imageLayer.contents = newFrame.image
+        imageLayer.contents = newFrame.layerContents
         imageLayer.isHidden = false
         setHighDynamicRange(newFrame.isHDR)
         placeImage()
@@ -212,7 +217,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         imageLayer.frame = backingAligned(rect)
         imageLayer.contentsScale = backingScale
         // Past 150% show real pixels, not a smoothed guess: that's the point of checking sharpness.
-        let screenPixelsPerBitmapPixel = rect.width * backingScale / CGFloat(frame.image.width)
+        let screenPixelsPerBitmapPixel = rect.width * backingScale / CGFloat(frame.width)
         imageLayer.magnificationFilter = screenPixelsPerBitmapPixel > 1.5 && frame.isFullResolution ? .nearest : .linear
         CATransaction.commit()
     }
@@ -386,10 +391,11 @@ final class ImageCanvasView: NSView, NSDraggingSource {
     private func beginFileDrag(with event: NSEvent) {
         guard let url = currentURL, let frame = currentFrame else { return }
         let item = NSDraggingItem(pasteboardWriter: url as NSURL)
-        let preview = NSImage(cgImage: frame.image, size: .zero)
+        let preview = NSImage(size: NSSize(width: frame.width, height: frame.height))
+        preview.addRepresentation(NSCIImageRep(ciImage: frame.ciImage))
         let longSide: CGFloat = 160
-        let scale = longSide / max(CGFloat(frame.image.width), CGFloat(frame.image.height))
-        let size = NSSize(width: CGFloat(frame.image.width) * scale, height: CGFloat(frame.image.height) * scale)
+        let scale = longSide / CGFloat(frame.longSide)
+        let size = NSSize(width: CGFloat(frame.width) * scale, height: CGFloat(frame.height) * scale)
         let point = convert(event.locationInWindow, from: nil)
         item.setDraggingFrame(NSRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
                                      width: size.width, height: size.height), contents: preview)

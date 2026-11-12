@@ -339,8 +339,8 @@ private final class ImagePasteboardItem: NSObject, NSPasteboardItemDataProvider 
     }
 
     func pasteboard(_ pasteboard: NSPasteboard?, item: NSPasteboardItem, provideDataForType type: NSPasteboard.PasteboardType) {
-        guard let frame = ImageDecoder.full(at: url) else { return }
-        let bitmap = NSBitmapImageRep(cgImage: frame.image)
+        guard let image = ImageDecoder.full(at: url)?.cgImage else { return }
+        let bitmap = NSBitmapImageRep(cgImage: image)
         let data = type == .png ? bitmap.representation(using: .png, properties: [:]) : bitmap.tiffRepresentation
         if let data { item.setData(data, forType: type) }
     }

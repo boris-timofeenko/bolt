@@ -1,4 +1,5 @@
 import CoreGraphics
+import CoreImage
 import Foundation
 import Testing
 @testable import BoltCore
@@ -11,9 +12,27 @@ struct DecoderTests {
         let frame = try #require(ImageDecoder.screen(at: file, fitting: CGSize(width: 150, height: 150)))
 
         #expect(frame.info.pixelSize == CGSize(width: 300, height: 400))
-        #expect(frame.image.width < frame.image.height)
+        #expect(frame.width < frame.height)
         #expect(frame.longSide == 150)
         #expect(frame.kind == .screen)
+    }
+
+    /// Rotating a photo turns the frame already decoded instead of reading the file again.
+    @Test func turningAFrameTurnsItsPixels() throws {
+        let folder = try TemporaryFolder()
+        // The test JPEG gets redder from left to right.
+        let file = try folder.jpeg("landscape.jpg", width: 400, height: 300)
+        let frame = try #require(ImageDecoder.screen(at: file, fitting: CGSize(width: 200, height: 200)))
+        var info = frame.info
+        swap(&info.pixelWidth, &info.pixelHeight)
+
+        let turned = try #require(frame.turned(.right, info: info))
+
+        #expect(turned.width == frame.height && turned.height == frame.width)
+        #expect(turned.kind == frame.kind)
+        // Turned a quarter clockwise, the red end is at the bottom (y = 0 for Core Image).
+        let middle = turned.width / 2
+        #expect(red(of: turned, x: middle, y: 2) > red(of: turned, x: middle, y: turned.height - 3))
     }
 
     @Test func brokenFilesDecodeToNilInsteadOfCrashing() throws {
@@ -52,4 +71,11 @@ struct DecoderTests {
         #expect(date == Date(timeIntervalSince1970: 1_791_802_980.5))
         #expect(ExifDate.parse("0000:00:00 00:00:00") == nil)
     }
+}
+
+private func red(of frame: DecodedFrame, x: Int, y: Int) -> UInt8 {
+    var pixel = [UInt8](repeating: 0, count: 4)
+    CIContext().render(frame.ciImage, toBitmap: &pixel, rowBytes: 4, bounds: CGRect(x: x, y: y, width: 1, height: 1),
+                       format: .RGBA8, colorSpace: nil)
+    return pixel[0]
 }
