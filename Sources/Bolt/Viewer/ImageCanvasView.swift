@@ -20,6 +20,13 @@ final class ImageCanvasView: NSView, NSDraggingSource {
 
     private(set) var currentURL: URL?
     private(set) var currentFrame: DecodedFrame?
+    enum ShownPhase {
+        case willShow, didShow
+    }
+
+    /// Told right before the canvas changes what it shows and right after, with the frame or nil for a blank
+    /// or a message. Set only by the debug channel's scroll benchmark.
+    var onShown: ((ShownPhase, URL?, DecodedFrame?) -> Void)?
     var viewport = Viewport() {
         didSet { if viewport != oldValue { layoutImage() } }
     }
@@ -99,6 +106,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
     }
 
     func show(_ newFrame: DecodedFrame, for newURL: URL) {
+        onShown?(.willShow, newURL, newFrame)
         PresentProbe.mark("show")
         if window?.isVisible == true { LaunchTimeline.frameShown(sharp: newFrame.kind != .preview) }
         currentURL = newURL
@@ -118,6 +126,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         // If something earlier in this event already opened an implicit transaction, the commit above only
         // nested in it; flushing sends the photo now anyway.
         if window?.isVisible == true { CATransaction.flush() }
+        onShown?(.didShow, newURL, newFrame)
         PresentProbe.mark("shown")
         setAccessibilityLabel(newURL.lastPathComponent)
         delegate?.canvasViewportDidChange(self)
@@ -156,6 +165,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
 
     /// Clears the image and shows a short line instead, e.g. for a file that can't be decoded.
     func showMessage(_ text: String, for newURL: URL?) {
+        onShown?(.willShow, newURL, nil)
         animationGeneration += 1
         currentURL = newURL
         currentFrame = nil
@@ -167,6 +177,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         messageLabel.stringValue = text
         messageLabel.isHidden = text.isEmpty
         layoutMessage()
+        onShown?(.didShow, newURL, nil)
     }
 
     /// Blank until the first frame of `newURL` arrives. Never leaves the previous photo up:

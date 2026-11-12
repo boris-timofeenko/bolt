@@ -11,6 +11,11 @@ import BoltCore
 ///   open /path                                              — opens a photo or folder
 ///   bench 200 120 /path/out.json [repeat]                    — steps forward N times, one step per M ms,
 ///                                                              and records how long each step took
+///   taps 100 150 /path/out.json [pgdn] [turn=20] [back]      — separate presses, one per M ms; per press: how long
+///                                                              until the next photo was sharp in the layer
+///   hold 120 90 /path/out.json [delay=400] [back]            — a held arrow key: one press, auto-repeats every
+///                                                              M ms, release; records what each step showed
+///   first 300 /path/out.json                                 — one press M ms after the first frame (ScrollBench)
 ///   convert /path/out.json                                   — converts the folder to JPEG and times it
 ///   command Convert…                                         — runs a command by its title
 /// See scripts/boltctl.swift for the sending side.
@@ -42,6 +47,9 @@ final class DebugControl {
         case "state": writeState(to: URL(fileURLWithPath: argument))
         case "open": session.open([URL(fileURLWithPath: argument)])
         case "bench": bench(argument)
+        case "hold": ScrollBench.start(.hold, argument, in: controller)
+        case "taps": ScrollBench.start(.taps, argument, in: controller)
+        case "first": ScrollBench.startFirstPress(argument, in: controller)
         case "convert": convertAll(to: URL(fileURLWithPath: argument))
         case "command": runCommand(argument)
         default: break
