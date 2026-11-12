@@ -99,6 +99,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
     }
 
     func show(_ newFrame: DecodedFrame, for newURL: URL) {
+        PresentProbe.mark("show")
         if window?.isVisible == true { LaunchTimeline.frameShown(sharp: newFrame.kind != .preview) }
         currentURL = newURL
         currentFrame = newFrame
@@ -109,6 +110,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         imageLayer.isHidden = false
         setHighDynamicRange(newFrame.isHDR)
         placeImage()
+        PresentProbe.presentMarker(in: layer)
         CATransaction.commit()
         // The photo goes to the window server in a commit of its own. The title, the status bar and whatever
         // else the delegate changes follow in the next one, a frame later at most: committed together, the
@@ -116,6 +118,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         // If something earlier in this event already opened an implicit transaction, the commit above only
         // nested in it; flushing sends the photo now anyway.
         if window?.isVisible == true { CATransaction.flush() }
+        PresentProbe.mark("shown")
         setAccessibilityLabel(newURL.lastPathComponent)
         delegate?.canvasViewportDidChange(self)
         if newFrame.info.isAnimated, newFrame.kind != .preview {

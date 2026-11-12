@@ -21,6 +21,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         session.startMemoryPressureMonitoring()
         NSApp.servicesProvider = self
         if DebugControl.isEnabled { debugControl = DebugControl(session: session) }
+        PresentProbe.install(session: session)
         NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil,
                                                queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.session.preferencesDidChange() }
@@ -73,7 +74,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     private func installKeyMonitor() {
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
             let handled = MainActor.assumeIsolated {
-                event.type == .keyDown ? self?.handleKeyDown(event) ?? false : self?.handleKeyUp(event) ?? false
+                guard event.type == .keyDown else { return self?.handleKeyUp(event) ?? false }
+                PresentProbe.mark("keyDown")
+                defer { PresentProbe.handlerEnd() }
+                return self?.handleKeyDown(event) ?? false
             }
             return handled ? nil : event
         }
