@@ -9,7 +9,7 @@ import BoltCore
 ///   snapshot /path/out.png                                  — renders the front viewer window
 ///   state /path/out.json                                    — writes what the viewer shows
 ///   open /path                                              — opens a photo or folder
-///   bench 200 120 /path/out.json [repeat]                    — steps forward N times, one step per M ms,
+///   bench 200 120 /path/out.json                             — steps forward N times, one step per M ms,
 ///                                                              and records how long each step took
 ///   taps 100 150 /path/out.json [pgdn] [turn=20] [back]      — separate presses, one per M ms; per press: how long
 ///                                                              until the next photo was sharp in the layer
@@ -106,7 +106,6 @@ final class DebugControl {
         let words = argument.split(separator: " ").map(String.init)
         guard words.count >= 3, let steps = Int(words[0]), let interval = Int(words[1]), let controller else { return }
         let output = URL(fileURLWithPath: words[2])
-        let isRepeat = words.contains("repeat")
         var samples: [[String: Any]] = []
 
         func step(_ remaining: Int) {
@@ -127,7 +126,7 @@ final class DebugControl {
                 }
                 return
             }
-            controller.perform(.next, isRepeat: isRepeat)
+            controller.perform(.next)
             samples.append(["ms": controller.lastDisplayDuration.milliseconds, "kind": controller.canvas.currentFrame.map { "\($0.kind)" } ?? "",
                             "name": controller.gallery.current?.name ?? ""])
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(interval)) { step(remaining - 1) }

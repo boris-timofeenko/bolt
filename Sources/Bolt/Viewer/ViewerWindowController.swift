@@ -20,6 +20,8 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
     /// +1 when moving forward, -1 backward. Decides prefetch direction and which photo follows a deletion.
     var direction = 1
+    /// Photos the last step skipped: 10 after Page Down, so the next press's photo can be decoded ahead too.
+    private var stepLength = 1
     var lastRepeatable: Command?
     var fullscreenWindow: NSWindow?
     var interfaceHidden = false
@@ -44,7 +46,6 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
     private var isFolderLocal = true
     private var watcher: FolderWatcher?
-    private var settleWork: DispatchWorkItem?
     private var scanGeneration = 0
     /// Main-thread time of the last photo change, for the speed overlay.
     private(set) var lastDisplayDuration: Duration = .zero
@@ -208,7 +209,7 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
     // MARK: - Display
 
-    func displayCurrent(fastScroll: Bool = false) {
+    func displayCurrent() {
         measureDisplay {
             cancelCropIfAnotherPhoto()
             stopLivePhoto()
@@ -224,11 +225,7 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
                 return
             }
             showBestFrame(for: item)
-            if fastScroll {
-                scheduleAfterFastScroll()
-            } else {
-                scheduleFrames()
-            }
+            scheduleFrames()
         }
     }
 
@@ -242,14 +239,17 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         updateChrome()
     }
 
-    /// The sharpest frame already decoded, else the embedded preview read right now, else blank until one arrives.
+    /// The sharpest frame already decoded, else blank until one arrives: `scheduleFrames` asks for the embedded
+    /// preview too, read on a queue of its own in a few milliseconds, and for the sharp frame, ~17 ms for an iPhone
+    /// photo. Only a window that isn't on screen yet waits here for the preview its `init` started reading:
+    /// it would otherwise appear empty.
     private func showBestFrame(for item: PhotoItem) {
         let url = item.url
         if let frame = loader.bestFrame(for: url) {
             canvas.show(frame, for: url)
         } else if loader.hasFailed(url) {
             canvas.showMessage(L("Can't open “%@”", item.name), for: url)
-        } else if isFolderLocal, let preview = loader.previewNow(url) {
+        } else if isFolderLocal, visibleWindow?.isVisible != true, let preview = loader.previewNow(url) {
             canvas.show(preview, for: url)
         } else {
             canvas.showLoading(for: url)
@@ -263,15 +263,22 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     /// Asks for the current photo and its neighbours, most urgent first. Replaces the previous request.
+    /// The same while an arrow key is held: a frame takes ~17 ms to decode, so the ones ahead keep up.
     func scheduleFrames() {
-        settleWork?.cancel()
-        settleWork = nil
         guard !gallery.isEmpty else { return }
         let plan = PrefetchPlan.indices(around: gallery.currentIndex, count: gallery.count, direction: direction)
         let priorities: [FrameLoader.Priority] = [.current, .next, .previous]
         var wanted = plan.enumerated().map { rank, index in
             (FrameLoader.Request(url: gallery.items[index].url, kind: .screen),
              rank < priorities.count ? priorities[rank] : .background)
+        }
+        if let url = gallery.current?.url, canvas.currentURL != url || canvas.currentFrame == nil, isFolderLocal,
+           !loader.hasFailed(url) {
+            // Nothing of this photo on screen yet: its embedded preview fills the gap until the sharp frame.
+            wanted.insert((FrameLoader.Request(url: url, kind: .preview), .current), at: 1)
+        }
+        if let index = nextJumpIndex {
+            wanted.append((FrameLoader.Request(url: gallery.items[index].url, kind: .screen), .background))
         }
         if case .fit = canvas.viewport.mode {} else {
             // Zoomed in, e.g. checking sharpness across a burst: have the next photo's pixels ready too.
@@ -283,34 +290,15 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
             }
         }
         loader.schedule(wanted)
-        loader.retain(around: Set(retentionWindow()))
+        // Only the photos asked for keep their frames. Decoding one again takes ~17 ms, and an HDR frame
+        // is twice the size it was with ImageIO, so frames held further back would cost more than they save.
+        loader.retain(around: Set(wanted.map(\.0.url)))
     }
 
-    /// Frames worth keeping: a little more than the prefetch window, so stepping back a few photos is free
-    /// without holding the whole folder in memory.
-    private func retentionWindow() -> [URL] {
-        let lower = max(gallery.currentIndex - 8, 0)
-        let upper = min(gallery.currentIndex + 12, gallery.count - 1)
-        guard lower <= upper else { return [] }
-        return gallery.items[lower...upper].map(\.url)
-    }
-
-    /// While an arrow key is held only embedded previews are shown, read a few photos ahead, so no backlog
-    /// builds up. Real decoding starts when the key is released (`finishFastScroll`), or 80 ms after the
-    /// last repeat if the release never comes.
-    private func scheduleAfterFastScroll() {
-        let ahead = (1...8).map { gallery.currentIndex + direction * $0 }.filter { gallery.items.indices.contains($0) }
-        loader.schedule(ahead.map { (FrameLoader.Request(url: gallery.items[$0].url, kind: .preview), .next) })
-        settleWork?.cancel()
-        let work = DispatchWorkItem { [weak self] in self?.scheduleFrames() }
-        settleWork = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08, execute: work)
-    }
-
-    /// The held key was released: decode the photo it stopped on now instead of waiting out the pause.
-    func finishFastScroll() {
-        guard settleWork != nil else { return }
-        scheduleFrames()
+    /// Where another step of the same length lands after a jump such as Page Down, so it's decoded ahead too.
+    private var nextJumpIndex: Int? {
+        let index = gallery.currentIndex + direction * stepLength
+        return stepLength > 1 && gallery.items.indices.contains(index) ? index : nil
     }
 
     private func frameDidArrive(_ url: URL, _ frame: DecodedFrame) {
@@ -326,9 +314,8 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     /// Zooming past what the screen-sized frame can show asks for the full image.
-    /// Not while an arrow key is held: then only previews are wanted.
     fileprivate func requestSharperFrameIfNeeded() {
-        if canvas.needsSharperFrame, settleWork == nil { scheduleFrames() }
+        if canvas.needsSharperFrame { scheduleFrames() }
     }
 
     private func frameDidFail(_ url: URL) {
@@ -343,25 +330,28 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
 
     // MARK: - Navigation
 
-    func go(by delta: Int, isRepeat: Bool = false) {
+    func go(by delta: Int) {
         direction = delta < 0 ? -1 : 1
+        stepLength = abs(delta)
         gallery.clearSelection()
         guard gallery.step(by: delta) else {
             updateChrome()
             return
         }
         hideCursorInFullscreen()
-        displayCurrent(fastScroll: isRepeat)
+        displayCurrent()
     }
 
     func go(to index: Int) {
         direction = index >= gallery.currentIndex ? 1 : -1
+        stepLength = 1
         gallery.clearSelection()
         if gallery.move(to: index) { displayCurrent() }
     }
 
     func extendSelection(by delta: Int) {
         direction = delta < 0 ? -1 : 1
+        stepLength = 1
         gallery.extendSelection(by: delta)
         displayCurrent()
     }

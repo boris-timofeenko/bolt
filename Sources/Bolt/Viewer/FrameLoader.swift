@@ -54,6 +54,9 @@ final class FrameLoader {
 
     private let cache: LRUCache<Request, DecodedFrame>
     private let queue = OperationQueue()
+    /// Embedded previews are read apart from the frames: a few milliseconds each, they must not wait behind
+    /// four screen decodes when nothing of the photo is on screen yet.
+    private let previewQueue = OperationQueue()
     private var pending: [Request: DecodeOperation] = [:]
     /// Requests whose decode failed. Per kind: a RAW whose embedded preview shows fine but whose
     /// full decode fails is still a photo that opens.
@@ -66,6 +69,8 @@ final class FrameLoader {
         cache = LRUCache(budget: budget)
         queue.name = "Bolt decode"
         queue.maxConcurrentOperationCount = Self.performanceCoreCount
+        previewQueue.name = "Bolt previews"
+        previewQueue.maxConcurrentOperationCount = 2
     }
 
     var cachedBytes: Int { cache.totalCost }
@@ -136,13 +141,20 @@ final class FrameLoader {
             operation.cancel()
             pending[request] = nil
         }
+        // The photo on screen decodes alone: next to three neighbours it takes about twice as long
+        // (perf-lab/decode/RESULTS.md), and they aren't needed before it is shown.
+        var currentDecode: DecodeOperation?
         for (request, priority) in wanted {
             guard !isSatisfied(request), !failed.contains(request) else { continue }
-            if let operation = pending[request] {
-                if !operation.isExecuting { operation.queuePriority = priority.queuePriority }
-                continue
+            let operation: DecodeOperation
+            if let queued = pending[request] {
+                if !queued.isExecuting { queued.queuePriority = priority.queuePriority }
+                operation = queued
+            } else {
+                let waitsForCurrent = priority != .current && request.kind != .preview
+                operation = enqueue(request, priority: priority, after: waitsForCurrent ? currentDecode : nil)
             }
-            enqueue(request, priority: priority)
+            if priority == .current, request.kind != .preview, currentDecode == nil { currentDecode = operation }
         }
     }
 
@@ -165,7 +177,7 @@ final class FrameLoader {
         }
     }
 
-    private func enqueue(_ request: Request, priority: Priority) {
+    private func enqueue(_ request: Request, priority: Priority, after earlier: DecodeOperation?) -> DecodeOperation {
         let generation = generations[request.url, default: 0]
         let target = screenTarget
         let signposter = signposter
@@ -179,8 +191,10 @@ final class FrameLoader {
         operation.signposter = signposter
         operation.queuePriority = priority.queuePriority
         operation.qualityOfService = priority.qualityOfService
+        if let earlier, !earlier.isFinished { operation.addDependency(earlier) }
         pending[request] = operation
-        queue.addOperation(operation)
+        (request.kind == .preview ? previewQueue : queue).addOperation(operation)
+        return operation
     }
 
     private func finish(_ operation: DecodeOperation, frame: DecodedFrame?, generation: Int) {

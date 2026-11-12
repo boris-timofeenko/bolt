@@ -54,11 +54,11 @@ struct ViewportTests {
 
 struct PrefetchPlanTests {
     @Test func forwardWindowPutsNextThenPreviousFirst() {
-        #expect(PrefetchPlan.indices(around: 10, count: 100, direction: 1) == [10, 11, 9, 12, 13, 14, 8])
+        #expect(PrefetchPlan.indices(around: 10, count: 100, direction: 1, ahead: 4, behind: 2) == [10, 11, 9, 12, 13, 14, 8])
     }
 
     @Test func backwardWindowMirrors() {
-        #expect(PrefetchPlan.indices(around: 10, count: 100, direction: -1) == [10, 9, 11, 8, 7, 6, 12])
+        #expect(PrefetchPlan.indices(around: 10, count: 100, direction: -1, ahead: 4, behind: 2) == [10, 9, 11, 8, 7, 6, 12])
     }
 
     @Test func windowIsClippedToTheList() {

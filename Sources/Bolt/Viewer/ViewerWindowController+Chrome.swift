@@ -19,26 +19,25 @@ extension ViewerWindowController {
         guard let command = session.keyMap.command(for: KeyChord(event: event)) else { return false }
         // Holding a key repeats it; for Live Photos the hold itself is the point, not the repeats.
         if command == .livePhoto, event.isARepeat { return true }
-        perform(command, isRepeat: event.isARepeat)
+        perform(command)
         return true
     }
 
-    /// Releasing V stops a Live Photo; releasing a held arrow gets the photo it stopped on decoded at once.
+    /// Releasing V stops a Live Photo.
     func handleKeyUp(_ event: NSEvent) -> Bool {
         let command = session.keyMap.command(for: KeyChord(event: event))
         if command == .livePhoto, livePhotoLayer != nil {
             stopLivePhoto()
             return true
         }
-        if command?.group == .navigation { finishFastScroll() }
         return false
     }
 
-    func perform(_ command: Command, isRepeat: Bool = false) {
+    func perform(_ command: Command) {
         if slideshowTimer != nil, command.group == .navigation || command == .exitFullscreen { stopSlideshow() }
         switch command {
-        case .next: go(by: 1, isRepeat: isRepeat)
-        case .previous: go(by: -1, isRepeat: isRepeat)
+        case .next: go(by: 1)
+        case .previous: go(by: -1)
         case .first: go(to: 0)
         case .last: go(to: gallery.count - 1)
         case .forward10: go(by: 10)

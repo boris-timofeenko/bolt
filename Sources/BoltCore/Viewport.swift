@@ -114,8 +114,13 @@ public struct Viewport: Equatable, Sendable {
 /// Which frames to decode ahead of time, most urgent first:
 /// current, next, previous, then further along the direction of travel, then further back.
 public enum PrefetchPlan {
+    /// Photos decoded ahead. With frames at ~17 ms, three ahead keep up with a key repeating every 16 ms;
+    /// two fall behind there, and five only take more memory (FLIP-RESULTS.md).
+    public static let ahead = 3
+    public static let behind = 1
+
     public static func indices(around center: Int, count: Int, direction: Int,
-                               ahead: Int = 4, behind: Int = 2) -> [Int] {
+                               ahead: Int = PrefetchPlan.ahead, behind: Int = PrefetchPlan.behind) -> [Int] {
         guard count > 0, (0..<count).contains(center) else { return [] }
         let step = direction < 0 ? -1 : 1
         var order = [center, center + step, center - step]
