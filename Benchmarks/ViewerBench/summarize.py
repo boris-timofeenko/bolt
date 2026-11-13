@@ -31,7 +31,7 @@ def stats(values):
     return f"{statistics.median(values):.0f} / {percentile(values, 0.95):.0f} / {max(values):.0f}"
 
 
-ORDER = ["Bolt", "XnViewMP", "QuickLook", "qlmanage", "ApolloOne", "Preview"]
+ORDER = ["Bolt-after", "Bolt-before", "Bolt", "XnViewMP", "QuickLook", "qlmanage", "ApolloOne", "Preview"]
 
 
 def load(folder):
@@ -134,8 +134,9 @@ def table(folder):
     if any(holds.values()):
         print("\nЗажатая стрелка (системный автоповтор), медиана по кругам, в скобках каждый круг:\n")
         print("| программа | фото/с за всё зажатие | фото/с на автоповторе | чётких среди показанных | "
-              "времени с чётким фото | чёткое после отпускания, мс | ещё менялось после отпускания, мс |")
-        print("|---|---:|---:|---:|---:|---:|---:|")
+              "времени с чётким фото | чёткое после отпускания, мс | ещё менялось после отпускания, мс | "
+              "сдвинулся на, фото | после отпускания отстаёт на, фото |")
+        print("|---|---:|---:|---:|---:|---:|---:|---:|---:|")
 
         def cell(values, fmt):
             values = [v for v in values if v is not None]
@@ -154,7 +155,9 @@ def table(folder):
                   f"{cell([h.get('sharpPhotoShare') for h in items], share)} | "
                   f"{cell([h.get('sharpTimeShare') for h in items], share)} | "
                   f"{cell([h.get('sharpAfterReleaseMs') for h in items], ms)} | "
-                  f"{cell([h.get('lastChangeAfterReleaseMs') for h in items], ms)} |")
+                  f"{cell([h.get('lastChangeAfterReleaseMs') for h in items], ms)} | "
+                  f"{cell([h.get('positionsMoved') for h in items], ms)} | "
+                  f"{cell([h.get('finalPictureBehindBy') for h in items], ms)} |")
         first = next(h for items in holds.values() for h in items)
         print(f"\nАвтоповтор: задержка {first['repeatDelayMs']:.0f} мс, затем каждые {first['repeatIntervalMs']:.0f} мс; "
               f"зажата {first['heldMs'] / 1000:.1f} с.")

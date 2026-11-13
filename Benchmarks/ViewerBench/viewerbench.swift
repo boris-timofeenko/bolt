@@ -36,6 +36,7 @@ import AppKit
 import ApplicationServices
 import CoreImage
 import CoreMedia
+import CryptoKit
 import ScreenCaptureKit
 
 // MARK: - Options
@@ -86,15 +87,30 @@ struct Options {
     var holdSeconds = 3.0
     /// Checks the generic analysis on a made-up recording and exits.
     var selfTest = false
+    /// Posts ⌘ ⇧ ⌥ ⌃ key-ups first (with --probe-key: before its key), to clear a modifier left down.
+    var releaseModifiers = false
+    /// Only saves one frame of the screen to this file (JPEG), to see what is on screen.
+    var screenshot: URL?
     /// Parts of the viewer's window left out when timing the opening, as fractions of the window
     /// (x, y, width, height): ApolloOne's trial notice sits on the photo for a few seconds after launch.
     var openMasks: [CGRect] = []
+    /// What the results call the viewer, instead of the app's name: two builds of one app.
+    var label: String?
+    /// Generic runs: each launch gets BOLT_LAUNCH_TIMELINE=<this>/open-<n>, Bolt's own startup timeline.
+    var timeline: URL?
+    /// Generic runs: seconds between the start of the recording and the first opening.
+    var openDelay = 0.0
+    /// Opens each of these photos of the folder on its own, waits --still-wait seconds and saves the
+    /// screen as PNG into --snapshots: how each viewer shows the same photo.
+    var stills: [String] = []
+    var stillWait = 3.0
 
     var steps: Int { stepsOption ?? (generic ? 30 : 25) }
 
     /// What the results call the viewer.
     var viewerName: String {
-        switch quickLook {
+        if let label { return label }
+        return switch quickLook {
         case "finder": "QuickLook"
         case "qlmanage": "qlmanage"
         default: app.deletingPathExtension().lastPathComponent
@@ -139,8 +155,15 @@ struct Options {
             case "--min-change": thresholds.minChange = iterator.next().flatMap(Double.init) ?? thresholds.minChange
             case "--settle": thresholds.settle = iterator.next().flatMap(Double.init) ?? thresholds.settle
             case "--quicklook": quickLook = iterator.next()
+            case "--label": label = iterator.next()
+            case "--timeline": timeline = iterator.next().map { URL(fileURLWithPath: $0) }
+            case "--open-delay": openDelay = iterator.next().flatMap(Double.init) ?? openDelay
+            case "--stills": stills = (iterator.next() ?? "").split(separator: ",").map(String.init)
+            case "--still-wait": stillWait = iterator.next().flatMap(Double.init) ?? stillWait
             case "--hold-seconds": holdSeconds = iterator.next().flatMap(Double.init) ?? holdSeconds
             case "--self-test": selfTest = true
+            case "--release-modifiers": releaseModifiers = true
+            case "--screenshot": screenshot = iterator.next().map { URL(fileURLWithPath: $0) }
             case "--open-mask":
                 let parts = (iterator.next() ?? "").split(separator: ",").compactMap { Double($0) }
                 if parts.count == 4 { openMasks.append(CGRect(x: parts[0], y: parts[1], width: parts[2], height: parts[3])) }
@@ -524,6 +547,10 @@ final class Driver {
 
     /// `qlmanage -p`, when that is the viewer.
     var qlmanage: Process?
+    /// Added to the launch environment of the next launch.
+    var extraEnvironment: [String: String] = [:]
+    /// --stills: the photo the next launch opens, instead of the first one of the folder.
+    var stillPhoto: URL?
     /// Windows on screen just before the space bar: Quick Look's preview is the big one that wasn't.
     var windowsBeforeQuickLook: Set<CGWindowID> = []
     var listViewSet = false
@@ -597,16 +624,17 @@ final class Driver {
 
     /// Selects the first photo in a Finder window of the folder and presses the space bar.
     private func openQuickLookFromFinder() async -> Double? {
-        NSWorkspace.shared.activateFileViewerSelecting([photos[0]])
+        let photo = stillPhoto ?? photos[0]
+        NSWorkspace.shared.activateFileViewerSelecting([photo])
         await pause(1.5)
         guard viewerIsFrontmost else { return nil }
         if !listViewSet {
             // As List (⌘2): the down and up arrows then go through the files in order. Finder remembers
             // the view for this folder.
-            press(19, flags: .maskCommand)
+            press(19, command: true)
             listViewSet = true
             await pause(0.8)
-            NSWorkspace.shared.activateFileViewerSelecting([photos[0]])
+            NSWorkspace.shared.activateFileViewerSelecting([photo])
             await pause(0.8)
             guard viewerIsFrontmost else { return nil }
         }
@@ -725,11 +753,29 @@ final class Driver {
         configuration.activates = true
         // Don't reopen whatever windows the previous run left: every run starts clean.
         configuration.arguments = ["-ApplePersistenceIgnoreState", "YES"]
-        configuration.environment = options.launchEnvironment
-        let files = options.openAll ? photos : [photos[0]]
+        configuration.environment = options.launchEnvironment.merging(extraEnvironment) { $1 }
+        let files = stillPhoto.map { [$0] } ?? (options.openAll ? photos : [photos[0]])
         let start = now()
         _ = try await NSWorkspace.shared.open(files, withApplicationAt: options.app, configuration: configuration)
         return start
+    }
+
+    /// Where the running viewer was launched from: two builds of one app share the bundle identifier.
+    var launchedFrom: String? {
+        guard options.quickLook == nil else { return nil }
+        return NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first?
+            .bundleURL?.resolvingSymlinksInPath().path
+    }
+
+    /// When the viewer's process started, on the recording's clock (seconds), from the kernel.
+    func processStart(_ pid: pid_t) -> Double? {
+        var info = kinfo_proc()
+        var size = MemoryLayout<kinfo_proc>.stride
+        var name: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
+        guard sysctl(&name, 4, &info, &size, nil, 0) == 0, size > 0 else { return nil }
+        let started = info.kp_proc.p_starttime
+        let wall = Double(started.tv_sec) + Double(started.tv_usec) / 1e6
+        return now() - (Date().timeIntervalSince1970 - wall)
     }
 
     var viewerPID: pid_t? {
@@ -781,7 +827,8 @@ final class Driver {
         return list.compactMap { info in
             guard let layer = info[kCGWindowLayer as String] as? Int, layer > 0,
                   let owner = info[kCGWindowOwnerName as String] as? String, !["Dock", "Window Server"].contains(owner),
-                  (info[kCGWindowOwnerPID as String] as? Int).map({ pid_t($0) != getpid() }) ?? true,
+                  // Not ours, and not the viewer's own: Quick Look's preview is a floating panel of Finder.
+                  (info[kCGWindowOwnerPID as String] as? Int).map({ pid_t($0) != getpid() && pid_t($0) != viewerPID }) ?? true,
                   let bounds = info[kCGWindowBounds as String] as? NSDictionary,
                   let rect = CGRect(dictionaryRepresentation: bounds) else { return nil }
             return (owner, CGRect(x: rect.minX * scale, y: rect.minY * scale, width: rect.width * scale,
@@ -794,20 +841,35 @@ final class Driver {
         await pause(0.4)
     }
 
+    /// Presses a key. With `command`, ⌘ itself goes down before and up after, as on a keyboard: a key
+    /// event that only carries the flag leaves the system thinking ⌘ is still held, and the next key
+    /// becomes a shortcut (⌘2 then the space bar opened Spotlight).
     @discardableResult
-    func press(_ key: CGKeyCode, autorepeat: Bool = false, release: Bool = true, flags: CGEventFlags = []) -> Double {
+    func press(_ key: CGKeyCode, autorepeat: Bool = false, release: Bool = true, command: Bool = false) -> Double {
         let source = CGEventSource(stateID: .hidSystemState)
+        if command { CGEvent(keyboardEventSource: source, virtualKey: 55, keyDown: true)!.post(tap: .cghidEventTap) }
         let down = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: true)!
         if autorepeat { down.setIntegerValueField(.keyboardEventAutorepeat, value: 1) }
-        if !flags.isEmpty { down.flags = flags }
+        if command { down.flags.insert(.maskCommand) }
         let time = now()
         down.post(tap: .cghidEventTap)
         if release {
             let up = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: false)!
-            if !flags.isEmpty { up.flags = flags }
+            if command { up.flags.insert(.maskCommand) }
             up.post(tap: .cghidEventTap)
         }
+        if command { releaseModifiers() }
         return time
+    }
+
+    /// ⌘, ⇧, ⌥ and ⌃ up, with no flags left on.
+    func releaseModifiers() {
+        let source = CGEventSource(stateID: .hidSystemState)
+        for key: CGKeyCode in [55, 54, 56, 60, 58, 61, 59, 62] {
+            let up = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: false)!
+            up.flags = []
+            up.post(tap: .cghidEventTap)
+        }
     }
 
     func releaseKey(_ key: CGKeyCode) -> Double {
@@ -977,10 +1039,17 @@ func summary(_ values: [Double]) -> [String: Double] {
 
 @MainActor
 func run(_ options: Options) async -> [String: Any] {
+    if options.releaseModifiers {
+        Driver(options: options).releaseModifiers()
+        if !options.probeKey { return ["released": true, "accessibility": AXIsProcessTrusted()] }
+    }
     if options.probeKey {
         let source = CGEventSource(stateID: .hidSystemState)
-        CGEvent(keyboardEventSource: source, virtualKey: options.nextKey, keyDown: true)?.post(tap: .cghidEventTap)
-        CGEvent(keyboardEventSource: source, virtualKey: options.nextKey, keyDown: false)?.post(tap: .cghidEventTap)
+        for down in [true, false] {
+            let event = CGEvent(keyboardEventSource: source, virtualKey: options.nextKey, keyDown: down)
+            if options.releaseModifiers { event?.flags = [] }
+            event?.post(tap: .cghidEventTap)
+        }
         return ["posted": true, "accessibility": AXIsProcessTrusted()]
     }
     guard CGPreflightScreenCaptureAccess(), AXIsProcessTrusted() else {
@@ -989,6 +1058,17 @@ func run(_ options: Options) async -> [String: Any] {
         return ["error": "permissions", "screen": CGPreflightScreenCaptureAccess(), "accessibility": AXIsProcessTrusted()]
     }
     if options.checkOnly { return ["ok": true] }
+    if let screenshot = options.screenshot {
+        let driver = Driver(options: options)
+        do { try await driver.startRecording() } catch { return ["error": "recording: \(error)"] }
+        await driver.nudge()
+        driver.recorder.snapshot(to: screenshot)
+        await driver.nudge()
+        await pause(0.3)
+        try? await driver.stream?.stopCapture()
+        return ["saved": screenshot.path]
+    }
+    if !options.stills.isEmpty { return await runStills(options) }
     if options.generic { return await runGeneric(options) }
 
     let driver = Driver(options: options)
@@ -1131,6 +1211,9 @@ struct HoldEvent: Codable {
 struct OpenEvent: Codable {
     var start: Double
     var end: Double
+    /// The viewer's process and when it started, on the same clock as start.
+    var pid: Int32?
+    var processStart: Double?
     /// The viewer's window when the wait ended, recording pixels.
     var window: CGRect?
     var hueVisibleMs: Double?
@@ -1174,6 +1257,8 @@ struct Trace: Codable {
     var hold: HoldEvent?
     /// --open-mask, fractions of the window.
     var openMasks: [CGRect]?
+    /// Where the viewer ran from, checked after every launch and before the last quit.
+    var launched: [String]?
 
     /// The middle of a window where an opening is timed, and the cells of `region` in it that nothing
     /// covered. Shared by the run (to know when the opening has settled) and the analysis.
@@ -1222,6 +1307,9 @@ func runGeneric(_ options: Options) async -> [String: Any] {
     if let executable = Bundle(url: options.app)?.executableURL,
        let attributes = try? FileManager.default.attributesOfItem(atPath: executable.path) {
         trace.binary = "\(executable.lastPathComponent) \(attributes[.size] ?? 0) bytes, \(attributes[.modificationDate] ?? "")"
+        if let data = FileManager.default.contents(atPath: executable.path) {
+            trace.binary += ", sha256 " + SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        }
     }
 
     driver.showBackdrop()
@@ -1242,12 +1330,19 @@ func runGeneric(_ options: Options) async -> [String: Any] {
     trace.calibrationStarts = calibration.starts
     trace.calibrationHueMs = calibration.delays
 
+    if options.openDelay > 0 { await pause(options.openDelay) }
     for run in 1...options.openRuns {
         await driver.quitViewer()
+        if let timeline = options.timeline {
+            let folder = timeline.appendingPathComponent("open-\(run)")
+            try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            driver.extraEnvironment["BOLT_LAUNCH_TIMELINE"] = folder.path
+        }
         guard let start = try? await driver.launchViewer() else { return ["error": "launch failed"] }
         // Until the middle of the window has been still for 1.5 s: Preview opening 200 real photos keeps
         // redrawing for longer than 7 s. At least 5 s, at most 25.
         await pause(5)
+        if let error = checkLaunched(driver, &trace) { return ["error": error] }
         // A viewer still busy opening files may not answer accessibility requests at once.
         var frame = driver.viewerWindowFrame()
         for _ in 0..<10 where frame == nil {
@@ -1263,6 +1358,10 @@ func runGeneric(_ options: Options) async -> [String: Any] {
         }
         let end = now()
         var event = OpenEvent(start: start, end: end, window: frame)
+        if options.quickLook == nil, let pid = driver.viewerPID {
+            event.pid = pid
+            event.processStart = driver.processStart(pid)
+        }
         let floating = driver.overlays()
         trace.overlays = (trace.overlays ?? []) + floating.map(\.rect)
         trace.overlayOwners = (trace.overlayOwners ?? []) + floating.map(\.owner)
@@ -1273,6 +1372,20 @@ func runGeneric(_ options: Options) async -> [String: Any] {
         }
         trace.opens.append(event)
         if run == 1 { await driver.snapshot("\(trace.app)-open.jpg") }
+    }
+
+    if options.openOnly {
+        if let error = checkLaunched(driver, &trace) { return ["error": error] }
+        await driver.quitViewer()
+        try? await driver.stream?.stopCapture()
+        trace.frames = driver.recorder.all.count
+        trace.regions = driver.recorder.regions
+        trace.looks = driver.recorder.allLooks.map(Trace.store)
+        let traceURL = options.trace ?? options.output.deletingPathExtension().appendingPathExtension("trace")
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        try? encoder.encode(trace).write(to: traceURL)
+        return analyze(trace, options.thresholds)
     }
 
     await driver.activateViewer()
@@ -1312,6 +1425,7 @@ func runGeneric(_ options: Options) async -> [String: Any] {
     }
     await driver.snapshot("\(trace.app)-after-hold.jpg")
 
+    if let error = checkLaunched(driver, &trace) { return ["error": error] }
     await driver.quitViewer()
     if driver.lostFocus {
         try? await driver.stream?.stopCapture()
@@ -1442,9 +1556,15 @@ func analyzeHold(_ hold: HoldEvent, steps: [StepEvent], looks: [Look], cells: [I
     // Settled pictures from where the hold stopped back to where it started.
     // The walk's last step lands on the photo the hold started from: that one is kept once, last.
     let anchor = looks[anchorIndex]
-    let references = [final] + walk.compactMap(settled).filter { difference($0, anchor, cells) > thresholds.match }
-        + [anchor]
+    let walked = walk.compactMap(settled).filter { difference($0, anchor, cells) > thresholds.match } + [anchor]
+    let references = [final] + walked
     result["references"] = references.count
+    // How far the viewer actually moved, and whether the picture left after release is the photo it is
+    // on: the walk back starts one before it, so a final picture that the walk meets k steps in is k + 1
+    // photos behind.
+    if hold.anchorReached { result["positionsMoved"] = hold.walkedBack }
+    let behind = walked.firstIndex { difference($0, final, cells) <= thresholds.match }.map { $0 + 1 } ?? 0
+    result["finalPictureBehindBy"] = behind
 
     func isSharp(_ look: Look, _ reference: Look) -> Bool {
         difference(look, reference, cells) <= thresholds.match
@@ -1500,6 +1620,67 @@ func analyzeHold(_ hold: HoldEvent, steps: [StepEvent], looks: [Look], cells: [I
     return result
 }
 
+/// --stills: each photo opened on its own in a fresh launch, the window set to 1400×870 pt, then after
+/// --still-wait seconds the whole screen saved as PNG. hdr-compare.swift finds the photo in it.
+@MainActor
+func runStills(_ options: Options) async -> [String: Any] {
+    if options.quickLook == nil, !FileManager.default.fileExists(atPath: options.app.path) {
+        return ["error": "no app at \(options.app.path)", "skipped": true]
+    }
+    guard let folder = options.snapshots else { return ["error": "--stills needs --snapshots"] }
+    try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let driver = Driver(options: options)
+    var trace = Trace()
+    trace.app = options.viewerName
+    if let executable = Bundle(url: options.app)?.executableURL, options.quickLook == nil,
+       let data = FileManager.default.contents(atPath: executable.path) {
+        trace.binary = "\(executable.lastPathComponent) \(data.count) bytes, sha256 "
+            + SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    }
+    driver.showBackdrop()
+    do { try await driver.startRecording() } catch { return ["error": "recording: \(error)"] }
+    await pause(0.5)
+    await driver.quitViewer()
+    var shots: [[String: Any]] = []
+    for name in options.stills {
+        let photo = options.folder.appendingPathComponent(name)
+        var shot: [String: Any] = ["photo": name]
+        defer { shots.append(shot) }
+        guard FileManager.default.fileExists(atPath: photo.path) else { shot["error"] = "no such photo"; continue }
+        driver.stillPhoto = photo
+        await driver.quitViewer()
+        guard (try? await driver.launchViewer()) != nil else { shot["error"] = "launch failed"; continue }
+        for _ in 0..<40 where driver.viewerWindowFrame() == nil { await pause(0.25) }
+        await pause(0.5)
+        if let error = checkLaunched(driver, &trace) { return ["error": error] }
+        shot["resized"] = driver.resizeViewerWindow()
+        await pause(options.stillWait)
+        guard let window = driver.viewerWindowFrame() else { shot["error"] = "no window"; continue }
+        shot["windowPx"] = [window.minX, window.minY, window.width, window.height]
+        let floating = driver.overlays().filter { $0.rect.intersects(window) && !$0.rect.contains(window) }
+        if !floating.isEmpty { shot["overlays"] = floating.map(\.owner) }
+        let file = "\(trace.app)-\(photo.deletingPathExtension().lastPathComponent).png"
+        driver.recorder.snapshot(to: folder.appendingPathComponent(file))
+        await driver.nudge()
+        await pause(0.5)
+        shot["png"] = file
+    }
+    await driver.quitViewer()
+    try? await driver.stream?.stopCapture()
+    var result: [String: Any] = ["app": trace.app, "binary": trace.binary, "mode": "stills",
+                                 "folder": options.folder.path, "stillWaitS": options.stillWait, "shots": shots]
+    if let launched = trace.launched { result["launched"] = launched }
+    return result
+}
+
+/// Records where the running viewer came from; an error if it isn't the app asked for.
+@MainActor func checkLaunched(_ driver: Driver, _ trace: inout Trace) -> String? {
+    guard let path = driver.launchedFrom else { return nil }
+    if !(trace.launched ?? []).contains(path) { trace.launched = (trace.launched ?? []) + [path] }
+    let wanted = driver.options.app.resolvingSymlinksInPath().path
+    return path == wanted ? nil : "launched \(path), not \(wanted)"
+}
+
 func analyze(_ trace: Trace, _ thresholds: Thresholds) -> [String: Any] {
     let looks = trace.decodedLooks()
     let openLooks = looks.filter { $0.region == trace.openRegion }
@@ -1511,6 +1692,7 @@ func analyze(_ trace: Trace, _ thresholds: Thresholds) -> [String: Any] {
         "thresholds": ["appear": thresholds.appear, "sharpDetail": thresholds.sharpDetail,
                        "match": thresholds.match, "minChange": thresholds.minChange, "settle": thresholds.settle],
     ]
+    if let launched = trace.launched { result["launched"] = launched }
     if let window = trace.window {
         result["windowPx"] = [window.minX, window.minY, window.width, window.height]
     }
@@ -1551,6 +1733,13 @@ func analyze(_ trace: Trace, _ thresholds: Thresholds) -> [String: Any] {
                     row["appearedMs"] = timing.appeared
                     row["sharpMs"] = timing.sharp
                     row["blurredMs"] = timing.blurred
+                    // The first frame that differs from the one before the launch at all: the window.
+                    if let before = lastIndex(before: event.start, in: openLooks),
+                       let first = openLooks[(before + 1)...].first(where: {
+                           $0.time <= event.end && difference(openLooks[before], $0, cells) >= thresholds.minChange
+                       }) {
+                        row["firstChangeMs"] = (first.time - event.start) * 1000
+                    }
                     let changed = lastChange(openLooks, cells: cells, from: event.start, to: event.end) ?? event.start
                     row["settledForMs"] = (event.end - changed) * 1000
                     // Still changing when the wait ended: the final picture isn't known.
@@ -1558,10 +1747,13 @@ func analyze(_ trace: Trace, _ thresholds: Thresholds) -> [String: Any] {
                     row["cells"] = cells.count
                 }
             }
+            if let pid = event.pid { row["pid"] = Int(pid) }
+            if let started = event.processStart { row["processStartMs"] = (started - event.start) * 1000 }
             openRows.append(row)
         }
     }
     result["open"] = openRows
+    if trace.stepRegion < 0, trace.steps.isEmpty { return result }
 
     // The settled picture of each photo: from the reference walk, else from a measured step that ended
     // settled. A picture that was still changing when the next key went down isn't used.
