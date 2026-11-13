@@ -26,9 +26,12 @@ cp App/Resources/* "$APP/Contents/Resources/"
 [ -f App/AppIcon.icns ] && cp App/AppIcon.icns "$APP/Contents/Resources/"
 
 if [ -n "${SIGN_IDENTITY:-}" ]; then
+    codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP/Contents/Helpers/bolt"
     codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP"
 else
     # Ad hoc, without the hardened runtime, so local builds can be profiled with sample and Instruments.
+    # The helper first: the x86_64 linker doesn't sign it, and the app's signature covers it.
+    codesign --force --sign - "$APP/Contents/Helpers/bolt"
     codesign --force --sign - "$APP"
 fi
 # Tell Launch Services about the app so Finder lists it under "Open With".
