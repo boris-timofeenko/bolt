@@ -1,122 +1,140 @@
-# Bolt
+![Bolt, a blazingly fast photo viewer for macOS](promo/bolt-en.png)
 
-![Bolt, молниеносный просмотрщик фото для macOS](promo/bolt-ru.png)
+**English** · [Русский](README.ru.md)
 
-Нативный просмотрщик фото для macOS. Открываешь одно фото и листаешь всю папку. Каждое действие с файлом делается одной клавишей и отменяется через ⌘Z.
+A native photo viewer for macOS. Open one photo and flip through the whole folder. Every file action takes one key and can be undone with ⌘Z.
 
-Swift 6 и AppKit, декодер системный (ImageIO и Core Image), сторонних зависимостей нет. Лицензия MIT.
+Swift 6 and AppKit, system decoders (ImageIO and Core Image), no third-party dependencies. Licensed under GPLv3.
 
-## Сборка
+## Building
 
-Нужны macOS 14+ и Swift 6. Command Line Tools достаточно, Xcode не обязателен.
+You need macOS 14+ and Swift 6. The Command Line Tools are enough, Xcode isn't required.
 
 ```bash
 scripts/build-app.sh            # build/Bolt.app, release
 scripts/build-app.sh debug
-scripts/test.sh                 # 83 юнит-теста ядра (Swift Testing)
-scripts/ui-smoke.sh             # 19 проверок собранного приложения настоящими нажатиями
+scripts/test.sh                 # 83 unit tests of the core (Swift Testing)
+scripts/ui-smoke.sh             # 19 checks of the built app with real key presses
 ```
 
-Скрипт подписывает приложение ad hoc и регистрирует его в Launch Services, чтобы Bolt появился в «Открыть в программе». Для раздачи нужен Developer ID: `SIGN_IDENTITY="Developer ID Application: …" scripts/build-app.sh`, потом нотаризация через `notarytool`.
+The script signs the app ad hoc and registers it with Launch Services, so Bolt shows up in "Open With". To distribute it you need a Developer ID: `SIGN_IDENTITY="Developer ID Application: …" scripts/build-app.sh`, then notarize with `notarytool`.
 
-Тестовые фото: `swift scripts/make-test-photos.swift ~/Desktop/test 400 --broken` создаёт 400 HEIC 12 Мп с EXIF и GPS, серии похожих кадров, размытые кадры, портретные с Orientation 6 и несколько битых файлов.
+Test photos: `swift scripts/make-test-photos.swift ~/Desktop/test 400 --broken` creates 400 12 MP HEIC files with EXIF and GPS, bursts of similar shots, blurry shots, portrait shots with Orientation 6 and a few broken files.
 
-## Что умеет
+## Features
 
-**Просмотр.** Файл из Finder открывается сразу, папка дочитывается фоном. Масштаб: вписать, 100% (пиксель в пиксель), по ширине, щипок в точку курсора. Зум и положение сохраняются при листании, поэтому серию удобно проверять на резкость. Свой полноэкранный режим без анимации Spaces. Сетка и лента миниатюр, панель EXIF, сравнение 2–4 фото с общим зумом, GIF/APNG/WebP с анимацией, видео без автозапуска, Live Photo по удержанию V, HDR на экранах с EDR. Новые файлы в папке подхватываются сами.
+**Viewing.** A file from Finder opens right away, the rest of the folder is read in the background. Zoom: fit, 100% (pixel for pixel), fit width, pinch toward the cursor. Zoom and position stay put as you flip, so it's easy to check a burst for sharpness. Its own full screen mode without the Spaces animation. Thumbnail grid and filmstrip, EXIF panel, side-by-side comparison of 2–4 photos with shared zoom, animated GIF/APNG/WebP, video without autoplay, Live Photo while V is held, HDR on EDR displays. New files in the folder are picked up automatically.
 
-**Отбор.** Delete отправляет в Корзину и сразу показывает следующее фото, без диалогов. Цифры 1–9 перемещают фото в назначенные папки, с ⌥ копируют. Если цифра ещё не назначена, открывается выбор папки с нечётким поиском, где можно ввести и новое имя. Флаги P/X/U, рейтинг ⌃1–5, цветные метки ⌃6–9 хранятся в тегах Finder, сами файлы не трогаются. Фильтр по меткам: показать отклонённые, выбрать все (⌘A), удалить. RAW+JPEG, половинки Live Photo и IMG_E-копии айфона перемещаются вместе.
+**Culling.** Delete moves the photo to the Trash and shows the next one at once, with no dialog. Digits 1–9 move the photo to assigned folders, with ⌥ they copy it. If a digit isn't assigned yet, a folder picker with fuzzy search opens, and you can type a new name there too. Flags P/X/U, ratings ⌃1–5 and color labels ⌃6–9 are stored in Finder tags, the files themselves are not touched. Filter by label: show the rejects, select all (⌘A), delete. RAW+JPEG pairs, Live Photo halves and iPhone IMG_E copies move together.
 
-**Правка.** Поворот [ ] и отражение H меняют только тег Orientation, пиксели остаются байт-в-байт (это проверяет тест). Кадрирование C с пропорциями. Экспорт E по последнему пресету («Telegram: JPEG 85%, 2560 px, без геометок»), ⇧E выбирает пресет. Пакетная конвертация, изменение размера и переименование по шаблону `{date:yyyy-MM-dd_HHmmss}_{counter:3}` с предпросмотром. Удаление геометок и серийных номеров без пережатия.
+**Editing.** Rotate [ ] and flip H only change the Orientation tag, the pixels stay byte for byte the same (a test checks this). Crop C with aspect ratios. Export E with the last preset ("Telegram: JPEG 85%, 2560 px, no location"), ⇧E picks a preset. Batch conversion, resizing and renaming by a template like `{date:yyyy-MM-dd_HHmmss}_{counter:3}`, with a preview. Removing location and serial numbers without re-encoding.
 
-Ни одна операция не удаляет файл мимо Корзины и не перезаписывает существующий: при совпадении имён появляется « (2)». Правки по умолчанию сохраняются копией рядом. Режим «заменять оригинал» сначала кладёт оригинал в Корзину, так что ⌘Z возвращает всё как было.
+No operation deletes a file without going through the Trash or overwrites an existing one: on a name clash you get " (2)". Edits are saved as a copy next to the original by default. The "replace original" mode first moves the original to the Trash, so ⌘Z brings everything back.
 
-## Клавиши
+## Keys
 
-Клавиши привязаны к физическим кодам, поэтому работают в русской раскладке. `?` показывает шпаргалку, `/` или ⌘K открывает палитру со всеми командами. В настройках есть профили Bolt, IrfanView и Lightroom, и любую клавишу можно переназначить.
+Keys are bound to physical key codes, so they also work with a Russian or other non-Latin layout. `?` shows a cheat sheet, `/` or ⌘K opens a palette with every command. Settings have Bolt, IrfanView and Lightroom profiles, and any key can be remapped.
 
 | | |
 |---|---|
-| ← → Пробел | листать |
-| Home End PgUp PgDn | в начало, в конец, на 10 |
-| ⌘← ⌘→ ⌘↑ | соседняя папка, папка выше |
-| G T I | сетка, лента, информация |
-| F Esc Tab | полный экран, выход, скрыть интерфейс |
-| Z = − W | вписать ⇄ 100%, зум, по ширине |
-| ⌫ | в Корзину |
-| 1–9, ⌥1–9, ⌘⇧1–9 | переместить, скопировать, назначить папку |
-| M ⇧M | в любую папку, копия в любую папку |
-| P X U, ⌃0–5, ⌃6–9 | флаг, рейтинг, цветная метка |
-| ⇧← ⇧→ | расширить выделение |
-| K | сравнение |
-| . | повторить последнее действие |
-| ⌘Z ⌘⇧Z | отменить, вернуть |
-| ↩ или F2 | переименовать |
-| [ ] H C | повернуть, отразить, кадрировать |
-| E ⇧E | экспорт по пресету, выбор пресета |
-| ⌘C ⌘⇧C ⌘R S O | копировать фото, путь; показать в Finder; поделиться; открыть в редакторе |
+| ← → Space | flip |
+| Home End PgUp PgDn | first, last, by 10 |
+| ⌘← ⌘→ ⌘↑ | neighboring folder, parent folder |
+| G T I | grid, filmstrip, info |
+| F Esc Tab | full screen, exit, hide interface |
+| Z = − W | fit ⇄ 100%, zoom, fit width |
+| ⌫ | to Trash |
+| 1–9, ⌥1–9, ⌘⇧1–9 | move, copy, assign folder |
+| M ⇧M | move to any folder, copy to any folder |
+| P X U, ⌃0–5, ⌃6–9 | flag, rating, color label |
+| ⇧← ⇧→ | extend selection |
+| K | compare |
+| . | repeat last action |
+| ⌘Z ⌘⇧Z | undo, redo |
+| ↩ or F2 | rename |
+| [ ] H C | rotate, flip, crop |
+| E ⇧E | export with preset, choose preset |
+| ⌘C ⌘⇧C ⌘R S O | copy photo, path; show in Finder; share; open in editor |
 
-## Как устроено
+## How it works
 
-`Sources/BoltCore`: всё, что можно проверить без окна: список папки через `getattrlistbulk`, естественная сортировка, модель ленты (`Gallery`), геометрия зума (`Viewport`), декодер, LRU-кэш, журнал файловых операций с отменой (`FileHistory`), экспорт, метки, шаблон переименования. Тесты лежат в `Tests/BoltCoreTests`.
+`Sources/BoltCore`: everything that can be tested without a window: folder listing via `getattrlistbulk`, natural sorting, the filmstrip model (`Gallery`), zoom geometry (`Viewport`), the decoder, an LRU cache, the undoable file operation log (`FileHistory`), export, labels, the rename template. Tests live in `Tests/BoltCoreTests`.
 
-`Sources/Bolt`: приложение на AppKit, SwiftUI только в настройках и диалогах.
+`Sources/Bolt`: the AppKit app, SwiftUI only in settings and dialogs.
 
-Кадр показывается так. Клавиша сдвигает `Gallery`, `displayCurrent` кладёт в `CALayer.contents` лучший готовый кадр из кэша, а `scheduleFrames` просит у `FrameLoader` текущее фото и соседей: 3 вперёд и 1 назад по направлению движения, после Page Down ещё и фото через 10. Соседи начинают декодироваться, когда готово текущее фото. HEIC и JPEG декодирует Core Image (`CoreImageFrames`): сразу в размер экрана, на видеокарте, в `IOSurface`, который слой показывает без копии, около 17 мс на айфонное фото. На экране с EDR фото с картой усиления получают HDR под запас яркости экрана, в half float, это вдвое больше памяти. Остальные форматы, полный кадр для зума 100% и всё, на чём Core Image споткнулся, идут через ImageIO (`CGImageSourceCreateThumbnailAtIndex`). Если кадра в кэше нет (первый Page Down), окно на миг пустеет, встроенное превью читается в фоне и появляется через 10–20 мс, чёткий кадр приходит через 30–45 мс. Зажатая стрелка устроена так же, как отдельные нажатия: декодер успевает за автоповтором. Работа, которая больше не нужна, отменяется, поэтому очередь не копится.
+This is how a frame gets shown. A key moves `Gallery`, `displayCurrent` puts the best ready frame from the cache into `CALayer.contents`, and `scheduleFrames` asks `FrameLoader` for the current photo and its neighbors: 3 ahead and 1 behind in the direction of travel, and after Page Down also the photo 10 further on. The neighbors start decoding once the current photo is ready. HEIC and JPEG are decoded by Core Image (`CoreImageFrames`): straight to screen size, on the GPU, into an `IOSurface` that the layer shows without a copy, about 17 ms for an iPhone photo. On an EDR display, photos with a gain map get HDR up to the display's headroom, in half float, which takes twice the memory. Other formats, the full-size frame for 100% zoom and anything Core Image trips on go through ImageIO (`CGImageSourceCreateThumbnailAtIndex`). If the frame isn't in the cache (the first Page Down), the window goes blank for a moment, the embedded preview is read in the background and shows up in 10–20 ms, and the sharp frame arrives in 30–45 ms. A held arrow key works the same way as separate presses: the decoder keeps up with key repeat. Work that is no longer needed is cancelled, so the queue doesn't pile up.
 
-Файловые операции оптимистичные. Фото пропадает из ленты сразу, а сам перенос идёт на одной последовательной очереди. Если он не удался, фото возвращается в ленту и появляется тост с причиной. Отмена встаёт в ту же очередь, так что ⌘Z сразу после Delete сработает после самого удаления. Длинные пакеты идут параллельно на всех ядрах и попадают в историю одним шагом.
+File operations are optimistic. The photo leaves the filmstrip at once, and the actual move runs on a single serial queue. If it fails, the photo comes back and a toast shows the reason. Undo goes into the same queue, so ⌘Z right after Delete runs after the deletion itself. Long batches run in parallel on all cores and land in the history as one step.
 
-## Замеры
+## Measurements
 
-MacBook (Apple M5, 16 ГБ), macOS 27, синтетические HEIC 12 Мп, release-сборка. Сценарии гоняются внутри приложения через отладочный канал (ниже).
+MacBook Air 15″ (Apple M5, 16 GB), macOS 27, 60 Hz display, release build. Photos: 200 12 MP HEIC files from an iPhone 13, nearly all with an HDR gain map, unless the row says otherwise. The scenarios run inside the app through the debug channel (below).
 
-| | Цель из ТЗ | Сейчас |
+| | Target from the spec | Measured |
 |---|---|---|
-| Холодный запуск до первого кадра | < 250 мс | ~150 мс, чёткий кадр через ~175 мс на айфонных HEIC с HDR (около 500 мс в первый запуск после пересборки) |
-| Смена кадра при листании, медиана / p95 | < 16 / < 50 мс | 5,6 / 6,4 мс, все 150 кадров уже декодированы |
-| То же с лентой и панелью EXIF | | 6,6 / 9,9 мс |
-| Зажатая стрелка | ≥ 30 к/с | 30 и 62 фото/с, чёткое фото на каждом шаге, главный поток ~1 мс на кадр (айфонные HEIC с HDR) |
-| Конвертация HEIC → JPEG | 1000 фото < 60 с | 400 фото за 9 с |
-| Память при листании | кэш ≤ 1 ГБ | 140–390 МБ на айфонных HEIC с HDR |
-| Память в простое | < 150 МБ | 104 МБ: в фоне кэш сжимается до соседних кадров |
+| Cold start to first frame | < 250 ms | ~150 ms, sharp frame at ~175 ms (about 500 ms on the first launch after a rebuild) |
+| Frame change while flipping, median / p95 | < 16 / < 50 ms | 1.2 / 2.2 ms from key to the transaction with the photo, 41 / 49 ms to the photo on screen, frame already decoded |
+| Held arrow key | ≥ 30 fps | 30 and 62 photos/s, a sharp photo at every step, ~1 ms of main thread per frame |
+| HEIC → JPEG conversion | 1000 photos < 60 s | 400 synthetic photos in 9 s |
+| Memory while flipping | cache ≤ 1 GB | 140–390 MB |
+| Memory when idle | < 150 MB | 104 MB on synthetic HEIC: in the background the cache shrinks to the neighboring frames |
 
-На M1 с 8 ГБ не проверял. Проверить стоит прежде всего холодный запуск.
+Of the 41 ms, 1.2 ms is Bolt itself. The rest of the time the frame waits for WindowServer and travels through it to the screen.
 
-Холодный запуск устроен так. Создание `NSApplication` занимает ~45 мс, и за это время на других ядрах прогреваются HEVC-декодер и Core Image: первый HEIC в процессе тратит ~100 мс на настройку декодера, поэтому сначала декодируется крошечный файл из бандла. Фото начинает декодироваться ещё до того, как построено окно, а превью читается в фоне, пока окно строится. Окно встаёт на своё место до того, как в него вставлено содержимое, чтобы не раскладывать его дважды. Строка состояния раскладывается вручную, без Auto Layout. Сетка, лента, EXIF и сравнение создаются, только когда их впервые показывают. Меню собирается, когда окно с фото уже на экране. Время каждого шага пишется в `launch-<pid>.json`, если задать `BOLT_LAUNCH_TIMELINE=<папка>`; бенчмарк передаёт её так: `--open-only --launch-env BOLT_LAUNCH_TIMELINE=/tmp/tl`.
+Not tested on an M1 with 8 GB. Cold start is the first thing worth checking there.
 
-### Сравнение с XnView MP и «Просмотром»
+This is how the cold start works. Creating `NSApplication` takes ~50 ms, and during that time the HEVC decoder and Core Image warm up on other cores: the first HEIC in a process spends ~100 ms setting up the decoder, so a tiny file from the bundle gets decoded first. The photo starts decoding before the window is built, and the preview is read in the background while the window is being built. The window moves into place before its content goes in, so it isn't laid out twice. The status bar is laid out by hand, without Auto Layout. The grid, filmstrip, EXIF panel and comparison view are created only when first shown. The menu is built once the window with the photo is on screen. The time of each step is written to `launch-<pid>.json` if you set `BOLT_LAUNCH_TIMELINE=<folder>`; the benchmark passes it like this: `--open-only --launch-env BOLT_LAUNCH_TIMELINE=/tmp/tl`.
 
-Время от нажатия клавиши (или двойного клика) до фото в записи экрана. Все программы одинаково нажимали клавиши в окне одного размера на одних и тех же 200 HEIC по 12 Мп и 2,6 МБ, по два прогона на каждую. Примерно 25–30 мс в каждой цифре даёт сама запись экрана.
+### Comparison with other viewers
 
-| | Bolt 0.1 | XnView MP 1.12.2 | Просмотр 11 |
-|---|---:|---:|---:|
-| Открыть из Finder, чёткий кадр | 280 мс\*\* | 633 мс | 3392 мс* |
-| Следующее фото, чёткое, медиана / p95 | 41 / 48 мс | 76 / 83 мс | 135 / 158 мс |
-| Листание 6,7 фото/с | 40 мс, ничего не пропущено | 501 мс, 2 из 25 пропущено | 110 мс |
-| Зажатая клавиша, фото в секунду | 26 | 3 | 10 |
-| После отпускания чёткий кадр через | 138 мс | 601 мс | 130–162 мс |
+Time from a key press (or opening from Finder) to a sharp photo in a screen recording. The benchmark presses keys itself with synthetic events and finds the moment the right photo appears in the recording. Photos: 202 HEIC files from an iPhone 13, 193 of them with an HDR gain map. Every app had a 1400 × 870 window and three rounds in shuffled order. One Mac: MacBook Air 15″ with Apple M5 and 16 GB, macOS 27, 60 Hz display.
 
-\* «Просмотр» листает только файлы, открытые вместе, поэтому ему открывали все 200 сразу.
+In our measurements Bolt flips faster than Preview, Quick Look, XnView MP and ApolloOne. Photo Mechanic, FastRawViewer and other viewers were not tested.
 
-\*\* После ускорения запуска, замерено позже остальных строк. Каждый из двух заходов проверялся попеременными запусками с предыдущей сборкой: 336 → 296 мс, затем 303 → 280 мс. В эти сеансы Mac был нагружен сильнее, чем при замере XnView, поэтому разница с ним скорее занижена.
+Presses once every 1000, 400 and 150 ms, 90 of each. Held arrow: three seconds, first repeat after 500 ms, then every 83 ms. Opening from Finder: the app is closed and the benchmark opens a file in it. Median, p95 in parentheses, ms.
 
-Столбец Bolt снят до перехода на Core Image, и запись экрана после него не повторяли. Что изменилось по замерам в самом приложении (`FLIP-RESULTS.md`): зажатая клавиша теперь даёт чёткие фото на каждом шаге, после отпускания ждать нечего, а при открытии из Finder чёткий кадр приходит примерно на 150 мс раньше.
+| | Bolt | ApolloOne 5.1⁷ | XnView MP 1.12.2 | Preview 11 | Quick Look |
+|---|---:|---:|---:|---:|---:|
+| Press every 1000 ms | 31 (49) | 87 (123) | 116 (134) | 140 (166) | 172 (224) |
+| Every 400 ms | 26 (36) | 64 (84) | 107 (131) | 123 (145) | 167 (247) |
+| Every 150 ms | 27 (35) | 64 (85) | 229 (486)¹ | 156 (247)¹ | 197 (238)¹ |
+| Held arrow, photos per second | 10.3 | 6.2 | 2.7 | 6.7 | 0.3² |
+| How many of them sharp | 100% | 100% | 100% | 6% | —² |
+| After release, until sharp frame | 0 | 137 | 780 | 407 | —² |
+| Open from Finder, photo appears | 291 (872) | 2119 (3326)³ | 674 (1140) | 2300 (7765)⁴ | 237 (649)⁵ |
+| Open from Finder, sharp frame | 350 (1938)⁶ | 2119 (3623)³ | 674 (1140) | 8250 (13457)⁴ | 637 (1016)⁵ |
 
-Фото синтетические, но размером и сжатием как айфонные: каждое залито своим цветом с тонкими полосами, по цвету видно, какое фото на экране, а по полосам видно, чёткое оно или ещё размытое превью. XnView работал с настройками по умолчанию.
+¹ These can't keep up. On 59 presses out of 90 XnView MP didn't change the picture before the next press, on 50 out of 90 Preview never got the photo sharp, and on 29 out of 90 Quick Look didn't show the photo.
 
-Повторить: `Benchmarks/build-viewer-bench.sh`, затем разрешить `build/BoltBench.app` запись экрана и универсальный доступ в настройках конфиденциальности, сгенерировать фото и запустить:
+² With synthetic key repeat Quick Look stayed on one photo while the selection in Finder moved. Not checked with a real keyboard.
+
+³ Including app launch and the trial check. ApolloOne is paid, we measured the trial.
+
+⁴ Preview only pages through files opened together, so it was given all 202 at once. Its time includes loading all the files.
+
+⁵ Quick Look was opened with the space bar in an already open Finder window, it doesn't launch an app.
+
+⁶ In two openings after a pause the HDR photo took about a second to reach full brightness, and the benchmark waited for it. This has been fixed, the screen measurement wasn't repeated after the fix.
+
+⁷ Flipping and the held arrow for ApolloOne are counted from two rounds of three: in the first one its filmstrip was open, and 57 presses out of 90 didn't change the photo.
+
+When opening from Finder Bolt isn't first: Quick Look shows the photo sooner, and in the worst cases the sharp frame arrives later than in Quick Look and XnView MP.
+
+The benchmark recognizes a sharp photo by a reference. At the end of a round it goes through every shown photo in the same app, waits 0.6 s on each and stores the settled picture. A recorded frame counts as sharp when it has at least 0.9 of the reference's detail and its brightness is within 2 levels out of 255. XnView ran with default settings.
+
+The screen recording and the probe inside the app use different clocks, which is why Bolt has 31 ms here and 41 ms in the measurements above. The table is good for comparing apps, the probe gives the absolute time.
+
+To reproduce: run `Benchmarks/build-viewer-bench.sh`, allow `build/BoltBench.app` Screen Recording and Accessibility in Privacy & Security settings, and run it on a folder of photos outside `~/Documents`, `~/Desktop` and `~/Downloads`:
 
 ```bash
-swiftc -O Benchmarks/make-bench-photos.swift -o .build/make-bench-photos
-.build/make-bench-photos /tmp/bench 200
-Benchmarks/run-viewer-bench.sh /tmp/bench /tmp/bench-results
+Benchmarks/run-viewer-bench.sh ~/bench-photos /tmp/bench-results 3 --generic
 ```
 
-Прогон занимает экран примерно на минуту на программу. BoltBench запускает только `build/viewerbench`, поэтому инструмент можно пересобирать, не выдавая разрешения заново.
+A run takes over the screen for about four minutes per app, apps that aren't installed are skipped. Without `--generic` the script measures only Bolt, XnView MP and Preview, on synthetic photos from `Benchmarks/make-bench-photos.swift`, and recognizes them by color. BoltBench only launches `build/viewerbench`, so you can rebuild the tool without granting the permissions again.
 
-## Командная строка
+## Command line
 
-В приложении лежит `bolt` для скриптов и действия «Запустить shell-скрипт» в «Командах»:
+The app contains `bolt` for scripts and for the "Run Shell Script" action in Shortcuts:
 
 ```bash
 ln -s /Applications/Bolt.app/Contents/Helpers/bolt /usr/local/bin/bolt
@@ -124,9 +142,9 @@ bolt convert *.HEIC --format jpeg --size 2560 --strip-location --out ~/Desktop/T
 bolt rename *.HEIC --template "{date:yyyy-MM-dd_HHmmss}_{counter:3}" --dry-run
 ```
 
-## Отладочный канал
+## Debug channel
 
-`Bolt --debug-control` принимает команды через distributed notifications: нажать клавишу (настоящее событие через очередь, вместе с монитором клавиш), снять PNG окна, выгрузить состояние в JSON, прогнать бенчмарк листания. Отправлять так:
+`Bolt --debug-control` takes commands through distributed notifications: press a key (a real event through the queue, along with the key monitor), save a PNG of the window, dump the state to JSON, run the flipping benchmark. Send them like this:
 
 ```bash
 swiftc -O scripts/boltctl.swift -o .build/boltctl
@@ -136,16 +154,20 @@ open -a build/Bolt.app ~/Desktop/test/IMG_1.HEIC --args --debug-control
 .build/boltctl state /tmp/state.json
 ```
 
-Без флага канал выключен.
+Without the flag the channel is off.
 
-Время от нажатия стрелки до чёткого кадра меряют три команды: `taps <шагов> <мс> <файл.json> [pgdn] [turn=<n>] [back]` (отдельные нажатия раз в `мс`; `pgdn` жмёт Page Down, то есть шаг на 10 фото; `turn=<n>` идёт n шагов вперёд и потом назад), `first <мс> <файл.json>` (одно нажатие через `мс` после первого кадра открытого фото) и `hold <шагов> <мс> <файл.json> [delay=<мс>] [back]` (зажатая стрелка: нажатие без повтора, первый повтор через `delay`, по умолчанию через один интервал, потом повтор раз в `мс`, отпускание через полинтервала после последнего). События настоящие, через очередь и монитор клавиш, и уходят по расписанию, не дожидаясь приложения, так что медленный шаг виден как задержка и пачка шагов. На каждое нажатие пишется: через сколько миллисекунд после нажатия чёткий кадр этого фото был в слое, какой кадр оказался на экране сразу (`none`, `preview`, `screen`, `full`), HDR ли он и сколько байт занимает, и из чего сложился шаг главного потока: до показа, показ вместе с коммитом транзакции, после показа, коммит в конце хода run loop. Крючок один, `ImageCanvasView.onShown`, он вызывается до и после смены кадра и задан только на время прогона. `scripts/scroll-bench.sh <фото> <результаты>` гоняет все сценарии (нажатия раз в 1000, 400, 150 и 60 мс, первое нажатие через 300 мс и 2 с после открытия, разворот, прыжки Page Down, зажатие 90, 33 и 16 мс), каждый на новом процессе с пустым кэшем кадров, и печатает таблицы по всем нажатиям всех кругов; с `--baseline <коммит>` собирает его из `git worktree` и гоняет попеременно с рабочей копией, в ячейках «база → новая». Фото скрипт клонирует во временную папку и отказывается работать с папками из `~/Documents`, `~/Desktop` и `~/Downloads`: приложение, запущенное через `open`, не читает их без запроса доступа, чтение папки молча зависает, а вместе с ним каждый процесс, который к этой папке обращается.
+Three commands measure the time from an arrow press to a sharp frame: `taps <steps> <ms> <file.json> [pgdn] [turn=<n>] [back]` (separate presses once every `ms`; `pgdn` presses Page Down, a step of 10 photos; `turn=<n>` goes n steps forward and then back), `first <ms> <file.json>` (one press `ms` after the first frame of the opened photo) and `hold <steps> <ms> <file.json> [delay=<ms>] [back]` (a held arrow: a press without repeat, the first repeat after `delay`, one interval by default, then a repeat every `ms`, release half an interval after the last one). The events are real, through the queue and the key monitor, and go out on schedule without waiting for the app, so a slow step shows up as a delay and a burst of steps. For each press it records: how many milliseconds after the press the sharp frame of that photo was in the layer, which frame was on screen right away (`none`, `preview`, `screen`, `full`), whether it was HDR and how many bytes it takes, and what the main thread's step was made of: before showing, showing together with the transaction commit, after showing, the commit at the end of the run loop pass. There is one hook, `ImageCanvasView.onShown`, called before and after the frame changes and set only for the duration of a run. `scripts/scroll-bench.sh <photos> <results>` runs every scenario (presses once every 1000, 400, 150 and 60 ms, a first press 300 ms and 2 s after opening, a turnaround, Page Down jumps, held keys at 90, 33 and 16 ms), each in a new process with an empty frame cache, and prints tables over all presses of all rounds; with `--baseline <commit>` it builds that commit from a `git worktree` and alternates it with the working copy, with cells reading "base → new". The script clones the photos into a temporary folder and refuses folders in `~/Documents`, `~/Desktop` and `~/Downloads`: an app started with `open` can't read them without an access prompt, reading the folder silently hangs, and so does every process that touches that folder.
 
-## Что не сделано
+## Not done
 
-- Нотаризация и Sparkle. Нужны Developer ID и ключ подписи обновлений, сборка подписана ad hoc.
-- Команды для приложения «Команды» (App Intents). Метаданные интентов собирает Xcode, а здесь были только Command Line Tools.
-- Экспорт в WebP: ImageIO его читает, но не пишет. Конвертация умеет JPEG, HEIC, AVIF, PNG и TIFF.
-- Мини-карта GPS. Карта ходила бы в сеть, а по ТЗ сеть нужна только для обновлений. Вместо неё координаты и кнопка «Открыть в Картах».
-- Тайлы для снимков больше 100 Мп. Полный кадр ограничен 16 384 px по длинной стороне (предел текстуры), этого хватает примерно до 180 Мп в формате 3:2.
-- Большая часть P2: дубли и серии по перцептивному хэшу, подсказки Vision, гистограмма и фокус-пикинг. Из P2 сделаны слайдшоу (⌘⌥S), раскладка по папкам с датами и CLI.
-- UI-тесты на XCTest. Вместо них `scripts/ui-smoke.sh`: собранное приложение проходит основные сценарии настоящими нажатиями клавиш (листание, Корзина и отмена, папки-корзинки, переименование, поворот, флаг, сетка, сравнение, полный экран), и скрипт проверяет, что получилось. В CI он не запускается, потому что нужен экран.
+- Notarization and Sparkle. They need a Developer ID and an update signing key, the build is signed ad hoc.
+- Actions for the Shortcuts app (App Intents). Intent metadata is built by Xcode, and only the Command Line Tools were available here.
+- WebP export: ImageIO reads it but can't write it. Conversion supports JPEG, HEIC, AVIF, PNG and TIFF.
+- A GPS mini map. A map would go to the network, and the spec allows the network only for updates. Instead there are coordinates and an "Open in Maps" button.
+- Tiles for images over 100 MP. The full-size frame is capped at 16,384 px on the long side (the texture limit), which is enough for about 180 MP at 3:2.
+- Most of P2: duplicates and bursts by perceptual hash, Vision suggestions, histogram and focus peaking. From P2, the slideshow (⌘⌥S), sorting into dated folders and the CLI are done.
+- UI tests in XCTest. Instead there is `scripts/ui-smoke.sh`: the built app goes through the main scenarios with real key presses (flipping, Trash and undo, bucket folders, renaming, rotation, flag, grid, comparison, full screen), and the script checks the result. It doesn't run in CI because it needs a screen.
+
+## License
+
+Copyright (C) 2026 Boris Timofeenko. Bolt is licensed under the GNU General Public License v3.0 (`GPL-3.0-only`). You may use, change and redistribute the code, but a program built on it must be released under the same license, so it can't go into closed-source software. The full text is in [LICENSE](LICENSE).

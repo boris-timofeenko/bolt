@@ -34,7 +34,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>MIT License</string>
+	<string>Copyright (C) 2026 Boris Timofeenko. GPL-3.0-only</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
