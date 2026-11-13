@@ -2,9 +2,11 @@ import AppKit
 
 /// A short line at the bottom of the photo that fades away: "Moved to Trash · ⌘Z".
 /// Replaces confirmation dialogs; the hint says how to take the action back.
+/// Also carries one-time tips ("Marked. To work with marked photos only: …"), which wrap and stay longer.
 final class ToastView: NSView {
     private let label = NSTextField(labelWithString: "")
     private var hideWork: DispatchWorkItem?
+    private var wraps = false
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -25,6 +27,18 @@ final class ToastView: NSView {
 
     /// Shows `text` for 1.5 s, or 3 s for errors, which take longer to read and matter more.
     func show(_ text: String, isError: Bool = false) {
+        show(text, isError: isError, wraps: false, seconds: isError ? 3 : 1.5)
+    }
+
+    /// A tip: up to a few lines, on screen long enough to read twice. The next toast replaces it.
+    func showTip(_ text: String) {
+        show(text, isError: false, wraps: true, seconds: 7)
+    }
+
+    private func show(_ text: String, isError: Bool, wraps: Bool, seconds: Double) {
+        self.wraps = wraps
+        label.lineBreakMode = wraps ? .byWordWrapping : .byTruncatingMiddle
+        label.maximumNumberOfLines = wraps ? 0 : 1
         label.stringValue = text
         // VoiceOver reads toasts too: they're the only confirmation an action gets.
         NSAccessibility.post(element: NSApp as Any, notification: .announcementRequested,
@@ -46,12 +60,18 @@ final class ToastView: NSView {
             })
         }
         hideWork = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + (isError ? 3 : 1.5), execute: work)
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work)
     }
 
     /// Positions the toast centred near the bottom of `container`.
     func place(in container: NSRect) {
-        let size = label.intrinsicContentSize
+        var size = label.intrinsicContentSize
+        if wraps, let cell = label.cell {
+            // Measured at the width it will get, so the frame holds every wrapped line.
+            let bounds = NSRect(x: 0, y: 0, width: min(460, container.width - 56), height: .greatestFiniteMagnitude)
+            size = cell.cellSize(forBounds: bounds)
+            size = NSSize(width: ceil(size.width) + 1, height: ceil(size.height))
+        }
         let width = min(size.width + 24, container.width - 32)
         let height = size.height + 10
         frame = NSRect(x: container.midX - width / 2, y: container.maxY - height - 18, width: width, height: height)

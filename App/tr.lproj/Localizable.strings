@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (%d mm eşdeğeri)";
 "%@ (and %d more)" = "%@ (ve %d tane daha)";
 "%@ and Up" = "%@ ve üzeri";
+"%@ give one to five stars, %@ removes them." = "%@ bir ile beş arası yıldız verir, %@ yıldızları kaldırır.";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ sn";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ bir taşımayı, silmeyi ya da bayrağı geri alır. Daha geriye gitmek için yeniden basın.";
 "%d / %d of %d" = "%d / %d, toplam %d";
 "%d bit" = "%d bit";
 "%d photos" = "%d fotoğraf";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "Öncekini Seçime Ekle";
 "Added to comparison. Press K on another photo" = "Karşılaştırmaya eklendi. Başka bir fotoğrafta K tuşuna basın";
 "After copying:" = "Kopyalandıktan sonra:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Bundan sonra %@ fotoğrafı klasöre taşır, %@ kopyalar. %@ tuşlarına dokuz klasör atanabilir.";
 "All Commands" = "Tüm Komutlar";
 "All Photos" = "Tüm Fotoğraflar";
 "Allow" = "İzin Ver";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "Klasör okunamadı: %@";
 "Cancel" = "İptal";
 "Choose" = "Seç";
+"Choose %@ to see every photo again." = "Tüm fotoğrafları yeniden görmek için %@ seçeneğini seçin.";
+"Choose %@ to see only the best ones, then copy them as above." = "Yalnızca en iyileri görmek için %@ seçeneğini seçin, sonra yukarıdaki gibi kopyalayın.";
+"Choose %@. Only the picked photos stay in the list." = "%@ seçeneğini seçin. Listede yalnızca seçilen fotoğraflar kalır.";
 "Choose folder for a key" = "Tuşa klasör ata";
+"Choose the best shot of a series" = "Bir serinin en iyi karesini seçmek";
 "Choose…" = "Seç…";
 "Cleaning" = "Konum bilgisi kaldırılıyor";
 "Clear" = "Temizle";
@@ -56,7 +63,7 @@
 "Copy" = "Kopyala";
 "Copy Image" = "Görseli Kopyala";
 "Copy Path" = "Yolu Kopyala";
-"Copy to Folder" = "Klasöre Kopyala";
+"Folders on Keys" = "Tuşlardaki Klasörler";
 "Copy to Folder %d" = "%d numaralı klasöre kopyala";
 "Copy to Folder…" = "Klasöre Kopyala…";
 "Copy to folder 1–9" = "1–9 klasörüne kopyala";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "Sığdır / %100";
 "Fit Width" = "Genişliğe Sığdır";
 "Fit to Window" = "Pencereye Sığdır";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Bayraklar, yıldızlar ve renk etiketleri dosyanın kendisindeki Finder etiketleridir. Finder bunları gösterir, Spotlight bulur ve fotoğrafın kopyası da korur.";
 "Flip Horizontal" = "Yatay Çevir";
 "Flips through photos" = "Fotoğraflara göz atar";
 "Focal length" = "Odak uzaklığı";
@@ -105,13 +113,17 @@
 "Full Screen" = "Tam Ekran";
 "Full Size JPEG" = "Tam boyutlu JPEG";
 "General" = "Genel";
+"Get rid of failed shots" = "Kötü kareleri temizlemek";
 "Go" = "Git";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Fotoğraflara göz atın ve istediklerinizde %@ tuşuna basın. Durum çubuğunda bir ✓ belirir.";
 "Gray" = "Gri";
 "Green" = "Yeşil";
 "Help" = "Yardım";
 "Hide %@" = "%@ Gizle";
 "Hide Interface" = "Arayüzü Gizle";
 "Hide Others" = "Diğerlerini Gizle";
+"How the culling keys work together: %@." = "Seçim tuşları birlikte nasıl çalışır: %@.";
+"How to Sort Photos" = "Fotoğraflar Nasıl Seçilir";
 "ISO" = "ISO";
 "Image" = "Görsel";
 "Image copied" = "Görsel kopyalandı";
@@ -137,7 +149,6 @@
 "Minimize" = "Simge Durumuna Küçült";
 "Modified" = "Değiştirildi";
 "Mouse wheel:" = "Fare tekerleği:";
-"Move to Folder" = "Klasöre Taşı";
 "Move to Folder %d" = "%d numaralı klasöre taşı";
 "Move to Folder…" = "Klasöre Taşı…";
 "Move to Trash" = "Çöp Kutusuna Taşı";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "Henüz yinelenecek bir şey yok";
 "Nothing to undo" = "Geri alınacak bir şey yok";
 "O opens in:" = "O tuşu şununla açar:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Şimdi yalnızca bu fotoğraflar görünüyor. %@ hepsini seçer, %@ bir klasöre kopyalar.";
 "Open Recent" = "Son Kullanılanları Aç";
 "Open in %@" = "%@ ile aç";
 "Open in Maps" = "Haritalar'da Aç";
@@ -178,6 +190,8 @@
 "Photo" = "Fotoğraf";
 "Photos now open in Bolt." = "Fotoğraflar artık Bolt ile açılıyor.";
 "Pick" = "Seç";
+"Pick the best and copy them to another folder" = "En iyileri seçip başka bir klasöre kopyalamak";
+"Picked. To show picks only: %@." = "Seçildi. Yalnızca seçilenleri göstermek için: %@.";
 "Picks" = "Seçilenler";
 "Pixels" = "Piksel";
 "Pixels:" = "Piksel:";
@@ -186,6 +200,9 @@
 "Preset" = "Ön ayar";
 "Preset name" = "Ön ayar adı";
 "Preset:" = "Ön ayar:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Bir fotoğrafta %@ tuşuna basın. Bolt bir klasör sorar, fotoğrafı oraya taşır ve klasörü bu tuş için hatırlar.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Gerekmeyen fotoğraflarda %@ tuşuna basın ya da birini hemen Çöp Kutusuna göndermek için %@ tuşuna basın.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Hepsini seçmek için %1$@, sonra %2$@ tuşuna basın ve bir klasör seçin. %3$@ kopyalamak yerine taşır.";
 "Press keys…" = "Tuşlara basın…";
 "Previous Folder" = "Önceki Klasör";
 "Previous Photo" = "Önceki Fotoğraf";
@@ -193,8 +210,10 @@
 "Quality:" = "Kalite:";
 "Quit %@" = "%@ Uygulamasından Çık";
 "Random" = "Rastgele";
+"Rate with stars" = "Yıldız vermek";
 "Rating" = "Derecelendirme";
 "Rating %@" = "Derecelendirme %@";
+"Rating saved. To show the best only: %@." = "Puan kaydedildi. Yalnızca en iyileri göstermek için: %@.";
 "Reading shooting dates…" = "Çekim tarihleri okunuyor…";
 "Red" = "Kırmızı";
 "Redo" = "Yinele";
@@ -202,6 +221,7 @@
 "Redone: %@" = "Yinelendi: %@";
 "Reject" = "Reddet";
 "Rejected" = "Reddedilenler";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Reddedildi. Reddedilen tüm fotoğrafları bir kerede silmek için %@ seçeneğini seçin, sonra %@ ve %@ tuşlarına basın.";
 "Remove Location and Serial Numbers" = "Konum ve Seri Numaralarını Kaldır";
 "Remove all" = "Tümünü kaldır";
 "Remove location and serial numbers" = "Konum ve seri numaralarını kaldır";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "Konumsuz kopya kaydedildi";
 "Saved to “%@”" = "“%@” klasörüne kaydedildi";
 "Select All" = "Tümünü Seç";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Seriyi %@ ile seçin, sonra %@ tuşuna basın. Dört fotoğrafa kadar yan yana görünür.";
 "Services" = "Servisler";
-"Set Folder for Key" = "Tuşa klasör ata";
 "Set Folder for Key %d…" = "%d tuşuna klasör ata…";
 "Settings" = "Ayarlar";
 "Settings…" = "Ayarlar…";
@@ -247,9 +267,11 @@
 "Sort By" = "Sırala";
 "Sort by %@" = "Sıralama: %@";
 "Sort into Date Folders" = "Tarih Klasörlerine Ayır";
+"Sort into folders as you go" = "Bakarken klasörlere ayırmak";
 "Sorted into date folders" = "Tarih klasörlerine ayrıldı";
 "Speed Overlay" = "Hız Göstergesi";
 "Stay on this photo" = "Bu fotoğrafta kal";
+"Step by step: %@." = "Adım adım: %@.";
 "Stopped. What's done stays done." = "Durduruldu. Tamamlananlar kaldı.";
 "System" = "Sistem";
 "Taken" = "Çekildi";
@@ -259,9 +281,11 @@
 "The file can't be read." = "Dosya okunamıyor.";
 "The folder is created next to the photos. Originals stay as they are." = "Klasör fotoğrafların yanında oluşturulur. Orijinaller olduğu gibi kalır.";
 "The photo is already in “%@”" = "Fotoğraf zaten “%@” klasöründe";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Sonra %@ seçeneğini seçin, %@ ve %@ tuşlarına basın. Reddedilen tüm fotoğraflar Çöp Kutusuna gider.";
 "This format can't be rotated without re-encoding." = "Bu biçim yeniden kodlanmadan döndürülemez.";
 "Thumbnail Grid" = "Küçük Resim Izgarası";
 "Thumbnail Strip" = "Küçük Resim Şeridi";
+"To give a key another folder, press %@." = "Bir tuşa başka klasör atamak için %@ tuşuna basın.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "“%@” içindeki diğer fotoğrafları göstermek için Bolt’un bu klasöre erişmesi gerekiyor. Ana klasör gibi bunun üst klasörüne izin verirseniz, Bolt içindeki klasörler için bir daha sormaz.";
 "Type a command" = "Komut yazın";
 "Undo" = "Geri Al";
@@ -270,6 +294,7 @@
 "Unflagged" = "Bayrağı yok";
 "View" = "Görüntü";
 "Web" = "Web";
+"Where flags and stars are kept" = "Bayraklar ve yıldızlar nerede saklanır";
 "Window" = "Pencere";
 "Yellow" = "Sarı";
 "Zoom" = "Yakınlaştırma";
@@ -297,4 +322,5 @@
 "no metadata" = "üst veri yok";
 "not set" = "ayarlanmadı";
 "“%@” already exists." = "“%@” zaten var.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← ve → aralarında geçiş yapar. En iyisini %@ ile seçin ve Esc tuşuna basın.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ kırp   Esc iptal   X çerçeveyi döndür";

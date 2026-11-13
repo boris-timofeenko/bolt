@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (équiv. %d mm)";
 "%@ (and %d more)" = "%@ (et %d autres)";
 "%@ and Up" = "%@ et plus";
+"%@ give one to five stars, %@ removes them." = "%@ donnent d’une à cinq étoiles, %@ les retire.";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ s";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ annule un déplacement, une suppression ou un marqueur. Appuyez encore pour remonter plus loin.";
 "%d / %d of %d" = "%d / %d sur %d";
 "%d bit" = "%d bits";
 "%d photos" = "%d photos";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "Ajouter le précédent à la sélection";
 "Added to comparison. Press K on another photo" = "Ajouté à la comparaison. Appuyez sur K sur une autre photo";
 "After copying:" = "Après copie :";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Ensuite, %@ déplace une photo dans ce dossier et %@ la copie. Les touches %@ gardent neuf dossiers.";
 "All Commands" = "Toutes les commandes";
 "All Photos" = "Toutes les photos";
 "Allow" = "Autoriser";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "Impossible de lire le dossier : %@";
 "Cancel" = "Annuler";
 "Choose" = "Choisir";
+"Choose %@ to see every photo again." = "Pour revoir toutes les photos, choisissez %@.";
+"Choose %@ to see only the best ones, then copy them as above." = "Choisissez %@ pour ne voir que les meilleures, puis copiez-les comme ci-dessus.";
+"Choose %@. Only the picked photos stay in the list." = "Choisissez %@. Seules les photos retenues restent dans la liste.";
 "Choose folder for a key" = "Choisir un dossier pour une touche";
+"Choose the best shot of a series" = "Choisir la meilleure photo d’une série";
 "Choose…" = "Choisir…";
 "Cleaning" = "Suppression de la localisation";
 "Clear" = "Effacer";
@@ -56,7 +63,7 @@
 "Copy" = "Copier";
 "Copy Image" = "Copier l'image";
 "Copy Path" = "Copier le chemin";
-"Copy to Folder" = "Copier dans le dossier";
+"Folders on Keys" = "Dossiers des touches";
 "Copy to Folder %d" = "Copier dans le dossier %d";
 "Copy to Folder…" = "Copier dans le dossier…";
 "Copy to folder 1–9" = "Copier dans le dossier 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "Ajuster / 100 %";
 "Fit Width" = "Ajuster à la largeur";
 "Fit to Window" = "Ajuster à la fenêtre";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Les marqueurs, les étoiles et les étiquettes de couleur sont des tags Finder sur le fichier lui-même. Le Finder les affiche, Spotlight les trouve et une copie de la photo les conserve.";
 "Flip Horizontal" = "Retourner horizontalement";
 "Flips through photos" = "Parcourt les photos";
 "Focal length" = "Focale";
@@ -105,13 +113,17 @@
 "Full Screen" = "Plein écran";
 "Full Size JPEG" = "JPEG pleine taille";
 "General" = "Général";
+"Get rid of failed shots" = "Se débarrasser des photos ratées";
 "Go" = "Aller";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Parcourez les photos et appuyez sur %@ sur celles que vous voulez garder. Un ✓ apparaît dans la barre d’état.";
 "Gray" = "Gris";
 "Green" = "Vert";
 "Help" = "Aide";
 "Hide %@" = "Masquer %@";
 "Hide Interface" = "Masquer l'interface";
 "Hide Others" = "Masquer les autres";
+"How the culling keys work together: %@." = "Comment les touches de tri fonctionnent ensemble : %@.";
+"How to Sort Photos" = "Comment trier les photos";
 "ISO" = "ISO";
 "Image" = "Image";
 "Image copied" = "Image copiée";
@@ -137,7 +149,6 @@
 "Minimize" = "Réduire";
 "Modified" = "Modifiée";
 "Mouse wheel:" = "Molette de la souris :";
-"Move to Folder" = "Déplacer dans le dossier";
 "Move to Folder %d" = "Déplacer dans le dossier %d";
 "Move to Folder…" = "Déplacer dans le dossier…";
 "Move to Trash" = "Placer dans la corbeille";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "Rien à répéter pour l'instant";
 "Nothing to undo" = "Rien à annuler";
 "O opens in:" = "La touche O ouvre dans :";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Seules ces photos sont affichées. %@ les sélectionne toutes, %@ les copie dans un dossier.";
 "Open Recent" = "Ouverts récemment";
 "Open in %@" = "Ouvrir dans %@";
 "Open in Maps" = "Ouvrir dans Plans";
@@ -178,6 +190,8 @@
 "Photo" = "Photo";
 "Photos now open in Bolt." = "Les photos s'ouvrent maintenant dans Bolt.";
 "Pick" = "Retenir";
+"Pick the best and copy them to another folder" = "Retenir les meilleures et les copier dans un autre dossier";
+"Picked. To show picks only: %@." = "Retenue. Pour n’afficher que les retenues : %@.";
 "Picks" = "Retenues";
 "Pixels" = "Pixels";
 "Pixels:" = "Pixels :";
@@ -186,6 +200,9 @@
 "Preset" = "Préréglage";
 "Preset name" = "Nom du préréglage";
 "Preset:" = "Préréglage :";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Appuyez sur %@ sur une photo. Bolt demande un dossier, y déplace la photo et retient ce dossier pour cette touche.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Appuyez sur %@ sur les photos inutiles, ou sur %@ pour en placer une directement dans la corbeille.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Appuyez sur %@ pour toutes les sélectionner, puis sur %@ et choisissez un dossier. %@ les déplace au lieu de les copier.";
 "Press keys…" = "Appuyez sur des touches…";
 "Previous Folder" = "Dossier précédent";
 "Previous Photo" = "Photo précédente";
@@ -193,8 +210,10 @@
 "Quality:" = "Qualité :";
 "Quit %@" = "Quitter %@";
 "Random" = "Aléatoire";
+"Rate with stars" = "Noter avec des étoiles";
 "Rating" = "Note";
 "Rating %@" = "Note %@";
+"Rating saved. To show the best only: %@." = "Note enregistrée. Pour n’afficher que les meilleures : %@.";
 "Reading shooting dates…" = "Lecture des dates de prise de vue…";
 "Red" = "Rouge";
 "Redo" = "Rétablir";
@@ -202,6 +221,7 @@
 "Redone: %@" = "Rétabli : %@";
 "Reject" = "Rejeter";
 "Rejected" = "Rejetées";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Rejetée. Pour supprimer d’un coup toutes les photos rejetées, choisissez %@, puis appuyez sur %@ et %@.";
 "Remove Location and Serial Numbers" = "Supprimer la localisation et les numéros de série";
 "Remove all" = "Tout supprimer";
 "Remove location and serial numbers" = "Supprimer la localisation et les numéros de série";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "Copie enregistrée sans localisation";
 "Saved to “%@”" = "Enregistré dans « %@ »";
 "Select All" = "Tout sélectionner";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Sélectionnez la série avec %@, puis appuyez sur %@. Jusqu’à quatre photos s’affichent côte à côte.";
 "Services" = "Services";
-"Set Folder for Key" = "Dossier pour la touche";
 "Set Folder for Key %d…" = "Dossier pour la touche %d…";
 "Settings" = "Réglages";
 "Settings…" = "Réglages…";
@@ -247,9 +267,11 @@
 "Sort By" = "Trier par";
 "Sort by %@" = "Trier par %@";
 "Sort into Date Folders" = "Trier dans des dossiers par date";
+"Sort into folders as you go" = "Ranger dans des dossiers au fil du tri";
 "Sorted into date folders" = "Triées dans des dossiers par date";
 "Speed Overlay" = "Mesures de vitesse";
 "Stay on this photo" = "Rester sur cette photo";
+"Step by step: %@." = "Pas à pas : %@.";
 "Stopped. What's done stays done." = "Arrêté. Les fichiers déjà traités sont conservés.";
 "System" = "Divers";
 "Taken" = "Prise de vue";
@@ -259,9 +281,11 @@
 "The file can't be read." = "Le fichier ne peut pas être lu.";
 "The folder is created next to the photos. Originals stay as they are." = "Le dossier est créé à côté des photos. Les originaux ne changent pas.";
 "The photo is already in “%@”" = "La photo est déjà dans « %@ »";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Choisissez ensuite %@, appuyez sur %@ puis sur %@. Toutes les photos rejetées vont dans la corbeille.";
 "This format can't be rotated without re-encoding." = "Ce format ne peut pas être pivoté sans réencodage.";
 "Thumbnail Grid" = "Grille de vignettes";
 "Thumbnail Strip" = "Bande de vignettes";
+"To give a key another folder, press %@." = "Pour attribuer un autre dossier à une touche, appuyez sur %@.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Pour afficher les autres photos de « %@ », Bolt a besoin d’accéder au dossier. Si vous autorisez un dossier parent, comme votre dossier personnel, Bolt ne vous demandera plus rien pour les dossiers qu’il contient.";
 "Type a command" = "Saisissez une commande";
 "Undo" = "Annuler";
@@ -270,6 +294,7 @@
 "Unflagged" = "Sans marqueur";
 "View" = "Présentation";
 "Web" = "Pour le web";
+"Where flags and stars are kept" = "Où sont gardés les marqueurs et les étoiles";
 "Window" = "Fenêtre";
 "Yellow" = "Jaune";
 "Zoom" = "Zoom";
@@ -297,4 +322,5 @@
 "no metadata" = "sans métadonnées";
 "not set" = "non défini";
 "“%@” already exists." = "« %@ » existe déjà.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← et → passent de l’une à l’autre. Retenez la meilleure avec %@ et appuyez sur Échap.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ Recadrer   Échap Annuler   X pivoter le cadre";

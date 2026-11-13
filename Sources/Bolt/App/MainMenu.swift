@@ -37,7 +37,7 @@ enum MainMenu {
             commands[.openInEditor],
             .separator(),
             commands[.export], commands[.exportWithPreset], commands[.convert], commands[.batchRename],
-            commands[.dateFolders],
+            commands[.dateFolders], commands[.removePrivateData],
             .separator(),
             commands[.moveToFolder], commands[.copyToFolder], commands[.trash],
         ]))
@@ -60,21 +60,15 @@ enum MainMenu {
             .separator(),
             commands[.toggleFullscreen], commands[.toggleInterface], commands[.slideshow],
             .separator(),
-            commands[.zoomToggle], commands[.zoomIn], commands[.zoomOut], commands[.fitWindow], commands[.fitWidth],
-            commands[.actualSize],
+            commands[.zoomIn], commands[.zoomOut], commands[.fitWindow], commands[.actualSize],
             .separator(),
             submenu(L("Sort By"), SortKey.allCases.map { commands[.sort($0)] } + [.separator(), commands[.reverseSort]]),
             submenu(L("Background"), CanvasBackground.allCases.map { commands[.background($0)] }),
             submenu(L("Show"), LabelFilter.menuItems.map { commands[.filter($0)] }),
-            .separator(),
-            commands[.performanceOverlay],
         ]))
 
         main.addItem(submenu(L("Go"), [
-            commands[.next], commands[.previous], commands[.first], commands[.last], commands[.forward10],
-            commands[.back10],
-            .separator(),
-            commands[.extendNext], commands[.extendPrevious],
+            commands[.next], commands[.previous], commands[.first], commands[.last],
             .separator(),
             commands[.nextFolder], commands[.previousFolder], commands[.parentFolder],
         ]))
@@ -85,11 +79,8 @@ enum MainMenu {
             submenu(L("Color Label"), LabelColor.all.map { commands[.colorLabel($0.number)] }),
             .separator(),
             commands[.rotateLeft], commands[.rotateRight], commands[.flipHorizontal], commands[.crop],
-            commands[.removePrivateData],
             .separator(),
-            submenu(L("Move to Folder"), (1...9).map { commands[.moveToBucket($0)] }),
-            submenu(L("Copy to Folder"), (1...9).map { commands[.copyToBucket($0)] }),
-            submenu(L("Set Folder for Key"), (1...9).map { commands[.assignBucket($0)] }),
+            submenu(L("Folders on Keys"), (1...9).flatMap(commands.bucketItems)),
             .separator(),
             commands[.copyImage],
         ]))
@@ -104,7 +95,7 @@ enum MainMenu {
         main.addItem(window)
         NSApp.windowsMenu = window.submenu
 
-        let help = submenu(L("Help"), [commands[.cheatSheet], commands[.commandPalette]])
+        let help = submenu(L("Help"), [commands[.sortingGuide], commands[.cheatSheet], commands[.commandPalette]])
         main.addItem(help)
         NSApp.helpMenu = help.submenu
         return main
@@ -150,6 +141,19 @@ private struct CommandItems {
         let showsShortcut = command != .undo && command != .redo && command != .copyImage
         return NSMenuItem(command: command, keyMap: showsShortcut ? keyMap : nil,
                           action: #selector(AppDelegate.performCommand(_:)))
+    }
+
+    /// One line per key: "Move to “Trip”  1". Holding ⌥ turns it into copying, ⇧⌘ into choosing the folder,
+    /// the way Finder's menus swap items. A variant whose key doesn't differ only in modifiers can't be an
+    /// alternate, so it then stays a line of its own.
+    func bucketItems(_ number: Int) -> [NSMenuItem] {
+        let move = self[.moveToBucket(number)]
+        return [move] + [Command.copyToBucket(number), .assignBucket(number)].map { command in
+            let item = self[command]
+            item.isAlternate = !move.keyEquivalent.isEmpty && item.keyEquivalent == move.keyEquivalent
+                && item.keyEquivalentModifierMask != move.keyEquivalentModifierMask
+            return item
+        }
     }
 }
 

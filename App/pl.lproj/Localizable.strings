@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (ekw. %d mm)";
 "%@ (and %d more)" = "%@ (i jeszcze %d)";
 "%@ and Up" = "%@ i wyżej";
+"%@ give one to five stars, %@ removes them." = "%@ dają od jednej do pięciu gwiazdek, %@ je usuwa.";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ s";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ cofa przeniesienie, usunięcie lub flagę. Naciśnij ponownie, aby cofnąć się dalej.";
 "%d / %d of %d" = "%d / %d z %d";
 "%d bit" = "%d bit";
 "%d photos" = "Zdjęcia: %d";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "Dodaj poprzednie do zaznaczenia";
 "Added to comparison. Press K on another photo" = "Dodano do porównania. Naciśnij K na innym zdjęciu";
 "After copying:" = "Po skopiowaniu:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Potem %@ przenosi zdjęcie do tego folderu, a %@ je kopiuje. Klawisze %@ mieszczą dziewięć folderów.";
 "All Commands" = "Wszystkie polecenia";
 "All Photos" = "Wszystkie zdjęcia";
 "Allow" = "Zezwól";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "Nie można odczytać folderu: %@";
 "Cancel" = "Anuluj";
 "Choose" = "Wybierz";
+"Choose %@ to see every photo again." = "Aby znów widzieć wszystkie zdjęcia, wybierz %@.";
+"Choose %@ to see only the best ones, then copy them as above." = "Wybierz %@, aby widzieć tylko najlepsze, i skopiuj je jak wyżej.";
+"Choose %@. Only the picked photos stay in the list." = "Wybierz %@. Na liście zostaną tylko wybrane zdjęcia.";
 "Choose folder for a key" = "Przypisz folder do klawisza";
+"Choose the best shot of a series" = "Wybrać najlepsze ujęcie z serii";
 "Choose…" = "Wybierz…";
 "Cleaning" = "Usuwanie geotagów";
 "Clear" = "Wyczyść";
@@ -56,7 +63,7 @@
 "Copy" = "Kopiuj";
 "Copy Image" = "Kopiuj obraz";
 "Copy Path" = "Kopiuj ścieżkę";
-"Copy to Folder" = "Kopiuj do folderu";
+"Folders on Keys" = "Foldery pod klawiszami";
 "Copy to Folder %d" = "Kopiuj do folderu %d";
 "Copy to Folder…" = "Kopiuj do folderu…";
 "Copy to folder 1–9" = "Kopiuj do folderu 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "Dopasuj / 100%";
 "Fit Width" = "Dopasuj do szerokości";
 "Fit to Window" = "Dopasuj do okna";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Flagi, gwiazdki i kolorowe etykiety to tagi Findera na samym pliku. Finder je pokazuje, Spotlight je znajduje, a kopia zdjęcia je zachowuje.";
 "Flip Horizontal" = "Odbij poziomo";
 "Flips through photos" = "Przegląda zdjęcia";
 "Focal length" = "Ogniskowa";
@@ -105,13 +113,17 @@
 "Full Screen" = "Pełny ekran";
 "Full Size JPEG" = "JPEG w pełnym rozmiarze";
 "General" = "Ogólne";
+"Get rid of failed shots" = "Pozbyć się nieudanych zdjęć";
 "Go" = "Przejdź";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Przeglądaj zdjęcia i naciskaj %@ na tych, które chcesz zostawić. Na pasku stanu pojawi się ✓.";
 "Gray" = "Szara";
 "Green" = "Zielona";
 "Help" = "Pomoc";
 "Hide %@" = "Ukryj %@";
 "Hide Interface" = "Ukryj interfejs";
 "Hide Others" = "Ukryj inne";
+"How the culling keys work together: %@." = "Jak klawisze selekcji działają razem: %@.";
+"How to Sort Photos" = "Jak przebierać zdjęcia";
 "ISO" = "ISO";
 "Image" = "Obraz";
 "Image copied" = "Skopiowano obraz";
@@ -137,7 +149,6 @@
 "Minimize" = "Minimalizuj";
 "Modified" = "Zmodyfikowano";
 "Mouse wheel:" = "Kółko myszy:";
-"Move to Folder" = "Przenieś do folderu";
 "Move to Folder %d" = "Przenieś do folderu %d";
 "Move to Folder…" = "Przenieś do folderu…";
 "Move to Trash" = "Przenieś do Kosza";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "Nie ma jeszcze czego powtórzyć";
 "Nothing to undo" = "Nie ma czego cofnąć";
 "O opens in:" = "Klawisz O otwiera w:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Teraz widać tylko te zdjęcia. %@ zaznaczy wszystkie, %@ skopiuje je do folderu.";
 "Open Recent" = "Otwórz ostatnie";
 "Open in %@" = "Otwórz w „%@”";
 "Open in Maps" = "Otwórz w Mapach";
@@ -178,6 +190,8 @@
 "Photo" = "Zdjęcie";
 "Photos now open in Bolt." = "Zdjęcia otwierają się teraz w Bolt.";
 "Pick" = "Wybierz";
+"Pick the best and copy them to another folder" = "Wybrać najlepsze i skopiować je do innego folderu";
+"Picked. To show picks only: %@." = "Wybrane. Pokaż tylko wybrane: %@.";
 "Picks" = "Wybrane";
 "Pixels" = "Piksele";
 "Pixels:" = "Piksele:";
@@ -186,6 +200,9 @@
 "Preset" = "Ustawienia";
 "Preset name" = "Nazwa ustawień";
 "Preset:" = "Ustawienia:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Naciśnij %@ na zdjęciu. Bolt zapyta o folder, przeniesie tam zdjęcie i zapamięta folder dla tego klawisza.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Naciskaj %@ na niepotrzebnych zdjęciach albo %@, aby od razu przenieść zdjęcie do Kosza.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Naciśnij %@, aby zaznaczyć wszystkie, potem %@ i wybierz folder. %@ przenosi je zamiast kopiować.";
 "Press keys…" = "Naciśnij klawisze…";
 "Previous Folder" = "Poprzedni folder";
 "Previous Photo" = "Poprzednie zdjęcie";
@@ -193,8 +210,10 @@
 "Quality:" = "Jakość:";
 "Quit %@" = "Zakończ %@";
 "Random" = "Losowo";
+"Rate with stars" = "Oceniać gwiazdkami";
 "Rating" = "Ocena";
 "Rating %@" = "Ocena %@";
+"Rating saved. To show the best only: %@." = "Ocena zapisana. Pokaż tylko najlepsze: %@.";
 "Reading shooting dates…" = "Odczytywanie dat wykonania…";
 "Red" = "Czerwona";
 "Redo" = "Ponów";
@@ -202,6 +221,7 @@
 "Redone: %@" = "Ponowiono: %@";
 "Reject" = "Odrzuć";
 "Rejected" = "Odrzucone";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Odrzucone. Aby usunąć naraz wszystkie odrzucone, wybierz %@, a potem naciśnij %@ i %@.";
 "Remove Location and Serial Numbers" = "Usuń lokalizację i numery seryjne";
 "Remove all" = "Usuń wszystkie";
 "Remove location and serial numbers" = "Usuń lokalizację i numery seryjne";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "Zapisano kopię bez lokalizacji";
 "Saved to “%@”" = "Zapisano w „%@”";
 "Select All" = "Zaznacz wszystko";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Zaznacz serię klawiszem %@ i naciśnij %@. Obok siebie pojawią się do czterech zdjęć.";
 "Services" = "Usługi";
-"Set Folder for Key" = "Przypisz folder do klawisza";
 "Set Folder for Key %d…" = "Przypisz folder do klawisza %d…";
 "Settings" = "Ustawienia";
 "Settings…" = "Ustawienia…";
@@ -247,9 +267,11 @@
 "Sort By" = "Sortuj według";
 "Sort by %@" = "Sortowanie: %@";
 "Sort into Date Folders" = "Sortuj do folderów z datami";
+"Sort into folders as you go" = "Rozkładać do folderów na bieżąco";
 "Sorted into date folders" = "Posortowano do folderów z datami";
 "Speed Overlay" = "Pomiary szybkości";
 "Stay on this photo" = "Zostań na tym zdjęciu";
+"Step by step: %@." = "Krok po kroku: %@.";
 "Stopped. What's done stays done." = "Zatrzymano. Gotowe pliki zostają.";
 "System" = "Różne";
 "Taken" = "Wykonano";
@@ -259,9 +281,11 @@
 "The file can't be read." = "Nie można odczytać pliku.";
 "The folder is created next to the photos. Originals stay as they are." = "Folder zostanie utworzony obok zdjęć. Oryginały pozostaną bez zmian.";
 "The photo is already in “%@”" = "Zdjęcie już jest w „%@”";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Potem wybierz %@, naciśnij %@ i %@. Wszystkie odrzucone zdjęcia trafią do Kosza.";
 "This format can't be rotated without re-encoding." = "Tego formatu nie można obrócić bez ponownego kodowania.";
 "Thumbnail Grid" = "Siatka miniatur";
 "Thumbnail Strip" = "Pasek miniatur";
+"To give a key another folder, press %@." = "Aby przypisać klawiszowi inny folder, naciśnij %@.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Aby pokazać pozostałe zdjęcia z „%@”, Bolt potrzebuje dostępu do folderu. Jeśli zezwolisz na dostęp do folderu nadrzędnego, np. folderu domowego, Bolt nie będzie już pytać o foldery znajdujące się w nim.";
 "Type a command" = "Nazwa polecenia";
 "Undo" = "Cofnij";
@@ -270,6 +294,7 @@
 "Unflagged" = "Bez flagi";
 "View" = "Widok";
 "Web" = "Do sieci";
+"Where flags and stars are kept" = "Gdzie zapisane są flagi i gwiazdki";
 "Window" = "Okno";
 "Yellow" = "Żółta";
 "Zoom" = "Powiększenie";
@@ -297,4 +322,5 @@
 "no metadata" = "bez metadanych";
 "not set" = "nie ustawiono";
 "“%@” already exists." = "„%@” już istnieje.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← i → przełączają między nimi. Wybierz najlepsze klawiszem %@ i naciśnij Esc.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ kadruj   Esc anuluj   X obróć ramkę";

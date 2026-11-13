@@ -10,6 +10,7 @@ final class Session {
     var onKeyMapChange: (() -> Void)?
 
     private var settingsWindow: NSWindow?
+    private var guideWindow: NSWindow?
     private var memoryPressure: DispatchSourceMemoryPressure?
 
     /// The viewer the user is looking at: key window first, then main window, then any.
@@ -108,6 +109,15 @@ final class Session {
             settingsWindow = SettingsWindow.make()
         }
         settingsWindow?.makeKeyAndOrderFront(nil)
+    }
+
+    /// Made anew each time, so it shows the shortcuts as they are now.
+    func showSortingGuide() {
+        let frame = guideWindow?.isVisible == true ? guideWindow?.frame : nil
+        guideWindow?.close()
+        guideWindow = GuideWindow.make(keyMap: keyMap)
+        if let frame { guideWindow?.setFrame(frame, display: false) }
+        guideWindow?.makeKeyAndOrderFront(nil)
     }
 
     // MARK: - Memory

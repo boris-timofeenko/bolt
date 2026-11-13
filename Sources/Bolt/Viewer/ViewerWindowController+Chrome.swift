@@ -108,6 +108,7 @@ extension ViewerWindowController {
         case .cheatSheet: cheatSheet == nil ? showCheatSheet() : closeCheatSheet()
         case .performanceOverlay: togglePerformanceOverlay()
         case .settings: session.showSettings()
+        case .sortingGuide: session.showSortingGuide()
         }
         if command.isRepeatable { lastRepeatable = command }
     }
@@ -200,7 +201,7 @@ extension ViewerWindowController {
 
     func isEnabled(_ command: Command) -> Bool {
         switch command {
-        case .open, .settings, .commandPalette, .cheatSheet, .toggleFullscreen, .toggleInterface, .performanceOverlay,
+        case .open, .settings, .commandPalette, .cheatSheet, .sortingGuide, .toggleFullscreen, .toggleInterface, .performanceOverlay,
              .background, .sort, .reverseSort, .undo, .redo, .assignBucket, .toggleStrip, .toggleInfo, .filter:
             true
         case .toggleGrid, .parentFolder, .nextFolder, .previousFolder: gallery.folder != nil
@@ -227,7 +228,7 @@ extension ViewerWindowController {
         guard let item = gallery.current else { return content }
 
         content.position = gallery.isFiltered
-            ? L("%d / %d of %d", gallery.currentIndex + 1, gallery.count, gallery.totalCount)
+            ? labelFilter.title + ": " + L("%d / %d of %d", gallery.currentIndex + 1, gallery.count, gallery.totalCount)
             : "\(gallery.currentIndex + 1) / \(gallery.count)"
         if gallery.selection.count > 1 {
             content.position += "  " + L("%d selected", gallery.selection.count)
@@ -356,7 +357,7 @@ extension ViewerWindowController {
         let commands = Command.all.filter { command in
             if case .moveToBucket(let number) = command { return Preferences.bucket(number) != nil }
             if case .copyToBucket(let number) = command { return Preferences.bucket(number) != nil }
-            return command != .commandPalette && isEnabled(command)
+            return command != .commandPalette && !command.isHidden && isEnabled(command)
         }
         let keyMap = session.keyMap
         presentPicker(title: L("All Commands"), placeholder: L("Type a command")) { [weak self] query in

@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@（等效 %d 毫米）";
 "%@ (and %d more)" = "%@（另外 %d 个）";
 "%@ and Up" = "%@ 及以上";
+"%@ give one to five stars, %@ removes them." = "%@ 打一到五颗星，%@ 清除星级。";
 "%@ mm" = "%@ 毫米";
 "%@ s" = "%@ 秒";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ 可撤销移动、删除或标记。再按一次可继续往前撤销。";
 "%d / %d of %d" = "%d / %d（共 %d）";
 "%d bit" = "%d 位";
 "%d photos" = "%d 张照片";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "将上一张添加到选择中";
 "Added to comparison. Press K on another photo" = "已添加到比较。在另一张照片上按 K";
 "After copying:" = "拷贝后：";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "之后，%@ 将照片移到该文件夹，%@ 则拷贝过去。%@ 可对应九个文件夹。";
 "All Commands" = "所有命令";
 "All Photos" = "所有照片";
 "Allow" = "允许";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "无法读取文件夹：%@";
 "Cancel" = "取消";
 "Choose" = "选择";
+"Choose %@ to see every photo again." = "要重新显示所有照片，请选择“%@”。";
+"Choose %@ to see only the best ones, then copy them as above." = "选择“%@”只看最好的照片，然后按上面的方法拷贝。";
+"Choose %@. Only the picked photos stay in the list." = "选择“%@”。列表中只留下精选的照片。";
 "Choose folder for a key" = "为按键选择文件夹";
+"Choose the best shot of a series" = "从一组连拍中挑出最好的一张";
 "Choose…" = "选择…";
 "Cleaning" = "清除位置信息";
 "Clear" = "清除";
@@ -56,7 +63,7 @@
 "Copy" = "拷贝";
 "Copy Image" = "拷贝图像";
 "Copy Path" = "拷贝路径";
-"Copy to Folder" = "拷贝到文件夹";
+"Folders on Keys" = "按键对应的文件夹";
 "Copy to Folder %d" = "拷贝到文件夹 %d";
 "Copy to Folder…" = "拷贝到文件夹…";
 "Copy to folder 1–9" = "拷贝到文件夹 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "适合窗口 / 100%";
 "Fit Width" = "适合宽度";
 "Fit to Window" = "适合窗口";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "标记、星级和颜色标签都是文件本身的 Finder 标签。Finder 会显示它们，Spotlight 能搜到它们，拷贝照片时也会保留。";
 "Flip Horizontal" = "水平翻转";
 "Flips through photos" = "翻看照片";
 "Focal length" = "焦距";
@@ -105,13 +113,17 @@
 "Full Screen" = "全屏幕";
 "Full Size JPEG" = "原尺寸 JPEG";
 "General" = "通用";
+"Get rid of failed shots" = "清理拍坏的照片";
 "Go" = "前往";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "浏览照片，在想要的照片上按 %@。状态栏中会出现 ✓。";
 "Gray" = "灰色";
 "Green" = "绿色";
 "Help" = "帮助";
 "Hide %@" = "隐藏 %@";
 "Hide Interface" = "隐藏界面";
 "Hide Others" = "隐藏其他";
+"How the culling keys work together: %@." = "筛选按键如何配合使用：%@。";
+"How to Sort Photos" = "如何筛选照片";
 "ISO" = "ISO";
 "Image" = "图像";
 "Image copied" = "图像已拷贝";
@@ -137,7 +149,6 @@
 "Minimize" = "最小化";
 "Modified" = "已修改";
 "Mouse wheel:" = "鼠标滚轮：";
-"Move to Folder" = "移到文件夹";
 "Move to Folder %d" = "移到文件夹 %d";
 "Move to Folder…" = "移到文件夹…";
 "Move to Trash" = "移到废纸篓";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "暂无可重复的操作";
 "Nothing to undo" = "没有可撤销的操作";
 "O opens in:" = "O 键打开方式：";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "现在只显示这些照片。%@ 全选，%@ 拷贝到文件夹。";
 "Open Recent" = "最近打开的文件";
 "Open in %@" = "在 %@ 中打开";
 "Open in Maps" = "在“地图”中打开";
@@ -178,6 +190,8 @@
 "Photo" = "照片";
 "Photos now open in Bolt." = "照片现在用 Bolt 打开。";
 "Pick" = "精选";
+"Pick the best and copy them to another folder" = "挑出最好的照片并拷贝到其他文件夹";
+"Picked. To show picks only: %@." = "已精选。只显示精选：%@。";
 "Picks" = "精选";
 "Pixels" = "像素";
 "Pixels:" = "像素：";
@@ -186,6 +200,9 @@
 "Preset" = "预设";
 "Preset name" = "预设名称";
 "Preset:" = "预设：";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "在照片上按 %@。Bolt 会询问文件夹，把照片移到那里，并为这个键记住该文件夹。";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "在不需要的照片上按 %@，或按 %@ 直接将其移到废纸篓。";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "按 %1$@ 全选，然后按 %2$@ 并选择文件夹。按 %3$@ 则是移动而不是拷贝。";
 "Press keys…" = "按下按键…";
 "Previous Folder" = "上一个文件夹";
 "Previous Photo" = "上一张照片";
@@ -193,8 +210,10 @@
 "Quality:" = "质量：";
 "Quit %@" = "退出 %@";
 "Random" = "随机";
+"Rate with stars" = "打星评分";
 "Rating" = "评分";
 "Rating %@" = "评分 %@";
+"Rating saved. To show the best only: %@." = "评分已存储。只显示最好的：%@。";
 "Reading shooting dates…" = "正在读取拍摄日期…";
 "Red" = "红色";
 "Redo" = "重做";
@@ -202,6 +221,7 @@
 "Redone: %@" = "已重做：%@";
 "Reject" = "排除";
 "Rejected" = "已排除";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "已排除。要一次删除所有排除的照片，请选择“%@”，然后按 %@ 和 %@。";
 "Remove Location and Serial Numbers" = "清除位置和序列号";
 "Remove all" = "全部清除";
 "Remove location and serial numbers" = "清除位置和序列号";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "已保存不含位置信息的副本";
 "Saved to “%@”" = "已保存到“%@”";
 "Select All" = "全选";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "用 %@ 选中这组照片，然后按 %@。最多四张照片并排显示。";
 "Services" = "服务";
-"Set Folder for Key" = "设置按键的文件夹";
 "Set Folder for Key %d…" = "设置按键 %d 的文件夹…";
 "Settings" = "设置";
 "Settings…" = "设置…";
@@ -247,9 +267,11 @@
 "Sort By" = "排序方式";
 "Sort by %@" = "排序方式：%@";
 "Sort into Date Folders" = "按日期分类到文件夹";
+"Sort into folders as you go" = "边看边归入文件夹";
 "Sorted into date folders" = "已按日期分类到文件夹";
 "Speed Overlay" = "速度叠加";
 "Stay on this photo" = "停留在此照片";
+"Step by step: %@." = "分步说明：%@。";
 "Stopped. What's done stays done." = "已停止。已完成的文件保留。";
 "System" = "其他";
 "Taken" = "拍摄";
@@ -259,9 +281,11 @@
 "The file can't be read." = "无法读取此文件。";
 "The folder is created next to the photos. Originals stay as they are." = "文件夹将创建在照片旁边。原件保持不变。";
 "The photo is already in “%@”" = "照片已在“%@”中";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "然后选择“%@”，按 %@ 再按 %@。所有排除的照片都会移到废纸篓。";
 "This format can't be rotated without re-encoding." = "此格式无法在不重新编码的情况下旋转。";
 "Thumbnail Grid" = "缩略图网格";
 "Thumbnail Strip" = "缩略图条";
+"To give a key another folder, press %@." = "要为某个键换一个文件夹，请按 %@。";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "要显示“%@”中的其他照片，Bolt 需要访问该文件夹。如果你允许访问上级文件夹，例如主文件夹，Bolt 以后就不会再询问其中的文件夹。";
 "Type a command" = "输入命令名称";
 "Undo" = "撤销";
@@ -270,6 +294,7 @@
 "Unflagged" = "无标记";
 "View" = "显示";
 "Web" = "网页";
+"Where flags and stars are kept" = "标记和星级保存在哪里";
 "Window" = "窗口";
 "Yellow" = "黄色";
 "Zoom" = "缩放";
@@ -297,4 +322,5 @@
 "no metadata" = "无元数据";
 "not set" = "未设置";
 "“%@” already exists." = "“%@”已存在。";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← 和 → 在它们之间切换。用 %@ 标出最好的一张，然后按 Esc。";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ 裁剪   Esc 取消   X 旋转边框";

@@ -77,9 +77,7 @@
 "Rotate Left" = "Повернуть влево";
 "Rotate Right" = "Повернуть вправо";
 "Flip Horizontal" = "Отразить по горизонтали";
-"Move to Folder" = "Переместить в папку";
-"Copy to Folder" = "Скопировать в папку";
-"Set Folder for Key" = "Папка для клавиши";
+"Folders on Keys" = "Папки на клавишах";
 "Move to “%@”" = "Переместить в «%@»";
 "Copy to “%@”" = "Скопировать в «%@»";
 "Move to Folder %d" = "Переместить в папку %d";
@@ -323,3 +321,35 @@
 "Restart Now" = "Перезапустить";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Чтобы показать остальные фото из «%@», Bolt нужен доступ к папке. Если разрешить папку выше, например домашнюю, Bolt больше не спросит про папки внутри неё.";
 "Allow" = "Разрешить";
+
+/* Справка: как отбирать фото */
+"How to Sort Photos" = "Как отбирать фото";
+"How the culling keys work together: %@." = "Как клавиши отбора работают вместе: %@.";
+"Pick the best and copy them to another folder" = "Отобрать лучшие и скопировать в другую папку";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Листайте фото и нажимайте %@ на нужных. В строке состояния у них появится ✓.";
+"Choose %@. Only the picked photos stay in the list." = "Выберите %@. В списке останутся только они.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Нажмите %@, чтобы выделить все, затем %@ и выберите папку. %@ не скопирует, а перенесёт.";
+"Choose %@ to see every photo again." = "Чтобы снова видеть все фото, выберите %@.";
+"Sort into folders as you go" = "Раскладывать по папкам на ходу";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Нажмите %@ на фото. Bolt спросит папку, перенесёт туда фото и запомнит папку за этой клавишей.";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Дальше %@ переносит фото в эту папку, а %@ копирует. На клавишах %@ помещается девять папок.";
+"To give a key another folder, press %@." = "Чтобы сменить папку у клавиши, нажмите %@.";
+"Get rid of failed shots" = "Убрать неудачные кадры";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Нажимайте %@ на ненужных фото или %@, чтобы сразу отправить фото в Корзину.";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Потом выберите %@, нажмите %@ и %@. Все отклонённые уйдут в Корзину.";
+"Choose the best shot of a series" = "Выбрать лучший кадр из серии";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Выделите серию клавишей %@ и нажмите %@. Рядом встанут до четырёх фото.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "Стрелки ← и → переключают между ними. Отметьте лучший клавишей %@ и нажмите Esc.";
+"Rate with stars" = "Ставить звёзды";
+"%@ give one to five stars, %@ removes them." = "%@ ставят от одной до пяти звёзд, %@ убирает их.";
+"Choose %@ to see only the best ones, then copy them as above." = "Выберите %@, чтобы видеть только лучшие, и скопируйте их, как описано выше.";
+"Where flags and stars are kept" = "Где хранятся флаги и звёзды";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Флаги, звёзды и цветные метки — это теги Finder на самом файле. Их показывает Finder, по ним ищет Spotlight, копия фото сохраняет их.";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ отменяет перенос, удаление или флаг. Нажмите ещё раз, чтобы отменить предыдущее действие.";
+
+/* Подсказки, каждая показывается один раз */
+"Picked. To show picks only: %@." = "Оставлено. Показать только оставленные: %@.";
+"Step by step: %@." = "Пошагово: %@.";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Отклонено. Чтобы удалить все отклонённые разом, выберите %@, затем нажмите %@ и %@.";
+"Rating saved. To show the best only: %@." = "Оценка сохранена. Показать только лучшие: %@.";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Теперь видны только эти фото. %@ выделит их все, %@ скопирует в папку.";

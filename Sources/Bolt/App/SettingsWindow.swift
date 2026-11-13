@@ -57,7 +57,7 @@ final class KeysModel {
     @ObservationIgnored private var monitor: Any?
 
     func commands(in group: Command.Group) -> [Command] {
-        Command.all.filter { $0.group == group }
+        Command.all.filter { $0.group == group && !$0.isHidden }
     }
 
     func shortcut(for command: Command) -> String {

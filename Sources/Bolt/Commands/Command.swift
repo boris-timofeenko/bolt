@@ -26,7 +26,7 @@ enum Command: Hashable {
     case sort(SortKey), reverseSort
     case background(CanvasBackground)
 
-    case commandPalette, cheatSheet, performanceOverlay, settings
+    case commandPalette, cheatSheet, sortingGuide, performanceOverlay, settings
 
     enum Group: CaseIterable {
         case navigation, view, zoom, culling, file, edit, system
@@ -63,7 +63,7 @@ enum Command: Hashable {
                      .export, .exportWithPreset, .convert, .batchRename, .dateFolders, .removePrivateData]
         commands += SortKey.allCases.map(Command.sort) + [.reverseSort]
         commands += CanvasBackground.allCases.map(Command.background)
-        commands += [.commandPalette, .cheatSheet, .performanceOverlay, .settings]
+        commands += [.commandPalette, .cheatSheet, .sortingGuide, .performanceOverlay, .settings]
         return commands
     }
 
@@ -105,7 +105,7 @@ enum Command: Hashable {
         case .rotateLeft, .rotateRight, .flipHorizontal, .crop, .export, .exportWithPreset, .convert, .batchRename,
              .dateFolders, .removePrivateData:
             .edit
-        case .commandPalette, .cheatSheet, .performanceOverlay, .settings:
+        case .commandPalette, .cheatSheet, .sortingGuide, .performanceOverlay, .settings:
             .system
         }
     }
@@ -181,10 +181,15 @@ enum Command: Hashable {
         case .background(let background): background.title
         case .commandPalette: L("All Commands")
         case .cheatSheet: L("Keyboard Shortcuts")
+        case .sortingGuide: L("How to Sort Photos")
         case .performanceOverlay: L("Speed Overlay")
         case .settings: L("Settings…")
         }
     }
+
+    /// Developer tools: they keep a key (⌘⌥P shows decode and display times) but stay out of
+    /// the menus, the palette and the shortcut settings.
+    var isHidden: Bool { self == .performanceOverlay }
 
     /// Title for places without a menu around it, like the command palette.
     var paletteTitle: String {

@@ -112,6 +112,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
             session.showOpenPanel(for: nil)
         } else if command == .settings {
             session.showSettings()
+        } else if command == .sortingGuide {
+            session.showSortingGuide()
         }
     }
 
@@ -172,7 +174,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
             default:
                 break
             }
-            guard let controller = session.activeController else { return command == .open || command == .settings }
+            guard let controller = session.activeController else {
+                return command == .open || command == .settings || command == .sortingGuide
+            }
             menuItem.state = controller.isChecked(command) ? .on : .off
             return controller.isEnabled(command)
         default:

@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (%d mm समकक्ष)";
 "%@ (and %d more)" = "%@ (और %d)";
 "%@ and Up" = "%@ और ऊपर";
+"%@ give one to five stars, %@ removes them." = "%@ एक से पाँच स्टार देते हैं, %@ उन्हें हटाता है।";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ s";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ ले जाना, हटाना या फ़्लैग पूर्ववत करता है। और पीछे जाने के लिए फिर दबाएँ।";
 "%d / %d of %d" = "%d / %d में से %d";
 "%d bit" = "%d बिट";
 "%d photos" = "%d फ़ोटो";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "पिछला चयन में जोड़ें";
 "Added to comparison. Press K on another photo" = "तुलना में जोड़ा गया। दूसरी फ़ोटो पर K दबाएँ";
 "After copying:" = "कॉपी करने के बाद:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "इसके बाद %@ फ़ोटो को उस फ़ोल्डर में ले जाता है और %@ कॉपी करता है। %@ पर नौ फ़ोल्डर रखे जा सकते हैं।";
 "All Commands" = "सभी कमांड";
 "All Photos" = "सभी फ़ोटो";
 "Allow" = "अनुमति दें";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "फ़ोल्डर नहीं पढ़ा जा सका: %@";
 "Cancel" = "रद्द करें";
 "Choose" = "चुनें";
+"Choose %@ to see every photo again." = "सभी फ़ोटो फिर से देखने के लिए %@ चुनें।";
+"Choose %@ to see only the best ones, then copy them as above." = "केवल सबसे अच्छी देखने के लिए %@ चुनें, फिर ऊपर की तरह कॉपी करें।";
+"Choose %@. Only the picked photos stay in the list." = "%@ चुनें। सूची में केवल चुनी गई फ़ोटो रहेंगी।";
 "Choose folder for a key" = "किसी कुंजी के लिए फ़ोल्डर चुनें";
+"Choose the best shot of a series" = "किसी सीरीज़ की सबसे अच्छी फ़ोटो चुनें";
 "Choose…" = "चुनें…";
 "Cleaning" = "जियो-टैग हटाना";
 "Clear" = "हटाएँ";
@@ -56,7 +63,7 @@
 "Copy" = "कॉपी करें";
 "Copy Image" = "इमेज कॉपी करें";
 "Copy Path" = "पथ कॉपी करें";
-"Copy to Folder" = "फ़ोल्डर में कॉपी करें";
+"Folders on Keys" = "कुंजियों पर फ़ोल्डर";
 "Copy to Folder %d" = "फ़ोल्डर %d में कॉपी करें";
 "Copy to Folder…" = "फ़ोल्डर में कॉपी करें…";
 "Copy to folder 1–9" = "फ़ोल्डर 1–9 में कॉपी";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "फ़िट / 100%";
 "Fit Width" = "चौड़ाई में फ़िट करें";
 "Fit to Window" = "विंडो में फ़िट करें";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "फ़्लैग, स्टार और रंगीन लेबल फ़ाइल पर ही लगे Finder टैग हैं। Finder उन्हें दिखाता है, Spotlight उन्हें ढूँढता है, और फ़ोटो की कॉपी में वे बने रहते हैं।";
 "Flip Horizontal" = "क्षैतिज पलटें";
 "Flips through photos" = "फ़ोटो पलटता है";
 "Focal length" = "फ़ोकल लंबाई";
@@ -105,13 +113,17 @@
 "Full Screen" = "पूर्ण स्क्रीन";
 "Full Size JPEG" = "पूरे आकार का JPEG";
 "General" = "सामान्य";
+"Get rid of failed shots" = "ख़राब फ़ोटो हटाएँ";
 "Go" = "जाएँ";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "फ़ोटो देखते जाएँ और जो चाहिए उन पर %@ दबाएँ। स्टेटस बार में ✓ दिखेगा।";
 "Gray" = "धूसर";
 "Green" = "हरा";
 "Help" = "सहायता";
 "Hide %@" = "%@ छिपाएँ";
 "Hide Interface" = "इंटरफ़ेस छिपाएँ";
 "Hide Others" = "अन्य छिपाएँ";
+"How the culling keys work together: %@." = "छँटाई की कुंजियाँ साथ में कैसे काम करती हैं: %@।";
+"How to Sort Photos" = "फ़ोटो कैसे छाँटें";
 "ISO" = "ISO";
 "Image" = "इमेज";
 "Image copied" = "इमेज कॉपी हुई";
@@ -137,7 +149,6 @@
 "Minimize" = "छोटा करें";
 "Modified" = "बदला गया";
 "Mouse wheel:" = "माउस व्हील:";
-"Move to Folder" = "फ़ोल्डर में ले जाएँ";
 "Move to Folder %d" = "फ़ोल्डर %d में ले जाएँ";
 "Move to Folder…" = "फ़ोल्डर में ले जाएँ…";
 "Move to Trash" = "रद्दी की टोकरी में डालें";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "दोहराने को अभी कुछ नहीं";
 "Nothing to undo" = "वापस लेने को कुछ नहीं";
 "O opens in:" = "O इसमें खोलता है:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "अब केवल ये फ़ोटो दिख रही हैं। %@ सबको चुनता है, %@ उन्हें फ़ोल्डर में कॉपी करता है।";
 "Open Recent" = "हाल की खोलें";
 "Open in %@" = "%@ में खोलें";
 "Open in Maps" = "Maps में खोलें";
@@ -178,6 +190,8 @@
 "Photo" = "फ़ोटो";
 "Photos now open in Bolt." = "अब फ़ोटो Bolt में खुलती हैं।";
 "Pick" = "चुनें";
+"Pick the best and copy them to another folder" = "सबसे अच्छी फ़ोटो चुनें और दूसरे फ़ोल्डर में कॉपी करें";
+"Picked. To show picks only: %@." = "चुनी गई। केवल चुनी गई दिखाने के लिए: %@।";
 "Picks" = "चुनी गई";
 "Pixels" = "पिक्सल";
 "Pixels:" = "पिक्सल:";
@@ -186,6 +200,9 @@
 "Preset" = "प्रीसेट";
 "Preset name" = "प्रीसेट का नाम";
 "Preset:" = "प्रीसेट:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "किसी फ़ोटो पर %@ दबाएँ। Bolt फ़ोल्डर पूछेगा, फ़ोटो को वहाँ ले जाएगा और इस कुंजी के लिए फ़ोल्डर याद रखेगा।";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "जिन फ़ोटो की ज़रूरत नहीं उन पर %@ दबाएँ, या किसी को तुरंत रद्दी की टोकरी में डालने के लिए %@ दबाएँ।";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "सब चुनने के लिए %1$@ दबाएँ, फिर %2$@ दबाकर फ़ोल्डर चुनें। %3$@ कॉपी करने के बजाय ले जाता है।";
 "Press keys…" = "कुंजियाँ दबाएँ…";
 "Previous Folder" = "पिछला फ़ोल्डर";
 "Previous Photo" = "पिछली फ़ोटो";
@@ -193,8 +210,10 @@
 "Quality:" = "गुणवत्ता:";
 "Quit %@" = "%@ बंद करें";
 "Random" = "रैंडम";
+"Rate with stars" = "स्टार से रेटिंग दें";
 "Rating" = "रेटिंग";
 "Rating %@" = "रेटिंग %@";
+"Rating saved. To show the best only: %@." = "रेटिंग सहेजी गई। केवल सबसे अच्छी दिखाने के लिए: %@।";
 "Reading shooting dates…" = "खींचने की तारीखें पढ़ी जा रही हैं…";
 "Red" = "लाल";
 "Redo" = "फिर से करें";
@@ -202,6 +221,7 @@
 "Redone: %@" = "फिर से किया गया: %@";
 "Reject" = "अस्वीकार";
 "Rejected" = "अस्वीकृत";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "अस्वीकृत। सभी अस्वीकृत फ़ोटो एक साथ हटाने के लिए %@ चुनें, फिर %@ और %@ दबाएँ।";
 "Remove Location and Serial Numbers" = "स्थान और सीरियल नंबर हटाएँ";
 "Remove all" = "सभी हटाएँ";
 "Remove location and serial numbers" = "स्थान और सीरियल नंबर हटाएँ";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "बिना स्थान की कॉपी सहेजी गई";
 "Saved to “%@”" = "“%@” में सहेजा गया";
 "Select All" = "सभी चुनें";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "%@ से सीरीज़ चुनें, फिर %@ दबाएँ। चार तक फ़ोटो साथ-साथ दिखेंगी।";
 "Services" = "सेवाएँ";
-"Set Folder for Key" = "कुंजी के लिए फ़ोल्डर सेट करें";
 "Set Folder for Key %d…" = "कुंजी %d के लिए फ़ोल्डर सेट करें…";
 "Settings" = "सेटिंग्स";
 "Settings…" = "सेटिंग्स…";
@@ -247,9 +267,11 @@
 "Sort By" = "क्रम से लगाएँ";
 "Sort by %@" = "क्रम: %@";
 "Sort into Date Folders" = "तारीख वाले फ़ोल्डरों में छाँटें";
+"Sort into folders as you go" = "देखते-देखते फ़ोल्डरों में बाँटें";
 "Sorted into date folders" = "तारीख वाले फ़ोल्डरों में छाँटा गया";
 "Speed Overlay" = "गति का ओवरले";
 "Stay on this photo" = "इसी फ़ोटो पर रहें";
+"Step by step: %@." = "चरण-दर-चरण: %@।";
 "Stopped. What's done stays done." = "रुक गया। जो हो चुका, वह रहेगा।";
 "System" = "सिस्टम";
 "Taken" = "खींची गई";
@@ -259,9 +281,11 @@
 "The file can't be read." = "फ़ाइल नहीं पढ़ी जा सकती।";
 "The folder is created next to the photos. Originals stay as they are." = "फ़ोल्डर फ़ोटो के बगल में बनेगा। मूल फ़ाइलें वैसी ही रहेंगी।";
 "The photo is already in “%@”" = "फ़ोटो पहले से “%@” में है";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "फिर %@ चुनें, %@ और %@ दबाएँ। सभी अस्वीकृत फ़ोटो रद्दी की टोकरी में चली जाएँगी।";
 "This format can't be rotated without re-encoding." = "इस प्रारूप को री-एन्कोड किए बिना नहीं घुमाया जा सकता।";
 "Thumbnail Grid" = "थंबनेल ग्रिड";
 "Thumbnail Strip" = "थंबनेल पट्टी";
+"To give a key another folder, press %@." = "किसी कुंजी को दूसरा फ़ोल्डर देने के लिए %@ दबाएँ।";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "“%@” में बाकी फ़ोटो दिखाने के लिए Bolt को इस फ़ोल्डर तक पहुँच चाहिए। अगर आप इसके ऊपर का कोई फ़ोल्डर, जैसे आपका होम फ़ोल्डर, अनुमति देते हैं, तो Bolt उसके अंदर के फ़ोल्डरों के बारे में दोबारा नहीं पूछेगा।";
 "Type a command" = "कमांड का नाम लिखें";
 "Undo" = "वापस लें";
@@ -270,6 +294,7 @@
 "Unflagged" = "बिना फ़्लैग";
 "View" = "देखें";
 "Web" = "वेब के लिए";
+"Where flags and stars are kept" = "फ़्लैग और स्टार कहाँ रखे जाते हैं";
 "Window" = "विंडो";
 "Yellow" = "पीला";
 "Zoom" = "ज़ूम";
@@ -297,4 +322,5 @@
 "no metadata" = "कोई मेटाडेटा नहीं";
 "not set" = "सेट नहीं";
 "“%@” already exists." = "“%@” पहले से मौजूद है।";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← और → से उनके बीच जाएँ। सबसे अच्छी पर %@ दबाएँ और Esc दबाएँ।";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ क्रॉप   Esc रद्द   X फ़्रेम घुमाएँ";

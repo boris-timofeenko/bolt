@@ -53,6 +53,7 @@ enum Preferences {
         static let showInfo = "showInfo"
         static let keyOverrides = "keyOverrides"
         static let slideshowSeconds = "slideshowSeconds"
+        static let shownTips = "shownTips"
     }
 
     private static var defaults: UserDefaults { .standard }
@@ -140,6 +141,15 @@ enum Preferences {
     }
 
     // MARK: - Buckets
+
+    /// True the first time it's asked about a tip, false ever after: each tip shows once.
+    static func takeTip(_ name: String) -> Bool {
+        var shown = defaults.stringArray(forKey: Key.shownTips) ?? []
+        guard !shown.contains(name) else { return false }
+        shown.append(name)
+        defaults.set(shown, forKey: Key.shownTips)
+        return true
+    }
 
     /// Folders assigned to keys 1–9.
     static func bucket(_ number: Int) -> URL? {

@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (35mm 환산 %d mm)";
 "%@ (and %d more)" = "%@ (외 %d개)";
 "%@ and Up" = "%@ 이상";
+"%@ give one to five stars, %@ removes them." = "%@ 키로 별 1~5개를 매기고 %@ 키로 지웁니다.";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@초";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ 키는 이동, 삭제, 플래그를 실행 취소합니다. 다시 누르면 더 이전으로 돌아갑니다.";
 "%d / %d of %d" = "%d / %d (전체 %d)";
 "%d bit" = "%d비트";
 "%d photos" = "사진 %d장";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "이전 사진 선택에 추가";
 "Added to comparison. Press K on another photo" = "비교 목록에 추가됨. 다른 사진에서 K를 누르세요";
 "After copying:" = "복사 후:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "그다음부터 %@ 키는 사진을 그 폴더로 이동하고 %@ 키는 복사합니다. %@ 키에 폴더 9개를 지정할 수 있습니다.";
 "All Commands" = "모든 명령";
 "All Photos" = "모든 사진";
 "Allow" = "허용";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "폴더를 읽을 수 없음: %@";
 "Cancel" = "취소";
 "Choose" = "선택";
+"Choose %@ to see every photo again." = "모든 사진을 다시 보려면 %@ 항목을 선택하십시오.";
+"Choose %@ to see only the best ones, then copy them as above." = "%@ 항목을 선택해 좋은 사진만 보고, 위와 같이 복사하십시오.";
+"Choose %@. Only the picked photos stay in the list." = "%@ 항목을 선택하십시오. 목록에는 선택한 사진만 남습니다.";
 "Choose folder for a key" = "이 키에 쓸 폴더 선택";
+"Choose the best shot of a series" = "연사에서 가장 좋은 컷 고르기";
 "Choose…" = "선택…";
 "Cleaning" = "위치 정보 지우기";
 "Clear" = "지우기";
@@ -56,7 +63,7 @@
 "Copy" = "복사";
 "Copy Image" = "이미지 복사";
 "Copy Path" = "경로 복사";
-"Copy to Folder" = "폴더로 복사";
+"Folders on Keys" = "키에 지정한 폴더";
 "Copy to Folder %d" = "폴더 %d로 복사";
 "Copy to Folder…" = "폴더로 복사…";
 "Copy to folder 1–9" = "1–9 폴더로 복사";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "맞춤 / 100%";
 "Fit Width" = "너비에 맞춤";
 "Fit to Window" = "창에 맞춤";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "플래그, 별점, 색상 레이블은 파일 자체에 붙는 Finder 태그입니다. Finder에 표시되고 Spotlight로 찾을 수 있으며, 사진을 복사해도 유지됩니다.";
 "Flip Horizontal" = "좌우 뒤집기";
 "Flips through photos" = "사진 넘기기";
 "Focal length" = "초점 거리";
@@ -105,13 +113,17 @@
 "Full Screen" = "전체 화면";
 "Full Size JPEG" = "원본 크기 JPEG";
 "General" = "일반";
+"Get rid of failed shots" = "잘못 찍힌 사진 정리하기";
 "Go" = "이동";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "사진을 넘겨 보며 남길 사진에서 %@ 키를 누르십시오. 상태 막대에 ✓가 표시됩니다.";
 "Gray" = "회색";
 "Green" = "초록";
 "Help" = "도움말";
 "Hide %@" = "%@ 가리기";
 "Hide Interface" = "인터페이스 숨기기";
 "Hide Others" = "다른 앱 가리기";
+"How the culling keys work together: %@." = "선별 키를 함께 쓰는 방법: %@.";
+"How to Sort Photos" = "사진 선별 방법";
 "ISO" = "ISO";
 "Image" = "이미지";
 "Image copied" = "이미지 복사됨";
@@ -137,7 +149,6 @@
 "Minimize" = "최소화";
 "Modified" = "수정됨";
 "Mouse wheel:" = "마우스 휠:";
-"Move to Folder" = "폴더로 이동";
 "Move to Folder %d" = "폴더 %d로 이동";
 "Move to Folder…" = "폴더로 이동…";
 "Move to Trash" = "휴지통으로 이동";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "아직 반복할 작업이 없음";
 "Nothing to undo" = "실행 취소할 것이 없음";
 "O opens in:" = "O 키로 열기:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "지금은 이 사진들만 표시됩니다. %@ 키로 모두 선택하고 %@ 키로 폴더에 복사합니다.";
 "Open Recent" = "최근 항목 열기";
 "Open in %@" = "%@에서 열기";
 "Open in Maps" = "지도에서 열기";
@@ -178,6 +190,8 @@
 "Photo" = "사진";
 "Photos now open in Bolt." = "이제 사진이 Bolt에서 열립니다.";
 "Pick" = "선택";
+"Pick the best and copy them to another folder" = "좋은 사진을 골라 다른 폴더에 복사하기";
+"Picked. To show picks only: %@." = "선택했습니다. 선택한 사진만 보기: %@.";
 "Picks" = "선택됨";
 "Pixels" = "픽셀";
 "Pixels:" = "픽셀:";
@@ -186,6 +200,9 @@
 "Preset" = "프리셋";
 "Preset name" = "프리셋 이름";
 "Preset:" = "프리셋:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "사진에서 %@ 키를 누르십시오. Bolt가 폴더를 묻고, 사진을 그곳으로 옮긴 뒤 이 키에 폴더를 기억합니다.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "필요 없는 사진에서 %@ 키를 누르거나, %@ 키로 바로 휴지통에 넣으십시오.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "%1$@ 키로 모두 선택한 다음 %2$@ 키를 누르고 폴더를 고르십시오. %3$@ 키는 복사 대신 이동합니다.";
 "Press keys…" = "키를 누르세요…";
 "Previous Folder" = "이전 폴더";
 "Previous Photo" = "이전 사진";
@@ -193,8 +210,10 @@
 "Quality:" = "품질:";
 "Quit %@" = "%@ 종료";
 "Random" = "무작위";
+"Rate with stars" = "별점 매기기";
 "Rating" = "평점";
 "Rating %@" = "평점 %@";
+"Rating saved. To show the best only: %@." = "별점을 저장했습니다. 좋은 사진만 보기: %@.";
 "Reading shooting dates…" = "촬영 날짜 읽는 중…";
 "Red" = "빨강";
 "Redo" = "다시 실행";
@@ -202,6 +221,7 @@
 "Redone: %@" = "다시 실행됨: %@";
 "Reject" = "제외";
 "Rejected" = "제외됨";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "제외했습니다. 제외한 사진을 한 번에 삭제하려면 %@ 항목을 선택한 다음 %@ 키와 %@ 키를 누르십시오.";
 "Remove Location and Serial Numbers" = "위치 정보 및 일련번호 지우기";
 "Remove all" = "모두 지우기";
 "Remove location and serial numbers" = "위치 정보 및 일련번호 지우기";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "위치 정보를 뺀 사본 저장됨";
 "Saved to “%@”" = "“%@”에 저장됨";
 "Select All" = "전체 선택";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "%@ 키로 연속된 사진을 선택하고 %@ 키를 누르십시오. 최대 4장이 나란히 표시됩니다.";
 "Services" = "서비스";
-"Set Folder for Key" = "키에 폴더 지정";
 "Set Folder for Key %d…" = "키 %d의 폴더 지정…";
 "Settings" = "설정";
 "Settings…" = "설정…";
@@ -247,9 +267,11 @@
 "Sort By" = "정렬 기준";
 "Sort by %@" = "정렬: %@";
 "Sort into Date Folders" = "날짜 폴더로 분류";
+"Sort into folders as you go" = "보면서 바로 폴더로 나누기";
 "Sorted into date folders" = "날짜 폴더로 분류됨";
 "Speed Overlay" = "속도 표시";
 "Stay on this photo" = "이 사진에 머물기";
+"Step by step: %@." = "단계별 안내: %@.";
 "Stopped. What's done stays done." = "중지됨. 끝난 작업은 그대로 남았습니다.";
 "System" = "기타";
 "Taken" = "촬영됨";
@@ -259,9 +281,11 @@
 "The file can't be read." = "파일을 읽을 수 없습니다.";
 "The folder is created next to the photos. Originals stay as they are." = "폴더는 사진 옆에 만들어집니다. 원본은 그대로 둡니다.";
 "The photo is already in “%@”" = "사진이 이미 “%@”에 있습니다";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "그런 다음 %@ 항목을 선택하고 %@ 키와 %@ 키를 누르십시오. 제외한 사진이 모두 휴지통으로 갑니다.";
 "This format can't be rotated without re-encoding." = "이 형식은 다시 인코딩하지 않고는 회전할 수 없습니다.";
 "Thumbnail Grid" = "썸네일 격자";
 "Thumbnail Strip" = "썸네일 띠";
+"To give a key another folder, press %@." = "키에 다른 폴더를 지정하려면 %@ 키를 누르십시오.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "“%@”의 다른 사진을 표시하려면 Bolt가 이 폴더에 접근해야 합니다. 홈 폴더처럼 이 폴더보다 상위의 폴더를 허용하면, Bolt는 그 안에 있는 폴더에 대해 다시 묻지 않습니다.";
 "Type a command" = "명령 이름 입력";
 "Undo" = "실행 취소";
@@ -270,6 +294,7 @@
 "Unflagged" = "플래그 없음";
 "View" = "보기";
 "Web" = "웹용";
+"Where flags and stars are kept" = "플래그와 별점이 저장되는 곳";
 "Window" = "창";
 "Yellow" = "노랑";
 "Zoom" = "확대/축소";
@@ -297,4 +322,5 @@
 "no metadata" = "메타데이터 없음";
 "not set" = "설정 안 됨";
 "“%@” already exists." = "“%@”이(가) 이미 있습니다.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "←와 →로 사진을 전환합니다. 가장 좋은 사진에서 %@ 키를 누르고 Esc를 누르십시오.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ 자르기   Esc 취소   X 프레임 회전";

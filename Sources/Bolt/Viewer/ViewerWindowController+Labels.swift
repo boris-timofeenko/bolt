@@ -29,6 +29,7 @@ extension ViewerWindowController {
         labelsDidChange()
         // Under a filter the photo may just have left the list; then the next one is already on screen.
         if gallery.current?.url == current.url { advanceAfterNonRemovingAction() }
+        if labelFilter == .all { showTip(after: change) }
     }
 
     func setFilter(_ filter: LabelFilter) {
@@ -41,7 +42,37 @@ extension ViewerWindowController {
             }
         }
         displayCurrent()
-        if gallery.isEmpty, filter != .all { showToast(L("Nothing matches: %@", filter.title.lowercasedFirstLetter)) }
+        if gallery.isEmpty, filter != .all {
+            showToast(L("Nothing matches: %@", filter.title.lowercasedFirstLetter))
+        } else if filter != .all {
+            showTipOnce("filter", L("Only these photos are shown now. %@ selects all of them, %@ copies them to a folder.",
+                                    key(.selectAll), key(.copyToFolder)))
+        }
+    }
+
+    /// The first flag or rating ever set leads on to the filter that makes it useful.
+    private func showTip(after change: LabelChange) {
+        switch change {
+        case .flag(.pick):
+            showTipOnce("pick", L("Picked. To show picks only: %@.", Guide.menuPath(.picks)) + "\n"
+                + L("Step by step: %@.", Guide.guideMenuPath))
+        case .flag(.reject):
+            showTipOnce("reject", L("Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@.",
+                                    Guide.menuPath(.rejects), key(.selectAll), key(.trash)))
+        case .rating(let stars) where stars > 0:
+            showTipOnce("rating", L("Rating saved. To show the best only: %@.", Guide.menuPath(.rated(atLeast: 3))))
+        default:
+            break
+        }
+    }
+
+    private func showTipOnce(_ name: String, _ text: String) {
+        guard Preferences.takeTip(name) else { return }
+        root.toast.showTip(text)
+    }
+
+    private func key(_ command: Command) -> String {
+        Guide(keyMap: session.keyMap).key(command)
     }
 
     /// Picks up label changes made by undo or in another window.

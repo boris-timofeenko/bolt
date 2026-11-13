@@ -10,6 +10,7 @@ final class CheatSheetView: NSView {
     var onClose: (() -> Void)?
     private let panel = NSView()
     private let columns = NSStackView()
+    private let content = NSStackView()
 
     init(keyMap: KeyMap) {
         super.init(frame: .zero)
@@ -23,8 +24,17 @@ final class CheatSheetView: NSView {
         columns.orientation = .horizontal
         columns.alignment = .top
         columns.spacing = 36
-        columns.edgeInsets = NSEdgeInsets(top: 22, left: 26, bottom: 24, right: 26)
-        panel.addSubview(columns)
+        content.orientation = .vertical
+        content.alignment = .leading
+        content.spacing = 4
+        content.edgeInsets = NSEdgeInsets(top: 22, left: 26, bottom: 20, right: 26)
+        content.addArrangedSubview(columns)
+        // Keys alone don't say how they add up; the guide does.
+        let guide = NSTextField(labelWithString: L("How the culling keys work together: %@.", Guide.guideMenuPath))
+        guide.font = .systemFont(ofSize: 11)
+        guide.textColor = .secondaryLabelColor
+        content.addArrangedSubview(guide)
+        panel.addSubview(content)
 
         let groups = Self.rows(for: keyMap)
         // Three columns of roughly equal height.
@@ -62,10 +72,10 @@ final class CheatSheetView: NSView {
 
     override func layout() {
         super.layout()
-        let size = columns.fittingSize
+        let size = content.fittingSize
         panel.frame = NSRect(x: max((bounds.width - size.width) / 2, 0), y: max((bounds.height - size.height) / 2, 0),
                              width: size.width, height: size.height)
-        columns.frame = panel.bounds
+        content.frame = panel.bounds
     }
 
     override func mouseDown(with event: NSEvent) {

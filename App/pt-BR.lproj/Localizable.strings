@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (equiv. a %d mm)";
 "%@ (and %d more)" = "%@ (e mais %d)";
 "%@ and Up" = "%@ e superior";
+"%@ give one to five stars, %@ removes them." = "%@ dão de uma a cinco estrelas, %@ as remove.";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ s";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ desfaz uma movimentação, uma exclusão ou uma marcação. Pressione de novo para voltar mais.";
 "%d / %d of %d" = "%d / %d de %d";
 "%d bit" = "%d bits";
 "%d photos" = "%d fotos";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "Adicionar anterior à seleção";
 "Added to comparison. Press K on another photo" = "Foto adicionada à comparação. Pressione K em outra foto";
 "After copying:" = "Depois de copiar:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Depois disso, %@ move uma foto para a pasta e %@ a copia. As teclas %@ guardam nove pastas.";
 "All Commands" = "Todos os comandos";
 "All Photos" = "Todas as fotos";
 "Allow" = "Permitir";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "Não foi possível ler a pasta: %@";
 "Cancel" = "Cancelar";
 "Choose" = "Escolher";
+"Choose %@ to see every photo again." = "Para ver todas as fotos de novo, escolha %@.";
+"Choose %@ to see only the best ones, then copy them as above." = "Escolha %@ para ver só as melhores e copie-as como acima.";
+"Choose %@. Only the picked photos stay in the list." = "Escolha %@. Só as fotos escolhidas ficam na lista.";
 "Choose folder for a key" = "Escolher pasta para a tecla";
+"Choose the best shot of a series" = "Escolher a melhor foto de uma sequência";
 "Choose…" = "Escolher…";
 "Cleaning" = "Remoção de localização";
 "Clear" = "Limpar";
@@ -56,7 +63,7 @@
 "Copy" = "Copiar";
 "Copy Image" = "Copiar imagem";
 "Copy Path" = "Copiar caminho";
-"Copy to Folder" = "Copiar para a pasta";
+"Folders on Keys" = "Pastas nas teclas";
 "Copy to Folder %d" = "Copiar para a pasta %d";
 "Copy to Folder…" = "Copiar para a pasta…";
 "Copy to folder 1–9" = "Cópia para a pasta 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "Ajustar / 100%";
 "Fit Width" = "Ajustar à largura";
 "Fit to Window" = "Ajustar à janela";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Marcações, estrelas e etiquetas de cor são tags do Finder no próprio arquivo. O Finder as mostra, o Spotlight as encontra e uma cópia da foto as mantém.";
 "Flip Horizontal" = "Espelhar horizontalmente";
 "Flips through photos" = "Passa fotos";
 "Focal length" = "Distância focal";
@@ -105,13 +113,17 @@
 "Full Screen" = "Tela cheia";
 "Full Size JPEG" = "JPEG em tamanho original";
 "General" = "Geral";
+"Get rid of failed shots" = "Livrar-se das fotos ruins";
 "Go" = "Ir";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Percorra as fotos e pressione %@ nas que você quer. Elas ganham um ✓ na barra de status.";
 "Gray" = "Cinza";
 "Green" = "Verde";
 "Help" = "Ajuda";
 "Hide %@" = "Ocultar %@";
 "Hide Interface" = "Ocultar interface";
 "Hide Others" = "Ocultar outros";
+"How the culling keys work together: %@." = "Como as teclas de triagem funcionam juntas: %@.";
+"How to Sort Photos" = "Como fazer a triagem de fotos";
 "ISO" = "ISO";
 "Image" = "Imagem";
 "Image copied" = "Imagem copiada";
@@ -137,7 +149,6 @@
 "Minimize" = "Minimizar";
 "Modified" = "Modificada";
 "Mouse wheel:" = "Roda do mouse:";
-"Move to Folder" = "Mover para a pasta";
 "Move to Folder %d" = "Mover para a pasta %d";
 "Move to Folder…" = "Mover para a pasta…";
 "Move to Trash" = "Mover para o Lixo";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "Ainda não há o que repetir";
 "Nothing to undo" = "Nada para desfazer";
 "O opens in:" = "A tecla O abre em:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Agora só estas fotos aparecem. %@ seleciona todas, %@ as copia para uma pasta.";
 "Open Recent" = "Abrir recentes";
 "Open in %@" = "Abrir no %@";
 "Open in Maps" = "Abrir no Mapas";
@@ -178,6 +190,8 @@
 "Photo" = "Foto";
 "Photos now open in Bolt." = "Agora as fotos abrem no Bolt.";
 "Pick" = "Escolher";
+"Pick the best and copy them to another folder" = "Escolher as melhores e copiá-las para outra pasta";
+"Picked. To show picks only: %@." = "Escolhida. Para ver só as escolhidas: %@.";
 "Picks" = "Escolhidas";
 "Pixels" = "Pixels";
 "Pixels:" = "Pixels:";
@@ -186,6 +200,9 @@
 "Preset" = "Predefinição";
 "Preset name" = "Nome da predefinição";
 "Preset:" = "Predefinição:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Pressione %@ numa foto. O Bolt pede uma pasta, move a foto para lá e guarda a pasta nessa tecla.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Pressione %@ nas fotos de que não precisa, ou %@ para mandar uma direto para o Lixo.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Pressione %@ para selecionar todas, depois %@ e escolha uma pasta. %@ move em vez de copiar.";
 "Press keys…" = "Pressione as teclas…";
 "Previous Folder" = "Pasta anterior";
 "Previous Photo" = "Foto anterior";
@@ -193,8 +210,10 @@
 "Quality:" = "Qualidade:";
 "Quit %@" = "Encerrar %@";
 "Random" = "Aleatório";
+"Rate with stars" = "Dar estrelas";
 "Rating" = "Avaliação";
 "Rating %@" = "Avaliação %@";
+"Rating saved. To show the best only: %@." = "Classificação salva. Para ver só as melhores: %@.";
 "Reading shooting dates…" = "Lendo datas das fotos…";
 "Red" = "Vermelha";
 "Redo" = "Refazer";
@@ -202,6 +221,7 @@
 "Redone: %@" = "Refeito: %@";
 "Reject" = "Rejeitar";
 "Rejected" = "Rejeitadas";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Rejeitada. Para apagar todas as rejeitadas de uma vez, escolha %@ e pressione %@ e %@.";
 "Remove Location and Serial Numbers" = "Remover localização e números de série";
 "Remove all" = "Remover todas";
 "Remove location and serial numbers" = "Remover localização e números de série";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "Cópia salva sem localização";
 "Saved to “%@”" = "Salvo em “%@”";
 "Select All" = "Selecionar tudo";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Selecione a sequência com %@ e pressione %@. Até quatro fotos aparecem lado a lado.";
 "Services" = "Serviços";
-"Set Folder for Key" = "Pasta para a tecla";
 "Set Folder for Key %d…" = "Pasta para a tecla %d…";
 "Settings" = "Ajustes";
 "Settings…" = "Ajustes…";
@@ -247,9 +267,11 @@
 "Sort By" = "Ordenar por";
 "Sort by %@" = "Ordenar por: %@";
 "Sort into Date Folders" = "Organizar em pastas por data";
+"Sort into folders as you go" = "Separar em pastas enquanto olha";
 "Sorted into date folders" = "Organizadas em pastas por data";
 "Speed Overlay" = "Medições de velocidade";
 "Stay on this photo" = "Permanecer nesta foto";
+"Step by step: %@." = "Passo a passo: %@.";
 "Stopped. What's done stays done." = "Interrompido. O que já foi feito permanece.";
 "System" = "Diversos";
 "Taken" = "Tirada";
@@ -259,9 +281,11 @@
 "The file can't be read." = "Não foi possível ler o arquivo.";
 "The folder is created next to the photos. Originals stay as they are." = "A pasta será criada ao lado das fotos. Os originais não mudam.";
 "The photo is already in “%@”" = "A foto já está em “%@”";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Depois escolha %@, pressione %@ e %@. Todas as fotos rejeitadas vão para o Lixo.";
 "This format can't be rotated without re-encoding." = "Este formato não pode ser girado sem recodificação.";
 "Thumbnail Grid" = "Grade de miniaturas";
 "Thumbnail Strip" = "Faixa de miniaturas";
+"To give a key another folder, press %@." = "Para dar outra pasta a uma tecla, pressione %@.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Para mostrar as outras fotos em “%@”, o Bolt precisa de acesso à pasta. Se você permitir uma pasta acima dela, como a pasta pessoal, o Bolt não vai perguntar de novo sobre as pastas dentro dela.";
 "Type a command" = "Digite o nome do comando";
 "Undo" = "Desfazer";
@@ -270,6 +294,7 @@
 "Unflagged" = "Sem marcação";
 "View" = "Visualização";
 "Web" = "Para web";
+"Where flags and stars are kept" = "Onde ficam as marcações e as estrelas";
 "Window" = "Janela";
 "Yellow" = "Amarela";
 "Zoom" = "Zoom";
@@ -297,4 +322,5 @@
 "no metadata" = "sem metadados";
 "not set" = "não definido";
 "“%@” already exists." = "“%@” já existe.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← e → alternam entre elas. Escolha a melhor com %@ e pressione Esc.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ cortar   Esc cancelar   X girar moldura";

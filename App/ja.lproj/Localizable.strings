@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@（35mm判換算 %d mm）";
 "%@ (and %d more)" = "%@（ほか %d 件）";
 "%@ and Up" = "%@ 以上";
+"%@ give one to five stars, %@ removes them." = "%@ で星 1〜5 個、%@ で星を外します。";
 "%@ mm" = "%@ mm";
 "%@ s" = "%@ 秒";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ で移動、削除、フラグを取り消せます。続けて押すとさらに前に戻ります。";
 "%d / %d of %d" = "%d / %d（全 %d）";
 "%d bit" = "%d ビット";
 "%d photos" = "%d 枚の写真";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "前を選択に追加";
 "Added to comparison. Press K on another photo" = "比較に追加しました。別の写真で K を押してください";
 "After copying:" = "コピー後:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "以後、%@ で写真をそのフォルダへ移動、%@ でコピーします。%@ に 9 個のフォルダを割り当てられます。";
 "All Commands" = "すべてのコマンド";
 "All Photos" = "すべての写真";
 "Allow" = "許可";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "フォルダを読めません: %@";
 "Cancel" = "キャンセル";
 "Choose" = "選択";
+"Choose %@ to see every photo again." = "すべての写真を再び表示するには %@ を選びます。";
+"Choose %@ to see only the best ones, then copy them as above." = "%@ を選んで良いものだけを表示し、上と同じ手順でコピーします。";
+"Choose %@. Only the picked photos stay in the list." = "%@ を選びます。リストには採用した写真だけが残ります。";
 "Choose folder for a key" = "キーに割り当てるフォルダを選択";
+"Choose the best shot of a series" = "連写から一番良いカットを選ぶ";
 "Choose…" = "選択…";
 "Cleaning" = "位置情報の削除";
 "Clear" = "消去";
@@ -56,7 +63,7 @@
 "Copy" = "コピー";
 "Copy Image" = "画像をコピー";
 "Copy Path" = "パスをコピー";
-"Copy to Folder" = "フォルダにコピー";
+"Folders on Keys" = "キーに割り当てたフォルダ";
 "Copy to Folder %d" = "フォルダ %d にコピー";
 "Copy to Folder…" = "フォルダにコピー…";
 "Copy to folder 1–9" = "1〜9 のフォルダにコピー";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "全体表示 / 100%";
 "Fit Width" = "幅に合わせる";
 "Fit to Window" = "ウインドウに合わせる";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "フラグ、星、カラーラベルはファイル自体に付く Finder タグです。Finder に表示され、Spotlight で検索でき、写真をコピーしても残ります。";
 "Flip Horizontal" = "左右反転";
 "Flips through photos" = "写真を切り替える";
 "Focal length" = "焦点距離";
@@ -105,13 +113,17 @@
 "Full Screen" = "フルスクリーン";
 "Full Size JPEG" = "フルサイズ JPEG";
 "General" = "一般";
+"Get rid of failed shots" = "失敗した写真を片付ける";
 "Go" = "移動";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "写真を順に見て、残したいものに %@ を押します。ステータスバーに ✓ が付きます。";
 "Gray" = "グレー";
 "Green" = "緑";
 "Help" = "ヘルプ";
 "Hide %@" = "%@を隠す";
 "Hide Interface" = "インターフェイスを隠す";
 "Hide Others" = "ほかを隠す";
+"How the culling keys work together: %@." = "選別キーの組み合わせ方：%@。";
+"How to Sort Photos" = "写真の選別のしかた";
 "ISO" = "ISO";
 "Image" = "画像";
 "Image copied" = "画像をコピーしました";
@@ -137,7 +149,6 @@
 "Minimize" = "しまう";
 "Modified" = "変更済み";
 "Mouse wheel:" = "マウスホイール:";
-"Move to Folder" = "フォルダに移動";
 "Move to Folder %d" = "フォルダ %d に移動";
 "Move to Folder…" = "フォルダに移動…";
 "Move to Trash" = "ゴミ箱に入れる";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "繰り返せる操作がまだありません";
 "Nothing to undo" = "取り消すものがありません";
 "O opens in:" = "O キーで開くアプリ:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "これらの写真だけが表示されています。%@ ですべて選択、%@ でフォルダにコピーします。";
 "Open Recent" = "最近使った項目を開く";
 "Open in %@" = "%@で開く";
 "Open in Maps" = "マップで開く";
@@ -178,6 +190,8 @@
 "Photo" = "写真";
 "Photos now open in Bolt." = "写真は Bolt で開くようになりました。";
 "Pick" = "採用";
+"Pick the best and copy them to another folder" = "良い写真を選んで別のフォルダにコピーする";
+"Picked. To show picks only: %@." = "採用しました。採用だけを表示：%@。";
 "Picks" = "採用";
 "Pixels" = "ピクセル";
 "Pixels:" = "ピクセル数:";
@@ -186,6 +200,9 @@
 "Preset" = "プリセット";
 "Preset name" = "プリセット名";
 "Preset:" = "プリセット:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "写真で %@ を押します。Bolt がフォルダを尋ね、写真をそこへ移動し、そのフォルダをこのキーに記憶します。";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "不要な写真で %@ を押すか、%@ ですぐにゴミ箱に入れます。";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "%1$@ ですべて選択し、%2$@ を押してフォルダを選びます。%3$@ ならコピーではなく移動します。";
 "Press keys…" = "キーを押してください…";
 "Previous Folder" = "前のフォルダ";
 "Previous Photo" = "前の写真";
@@ -193,8 +210,10 @@
 "Quality:" = "画質:";
 "Quit %@" = "%@を終了";
 "Random" = "ランダム";
+"Rate with stars" = "星で評価する";
 "Rating" = "評価";
 "Rating %@" = "評価 %@";
+"Rating saved. To show the best only: %@." = "評価を保存しました。良いものだけを表示：%@。";
 "Reading shooting dates…" = "撮影日を読み込んでいます…";
 "Red" = "赤";
 "Redo" = "やり直す";
@@ -202,6 +221,7 @@
 "Redone: %@" = "やり直し: %@";
 "Reject" = "不採用";
 "Rejected" = "不採用";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "不採用にしました。不採用の写真をまとめて削除するには、%@ を選び、%@ と %@ を押します。";
 "Remove Location and Serial Numbers" = "位置情報とシリアル番号を削除";
 "Remove all" = "すべて削除";
 "Remove location and serial numbers" = "位置情報とシリアル番号を削除";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "位置情報を除いたコピーを保存しました";
 "Saved to “%@”" = "「%@」に保存しました";
 "Select All" = "すべてを選択";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "%@ で連続した写真を選択し、%@ を押します。最大 4 枚が並んで表示されます。";
 "Services" = "サービス";
-"Set Folder for Key" = "キーのフォルダを設定";
 "Set Folder for Key %d…" = "キー %d のフォルダを設定…";
 "Settings" = "設定";
 "Settings…" = "設定…";
@@ -247,9 +267,11 @@
 "Sort By" = "並べ替え";
 "Sort by %@" = "並べ替え: %@";
 "Sort into Date Folders" = "日付フォルダに振り分ける";
+"Sort into folders as you go" = "見ながらフォルダに振り分ける";
 "Sorted into date folders" = "日付フォルダに振り分けました";
 "Speed Overlay" = "速度表示";
 "Stay on this photo" = "この写真に留まる";
+"Step by step: %@." = "手順の説明：%@。";
 "Stopped. What's done stays done." = "停止しました。完了した分は残ります。";
 "System" = "その他";
 "Taken" = "撮影";
@@ -259,9 +281,11 @@
 "The file can't be read." = "ファイルを読めません。";
 "The folder is created next to the photos. Originals stay as they are." = "フォルダは写真の横に作られます。オリジナルは変わりません。";
 "The photo is already in “%@”" = "写真はすでに「%@」にあります";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "次に %@ を選び、%@ と %@ を押します。不採用の写真がすべてゴミ箱に入ります。";
 "This format can't be rotated without re-encoding." = "この形式は再エンコードせずに回転できません。";
 "Thumbnail Grid" = "サムネイルのグリッド";
 "Thumbnail Strip" = "サムネイルのストリップ";
+"To give a key another folder, press %@." = "キーのフォルダを変えるには %@ を押します。";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "「%@」内の他の写真を表示するには、Bolt がこのフォルダへのアクセスを必要とします。ホームフォルダなど上位のフォルダを許可すると、その中のフォルダについて Bolt は今後確認しなくなります。";
 "Type a command" = "コマンド名を入力";
 "Undo" = "取り消す";
@@ -270,6 +294,7 @@
 "Unflagged" = "フラグなし";
 "View" = "表示";
 "Web" = "Web 用";
+"Where flags and stars are kept" = "フラグと星の保存場所";
 "Window" = "ウインドウ";
 "Yellow" = "黄";
 "Zoom" = "ズーム";
@@ -297,4 +322,5 @@
 "no metadata" = "メタデータなし";
 "not set" = "未設定";
 "“%@” already exists." = "「%@」はすでにあります。";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "← と → で切り替えます。一番良いものに %@ を押し、Esc を押します。";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ 切り抜き   Esc キャンセル   X 枠を回転";

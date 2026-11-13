@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (ما يعادل %d مم)";
 "%@ (and %d more)" = "%@ (و%d أخرى)";
 "%@ and Up" = "%@ وما فوق";
+"%@ give one to five stars, %@ removes them." = "تمنح %@ من نجمة إلى خمس نجوم، ويزيلها %@.";
 "%@ mm" = "%@ مم";
 "%@ s" = "%@ ث";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "يتراجع %@ عن نقل أو حذف أو علامة. اضغطه مرة أخرى للرجوع أكثر.";
 "%d / %d of %d" = "%d / %d من %d";
 "%d bit" = "%d بت";
 "%d photos" = "%d صورة";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "إضافة السابق إلى التحديد";
 "Added to comparison. Press K on another photo" = "أُضيفت إلى المقارنة. اضغط K على صورة أخرى";
 "After copying:" = "بعد النسخ:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "بعد ذلك ينقل %@ الصورة إلى المجلد وينسخها %@. تتسع المفاتيح %@ لتسعة مجلدات.";
 "All Commands" = "كل الأوامر";
 "All Photos" = "كل الصور";
 "Allow" = "السماح";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "تعذّرت قراءة المجلد: %@";
 "Cancel" = "إلغاء";
 "Choose" = "اختيار";
+"Choose %@ to see every photo again." = "لعرض كل الصور مجددًا، اختر %@.";
+"Choose %@ to see only the best ones, then copy them as above." = "اختر %@ لعرض الأفضل فقط، ثم انسخها كما في الأعلى.";
+"Choose %@. Only the picked photos stay in the list." = "اختر %@. تبقى في القائمة الصور المختارة فقط.";
 "Choose folder for a key" = "اختر مجلدًا للمفتاح";
+"Choose the best shot of a series" = "اختيار أفضل لقطة من سلسلة";
 "Choose…" = "اختيار…";
 "Cleaning" = "حذف المواقع";
 "Clear" = "مسح";
@@ -56,7 +63,7 @@
 "Copy" = "نسخ";
 "Copy Image" = "نسخ الصورة";
 "Copy Path" = "نسخ المسار";
-"Copy to Folder" = "نسخ إلى مجلد";
+"Folders on Keys" = "مجلدات المفاتيح";
 "Copy to Folder %d" = "نسخ إلى المجلد %d";
 "Copy to Folder…" = "نسخ إلى مجلد…";
 "Copy to folder 1–9" = "نسخ إلى المجلد 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "ملاءمة / 100%";
 "Fit Width" = "ملاءمة العرض";
 "Fit to Window" = "ملاءمة للنافذة";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "العلامات والنجوم والوسوم الملونة هي وسوم Finder على الملف نفسه. يعرضها Finder ويجدها Spotlight وتبقى في نسخة الصورة.";
 "Flip Horizontal" = "قلب أفقي";
 "Flips through photos" = "يتنقل بين الصور";
 "Focal length" = "البعد البؤري";
@@ -105,13 +113,17 @@
 "Full Screen" = "ملء الشاشة";
 "Full Size JPEG" = "JPEG بالحجم الكامل";
 "General" = "عام";
+"Get rid of failed shots" = "التخلص من اللقطات الفاشلة";
 "Go" = "انتقال";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "تصفّح الصور واضغط %@ على التي تريدها. تظهر علامة ✓ في شريط الحالة.";
 "Gray" = "رمادي";
 "Green" = "أخضر";
 "Help" = "مساعدة";
 "Hide %@" = "إخفاء %@";
 "Hide Interface" = "إخفاء الواجهة";
 "Hide Others" = "إخفاء الآخرين";
+"How the culling keys work together: %@." = "كيف تعمل مفاتيح الفرز معًا: %@.";
+"How to Sort Photos" = "كيفية فرز الصور";
 "ISO" = "ISO";
 "Image" = "الصورة";
 "Image copied" = "نُسخت الصورة";
@@ -137,7 +149,6 @@
 "Minimize" = "تصغير";
 "Modified" = "مُعدَّل";
 "Mouse wheel:" = "عجلة الفأرة:";
-"Move to Folder" = "نقل إلى مجلد";
 "Move to Folder %d" = "نقل إلى المجلد %d";
 "Move to Folder…" = "نقل إلى مجلد…";
 "Move to Trash" = "نقل إلى سلة المهملات";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "لا شيء لتكراره بعد";
 "Nothing to undo" = "لا شيء للتراجع عنه";
 "O opens in:" = "المفتاح O يفتح في:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "تظهر الآن هذه الصور فقط. يحددها %@ كلها، وينسخها %@ إلى مجلد.";
 "Open Recent" = "فتح الأخيرة";
 "Open in %@" = "فتح في %@";
 "Open in Maps" = "فتح في الخرائط";
@@ -178,6 +190,8 @@
 "Photo" = "صورة";
 "Photos now open in Bolt." = "تُفتح الصور الآن في Bolt.";
 "Pick" = "اختيار";
+"Pick the best and copy them to another folder" = "اختيار أفضل الصور ونسخها إلى مجلد آخر";
+"Picked. To show picks only: %@." = "تم الاختيار. لعرض المختارة فقط: %@.";
 "Picks" = "المختارة";
 "Pixels" = "البكسلات";
 "Pixels:" = "البكسلات:";
@@ -186,6 +200,9 @@
 "Preset" = "الإعداد المسبق";
 "Preset name" = "اسم الإعداد";
 "Preset:" = "الإعداد المسبق:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "اضغط %@ على صورة. يسألك Bolt عن مجلد، وينقل الصورة إليه، ويتذكر المجلد لهذا المفتاح.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "اضغط %@ على الصور التي لا تحتاجها، أو %@ لنقل صورة إلى سلة المهملات فورًا.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "اضغط %1$@ لتحديدها كلها، ثم %2$@ واختر مجلدًا. يقوم %3$@ بنقلها بدلًا من نسخها.";
 "Press keys…" = "اضغط المفاتيح…";
 "Previous Folder" = "المجلد السابق";
 "Previous Photo" = "الصورة السابقة";
@@ -193,8 +210,10 @@
 "Quality:" = "الجودة:";
 "Quit %@" = "إنهاء %@";
 "Random" = "عشوائي";
+"Rate with stars" = "التقييم بالنجوم";
 "Rating" = "التقييم";
 "Rating %@" = "التقييم %@";
+"Rating saved. To show the best only: %@." = "تم حفظ التقييم. لعرض الأفضل فقط: %@.";
 "Reading shooting dates…" = "جارٍ قراءة تواريخ التصوير…";
 "Red" = "أحمر";
 "Redo" = "إعادة";
@@ -202,6 +221,7 @@
 "Redone: %@" = "أُعيد: %@";
 "Reject" = "رفض";
 "Rejected" = "المرفوضة";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "تم الرفض. لحذف كل الصور المرفوضة دفعة واحدة، اختر %@، ثم اضغط %@ و%@.";
 "Remove Location and Serial Numbers" = "حذف الموقع والأرقام التسلسلية";
 "Remove all" = "حذف الكل";
 "Remove location and serial numbers" = "حذف الموقع والأرقام التسلسلية";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "حُفظت نسخة بدون موقع";
 "Saved to “%@”" = "حُفظت في “%@”";
 "Select All" = "تحديد الكل";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "حدد السلسلة باستخدام %@، ثم اضغط %@. تظهر حتى أربع صور جنبًا إلى جنب.";
 "Services" = "الخدمات";
-"Set Folder for Key" = "تعيين مجلد للمفتاح";
 "Set Folder for Key %d…" = "تعيين مجلد للمفتاح %d…";
 "Settings" = "الإعدادات";
 "Settings…" = "الإعدادات…";
@@ -247,9 +267,11 @@
 "Sort By" = "ترتيب حسب";
 "Sort by %@" = "الترتيب: %@";
 "Sort into Date Folders" = "ترتيب في مجلدات حسب التاريخ";
+"Sort into folders as you go" = "التوزيع على المجلدات أثناء التصفح";
 "Sorted into date folders" = "رُتّبت في مجلدات حسب التاريخ";
 "Speed Overlay" = "قياسات السرعة";
 "Stay on this photo" = "البقاء على هذه الصورة";
+"Step by step: %@." = "خطوة بخطوة: %@.";
 "Stopped. What's done stays done." = "أُوقف. ما أُنجز بقي كما هو.";
 "System" = "متنوع";
 "Taken" = "التُقطت";
@@ -259,9 +281,11 @@
 "The file can't be read." = "تعذّرت قراءة الملف.";
 "The folder is created next to the photos. Originals stay as they are." = "يُنشأ المجلد بجانب الصور. الأصول لا تتغيّر.";
 "The photo is already in “%@”" = "الصورة موجودة بالفعل في “%@”";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "ثم اختر %@، واضغط %@ ثم %@. تنتقل كل الصور المرفوضة إلى سلة المهملات.";
 "This format can't be rotated without re-encoding." = "لا يمكن تدوير هذا التنسيق دون إعادة ترميز.";
 "Thumbnail Grid" = "شبكة المصغّرات";
 "Thumbnail Strip" = "شريط المصغّرات";
+"To give a key another folder, press %@." = "لتعيين مجلد آخر لمفتاح، اضغط %@.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "لعرض الصور الأخرى في “%@”، يحتاج Bolt إلى الوصول إلى المجلد. إذا سمحت بالوصول إلى مجلد أعلى منه، مثل مجلد الصفحة الرئيسية، فلن يسأل Bolt مرة أخرى عن المجلدات الموجودة داخله.";
 "Type a command" = "اكتب اسم الأمر";
 "Undo" = "التراجع";
@@ -270,6 +294,7 @@
 "Unflagged" = "بدون علامة";
 "View" = "عرض";
 "Web" = "للويب";
+"Where flags and stars are kept" = "أين تُحفظ العلامات والنجوم";
 "Window" = "النافذة";
 "Yellow" = "أصفر";
 "Zoom" = "تكبير";
@@ -297,4 +322,5 @@
 "no metadata" = "بدون بيانات وصفية";
 "not set" = "غير محدد";
 "“%@” already exists." = "“%@” موجود بالفعل.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "يتنقل ← و→ بينها. اختر الأفضل باستخدام %@ واضغط Esc.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ اقتطاع   Esc إلغاء   X تدوير الإطار";

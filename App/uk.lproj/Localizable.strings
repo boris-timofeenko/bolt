@@ -4,8 +4,10 @@
 "%@ (%d mm equiv.)" = "%@ (еквівалент %d мм)";
 "%@ (and %d more)" = "%@ (і ще %d)";
 "%@ and Up" = "%@ і вище";
+"%@ give one to five stars, %@ removes them." = "%@ ставлять від однієї до п’яти зірок, %@ прибирає їх.";
 "%@ mm" = "%@ мм";
 "%@ s" = "%@ с";
+"%@ undoes a move, a deletion or a flag. Press it again to go further back." = "%@ скасовує переміщення, видалення або прапорець. Натисніть ще раз, щоб скасувати попередню дію.";
 "%d / %d of %d" = "%d / %d з %d";
 "%d bit" = "%d біт";
 "%d photos" = "%d фото";
@@ -17,6 +19,7 @@
 "Add Previous to Selection" = "Додати попереднє до вибірки";
 "Added to comparison. Press K on another photo" = "Фото додано до порівняння. Натисніть K на іншому";
 "After copying:" = "Після копіювання:";
+"After that %@ moves a photo to the folder and %@ copies it. %@ hold nine folders." = "Далі %@ переміщує фото в цю папку, а %@ копіює. На клавішах %@ вміщається дев’ять папок.";
 "All Commands" = "Усі команди";
 "All Photos" = "Усі фото";
 "Allow" = "Дозволити";
@@ -35,7 +38,11 @@
 "Can't read the folder: %@" = "Не вдалося прочитати теку: %@";
 "Cancel" = "Скасувати";
 "Choose" = "Вибрати";
+"Choose %@ to see every photo again." = "Щоб знову бачити всі фото, виберіть %@.";
+"Choose %@ to see only the best ones, then copy them as above." = "Виберіть %@, щоб бачити тільки найкращі, і скопіюйте їх, як описано вище.";
+"Choose %@. Only the picked photos stay in the list." = "Виберіть %@. У списку залишаться тільки вони.";
 "Choose folder for a key" = "Призначити клавіші теку";
+"Choose the best shot of a series" = "Вибрати найкращий кадр із серії";
 "Choose…" = "Вибрати…";
 "Cleaning" = "Видалення геоміток";
 "Clear" = "Прибрати";
@@ -56,7 +63,7 @@
 "Copy" = "Копіювати";
 "Copy Image" = "Копіювати зображення";
 "Copy Path" = "Копіювати шлях";
-"Copy to Folder" = "Копіювати в теку";
+"Folders on Keys" = "Папки на клавішах";
 "Copy to Folder %d" = "Копіювати в теку %d";
 "Copy to Folder…" = "Копіювати в теку…";
 "Copy to folder 1–9" = "Копія в теку 1–9";
@@ -90,6 +97,7 @@
 "Fit / 100%" = "Вписати / 100%";
 "Fit Width" = "За шириною";
 "Fit to Window" = "Вписати у вікно";
+"Flags, stars and color labels are Finder tags on the file itself. Finder shows them, Spotlight finds them, and a copy of the photo keeps them." = "Прапорці, зірки й кольорові мітки — це теги Finder на самому файлі. Їх показує Finder, за ними шукає Spotlight, копія фото їх зберігає.";
 "Flip Horizontal" = "Віддзеркалити по горизонталі";
 "Flips through photos" = "Гортає фото";
 "Focal length" = "Фокусна відстань";
@@ -105,13 +113,17 @@
 "Full Screen" = "Повноекранний режим";
 "Full Size JPEG" = "JPEG повного розміру";
 "General" = "Основні";
+"Get rid of failed shots" = "Прибрати невдалі кадри";
 "Go" = "Перехід";
+"Go through the photos and press %@ on the ones you want. They get a ✓ in the status bar." = "Гортайте фото й натискайте %@ на потрібних. У рядку стану в них з’явиться ✓.";
 "Gray" = "Сірий";
 "Green" = "Зелений";
 "Help" = "Довідка";
 "Hide %@" = "Сховати %@";
 "Hide Interface" = "Сховати інтерфейс";
 "Hide Others" = "Сховати інші";
+"How the culling keys work together: %@." = "Як клавіші відбору працюють разом: %@.";
+"How to Sort Photos" = "Як відбирати фото";
 "ISO" = "ISO";
 "Image" = "Зображення";
 "Image copied" = "Зображення скопійовано";
@@ -137,7 +149,6 @@
 "Minimize" = "Звернути";
 "Modified" = "Змінено";
 "Mouse wheel:" = "Колесо миші:";
-"Move to Folder" = "Перемістити в теку";
 "Move to Folder %d" = "Перемістити в теку %d";
 "Move to Folder…" = "Перемістити в теку…";
 "Move to Trash" = "Перемістити в Кошик";
@@ -162,6 +173,7 @@
 "Nothing to repeat yet" = "Поки нічого повторювати";
 "Nothing to undo" = "Нічого відміняти";
 "O opens in:" = "Клавіша O відкриває в:";
+"Only these photos are shown now. %@ selects all of them, %@ copies them to a folder." = "Тепер видно тільки ці фото. %@ виділить їх усі, %@ скопіює в папку.";
 "Open Recent" = "Відкрити нещодавні";
 "Open in %@" = "Відкрити в програмі «%@»";
 "Open in Maps" = "Відкрити в Картах";
@@ -178,6 +190,8 @@
 "Photo" = "Фото";
 "Photos now open in Bolt." = "Тепер фото відкриваються в Bolt.";
 "Pick" = "Відібрати";
+"Pick the best and copy them to another folder" = "Відібрати найкращі й скопіювати в іншу папку";
+"Picked. To show picks only: %@." = "Відібрано. Показати тільки відібрані: %@.";
 "Picks" = "Відібрані";
 "Pixels" = "Пікселі";
 "Pixels:" = "Пікселів:";
@@ -186,6 +200,9 @@
 "Preset" = "Пресет";
 "Preset name" = "Назва пресета";
 "Preset:" = "Пресет:";
+"Press %@ on a photo. Bolt asks for a folder, moves the photo there and remembers the folder for this key." = "Натисніть %@ на фото. Bolt запитає папку, перемістить туди фото й запам’ятає папку за цією клавішею.";
+"Press %@ on the photos you don't need, or %@ to send one to the Trash right away." = "Натискайте %@ на непотрібних фото або %@, щоб одразу відправити фото в Кошик.";
+"Press %@ to select them all, then %@ and choose a folder. %@ moves them instead." = "Натисніть %@, щоб виділити всі, потім %@ і виберіть папку. %@ не скопіює, а перемістить.";
 "Press keys…" = "Натисніть клавіші…";
 "Previous Folder" = "Попередня тека";
 "Previous Photo" = "Попереднє фото";
@@ -193,8 +210,10 @@
 "Quality:" = "Якість:";
 "Quit %@" = "Завершити %@";
 "Random" = "Випадково";
+"Rate with stars" = "Ставити зірки";
 "Rating" = "Оцінка";
 "Rating %@" = "Оцінка %@";
+"Rating saved. To show the best only: %@." = "Оцінку збережено. Показати тільки найкращі: %@.";
 "Reading shooting dates…" = "Читання дат зйомки…";
 "Red" = "Червоний";
 "Redo" = "Повторити";
@@ -202,6 +221,7 @@
 "Redone: %@" = "Повторено: %@";
 "Reject" = "Відхилити";
 "Rejected" = "Відхилені";
+"Rejected. To delete all rejected photos at once, choose %@, then press %@ and %@." = "Відхилено. Щоб видалити всі відхилені разом, виберіть %@, потім натисніть %@ і %@.";
 "Remove Location and Serial Numbers" = "Прибрати геомітки та серійні номери";
 "Remove all" = "Прибрати всі";
 "Remove location and serial numbers" = "Прибрати геомітки та серійні номери";
@@ -226,8 +246,8 @@
 "Saved a copy without location" = "Збережено копію без геоміток";
 "Saved to “%@”" = "Збережено до «%@»";
 "Select All" = "Вибрати все";
+"Select the series with %@, then press %@. Up to four photos appear side by side." = "Виділіть серію клавішею %@ і натисніть %@. Поруч стануть до чотирьох фото.";
 "Services" = "Служби";
-"Set Folder for Key" = "Тека для клавіші";
 "Set Folder for Key %d…" = "Тека для клавіші %d…";
 "Settings" = "Параметри";
 "Settings…" = "Параметри…";
@@ -247,9 +267,11 @@
 "Sort By" = "Сортування";
 "Sort by %@" = "Сортування: %@";
 "Sort into Date Folders" = "Розкласти по теках з датами";
+"Sort into folders as you go" = "Розкладати по папках на ходу";
 "Sorted into date folders" = "Розкладено по теках з датами";
 "Speed Overlay" = "Вимірювання швидкості";
 "Stay on this photo" = "Залишитися на цьому фото";
+"Step by step: %@." = "Покроково: %@.";
 "Stopped. What's done stays done." = "Зупинено. Готові файли залишилися.";
 "System" = "Різне";
 "Taken" = "Знято";
@@ -259,9 +281,11 @@
 "The file can't be read." = "Файл не читається.";
 "The folder is created next to the photos. Originals stay as they are." = "Тека з'явиться поруч із фото. Оригінали не змінюються.";
 "The photo is already in “%@”" = "Фото вже лежить у «%@»";
+"Then choose %@, press %@ and %@. All rejected photos go to the Trash." = "Потім виберіть %@, натисніть %@ і %@. Усі відхилені підуть у Кошик.";
 "This format can't be rotated without re-encoding." = "Цей формат не можна повернути без перекодування.";
 "Thumbnail Grid" = "Сітка мініатюр";
 "Thumbnail Strip" = "Стрічка мініатюр";
+"To give a key another folder, press %@." = "Щоб змінити папку для клавіші, натисніть %@.";
 "To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Щоб показати інші фото з «%@», Bolt потрібен доступ до папки. Якщо дозволити доступ до папки вище, наприклад до домашньої, Bolt більше не питатиме про папки всередині неї.";
 "Type a command" = "Назва команди";
 "Undo" = "Відмінити";
@@ -270,6 +294,7 @@
 "Unflagged" = "Без прапорця";
 "View" = "Вигляд";
 "Web" = "Для веб";
+"Where flags and stars are kept" = "Де зберігаються прапорці й зірки";
 "Window" = "Вікно";
 "Yellow" = "Жовтий";
 "Zoom" = "Масштаб";
@@ -297,4 +322,5 @@
 "no metadata" = "без метаданих";
 "not set" = "не задано";
 "“%@” already exists." = "«%@» уже є.";
+"← and → switch between them. Mark the best one with %@ and press Esc." = "Стрілки ← і → перемикають між ними. Відберіть найкращий клавішею %@ і натисніть Esc.";
 "↩ Crop   Esc Cancel   X Rotate frame" = "↩ кадрувати   Esc скасувати   X повернути рамку";
