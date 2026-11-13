@@ -1,8 +1,10 @@
 # Bolt
 
+![Bolt, молниеносный просмотрщик фото для macOS](promo/bolt-ru.png)
+
 Нативный просмотрщик фото для macOS. Открываешь одно фото и листаешь всю папку. Каждое действие с файлом делается одной клавишей и отменяется через ⌘Z.
 
-Swift 6 и AppKit, декодер системный (ImageIO), сторонних зависимостей нет. Лицензия MIT.
+Swift 6 и AppKit, декодер системный (ImageIO и Core Image), сторонних зависимостей нет. Лицензия MIT.
 
 ## Сборка
 
@@ -11,7 +13,7 @@ Swift 6 и AppKit, декодер системный (ImageIO), сторонни
 ```bash
 scripts/build-app.sh            # build/Bolt.app, release
 scripts/build-app.sh debug
-scripts/test.sh                 # 82 юнит-теста ядра (Swift Testing)
+scripts/test.sh                 # 83 юнит-теста ядра (Swift Testing)
 scripts/ui-smoke.sh             # 19 проверок собранного приложения настоящими нажатиями
 ```
 
