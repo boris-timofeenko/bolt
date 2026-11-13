@@ -53,11 +53,6 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         imageLayer.actions = ["contents": NSNull(), "bounds": NSNull(), "position": NSNull(), "frame": NSNull()]
         imageLayer.contentsGravity = .resize
         imageLayer.minificationFilter = .trilinear
-        if #available(macOS 15, *) {
-            // HDR frames from Core Image are half floats tagged with their headroom; without this the layer
-            // would clip what the screen can't show instead of tone mapping it, as it does for ImageIO's frames.
-            imageLayer.toneMapMode = .ifSupported
-        }
         layer?.addSublayer(imageLayer)
 
         messageLabel.font = .systemFont(ofSize: 13)
@@ -121,7 +116,7 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         CATransaction.setDisableActions(true)
         imageLayer.contents = newFrame.layerContents
         imageLayer.isHidden = false
-        setHighDynamicRange(newFrame.isHDR)
+        setHighDynamicRange(for: newFrame)
         placeImage()
         PresentProbe.presentMarker(in: layer)
         CATransaction.commit()
@@ -142,11 +137,19 @@ final class ImageCanvasView: NSView, NSDraggingSource {
         }
     }
 
-    private func setHighDynamicRange(_ enabled: Bool) {
+    private func setHighDynamicRange(for frame: DecodedFrame) {
         if #available(macOS 26, *) {
-            imageLayer.preferredDynamicRange = enabled ? .high : .standard
+            imageLayer.preferredDynamicRange = frame.isHDR ? .high : .standard
         } else {
-            imageLayer.wantsExtendedDynamicRangeContent = enabled
+            imageLayer.wantsExtendedDynamicRangeContent = frame.isHDR
+        }
+        if #available(macOS 15, *) {
+            // A Core Image frame is already rendered for the headroom this screen can reach, so the layer shows
+            // it as is. Tone mapping it to the headroom of the moment darkened the whole photo, not only its
+            // highlights, for the second the screen takes to raise its headroom when nothing HDR was on it.
+            // ImageIO's HDR frames keep all the headroom of the photo and need the layer to bring them down.
+            let fitsScreenHeadroom = frame.cgImage == nil
+            imageLayer.toneMapMode = fitsScreenHeadroom ? .never : .ifSupported
         }
     }
 

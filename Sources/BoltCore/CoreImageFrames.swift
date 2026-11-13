@@ -53,7 +53,8 @@ enum CoreImageFrames {
 
         guard let surface = render(placed, width: width, height: height, hdr: isHDR) else { return nil }
         if isHDR, #available(macOS 15, *) {
-            // The layer tone maps from this down to what the screen has right now, as it does for ImageIO's HDR frames.
+            // How much headroom the frame asks the screen for. The layer shows it without tone mapping
+            // (ImageCanvasView.setHighDynamicRange).
             IOSurfaceSetValue(surface, kIOSurfaceContentHeadroom, contentHeadroom as CFNumber)
         }
         return (surface, isHDR)
