@@ -6,6 +6,8 @@ A native photo viewer for macOS. Open one photo and flip through the whole folde
 
 Swift 6 and AppKit, system decoders (ImageIO and Core Image), no third-party dependencies. Licensed under GPLv3.
 
+How it works and how the speed was measured is described in [the article](habr/article.en.md).
+
 ## Building
 
 You need macOS 14+ and Swift 6. The Command Line Tools are enough, Xcode isn't required.

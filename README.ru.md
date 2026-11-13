@@ -6,6 +6,8 @@
 
 Swift 6 и AppKit, декодер системный (ImageIO и Core Image), сторонних зависимостей нет. Лицензия GPLv3.
 
+Как это устроено и как меряли скорость, рассказано в [статье](habr/article.md).
+
 ## Сборка
 
 Нужны macOS 14+ и Swift 6. Command Line Tools достаточно, Xcode не обязателен.

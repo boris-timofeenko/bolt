@@ -1,5 +1,6 @@
 # Рисует картинки к статье в том же ризографическом виде, что и обложка (promo/src/make.py):
-# habr/chart.png, habr/chart-hold.png, habr/chart-open.png, habr/41ms.png, 1600 px в ширину.
+# habr/chart.png, habr/chart-hold.png, habr/chart-open.png, habr/41ms.png, 1600 px в ширину,
+# и те же картинки с английскими подписями: habr/chart.en.png и так далее.
 # Две краски: Bolt жёлтый, остальные программы и весь текст синие. Растр точками везде значит
 # «фото на экране, но ещё не чёткое» (кроме 41ms.png, там точки — ожидание срока WindowServer).
 # Запуск: python3 habr/src/charts.py
@@ -12,49 +13,77 @@ from make import halftone, ink, font, YELLOW, BLUE  # noqa: E402
 
 OUT = os.path.normpath(os.path.join(HERE, ".."))
 
+# Подписи на двух языках: один запуск пишет русские картинки (chart.png …) и английские (chart.en.png …).
+TEXT = {
+    "ru": {
+        "suffix": "", "decimal": ",",
+        "programs": ["Bolt", "ApolloOne", "XnView MP", "«Просмотр»", "Quick Look"],
+        "flip": {"title": "От стрелки до чёткого кадра, мс",
+                 "panels": ["раз в секунду", "раз в 400 мс", "раз в 150 мс"]},
+        "hold": {"title": "Стрелка зажата на три секунды",
+                 "rate": "фото в секунду", "release": "после отпускания до чёткого кадра, мс",
+                 "key": ("чётко", "на экране, но ещё не чётко")},
+        "open": {"title": "Открытие из Finder, мс",
+                 "key": ("фото ещё нет", "на экране, но ещё не чётко")},
+        "frame": {"kicker": "от нажатия стрелки до фото на экране",
+                  "big": "41 мс", "aside": "из них 1,2 мс — Bolt",
+                  "frame_labels": ["0", "16,7", "33,3", "50 мс"],
+                  "frames_caption": "кадры экрана, 60 Гц",
+                  "one": "всё одной транзакцией: 54 мс",
+                  "two": "фото отдельной транзакцией: 41 мс",
+                  "captions": ["1,2 мс — Bolt", "ждём срок WindowServer, ~8 мс", "WindowServer и экран, ~32 мс"]},
+    },
+    "en": {
+        "suffix": ".en", "decimal": ".",
+        "programs": ["Bolt", "ApolloOne", "XnView MP", "Preview", "Quick Look"],
+        "flip": {"title": "Arrow key to sharp frame, ms",
+                 "panels": ["once a second", "every 400 ms", "every 150 ms"]},
+        "hold": {"title": "Arrow key held for three seconds",
+                 "rate": "photos per second", "release": "release to sharp frame, ms",
+                 "key": ("sharp", "on screen, not sharp yet")},
+        "open": {"title": "Opening from Finder, ms",
+                 "key": ("no photo yet", "on screen, not sharp yet")},
+        "frame": {"kicker": "from arrow key press to photo on screen",
+                  "big": "41 ms", "aside": "of which 1.2 ms is Bolt",
+                  "frame_labels": ["0", "16.7", "33.3", "50 ms"],
+                  "frames_caption": "display frames, 60 Hz",
+                  "one": "all in one transaction: 54 ms",
+                  "two": "photo in its own transaction: 41 ms",
+                  "captions": ["1.2 ms: Bolt", "waiting for deadline, ~8 ms", "WindowServer and display, ~32 ms"]},
+    },
+}
+
 DATA = {
-    "programs": ["Bolt", "ApolloOne", "XnView MP", "«Просмотр»", "Quick Look"],
     # Рис. 1: от стрелки до чёткого кадра, медианы в мс, порядок как в programs.
     "flip": {
-        "title": "От стрелки до чёткого кадра, мс",
         "max": 250, "ticks": [0, 100, 200],
         "panels": [
-            ("раз в секунду", [31, 87, 116, 140, 172]),
-            ("раз в 400 мс", [26, 64, 107, 123, 167]),
-            ("раз в 150 мс", [27, 64, 229, 156, 197]),
+            [31, 87, 116, 140, 172],
+            [26, 64, 107, 123, 167],
+            [27, 64, 229, 156, 197],
         ],
     },
     # Рис. 2: стрелка зажата три секунды.
     "hold": {
-        "title": "Стрелка зажата на три секунды",
-        "rate": {"heading": "фото в секунду", "max": 12, "ticks": [0, 5, 10],
+        "rate": {"max": 12, "ticks": [0, 5, 10],
                  "values": [10.3, 6.2, 2.7, 6.7, 0.3],
                  # доля чётких среди показанных; None — вывода сделать нельзя, только контур
                  "sharp": [1.0, 1.0, 1.0, 0.06, None]},
-        "release": {"heading": "после отпускания до чёткого кадра, мс", "max": 800,
-                    "ticks": [0, 400, 800], "values": [0, 137, 780, 407, None]},
-        "key": ("чётко", "на экране, но ещё не чётко"),
+        "release": {"max": 800, "ticks": [0, 400, 800], "values": [0, 137, 780, 407, None]},
     },
     # Рис. 3: открытие из Finder, медианы в мс: (фото появилось, фото чёткое).
     "open": {
-        "title": "Открытие из Finder, мс",
         "max": 2500, "ticks": [0, 500, 1000, 1500, 2000, 2500],
         "values": [(291, 350), (2119, 2119), (674, 674), (2300, 8250), (237, 637)],
-        "key": ("фото ещё нет", "на экране, но ещё не чётко"),
     },
     # Рис. 4: из чего складываются 41 мс, отрезки в мс от нажатия.
     "frame": {
-        "kicker": "от нажатия стрелки до фото на экране",
-        "big": "41 мс", "aside": "из них 1,2 мс — Bolt",
-        "max": 60, "frames": [0, 50 / 3, 100 / 3, 50], "frame_labels": ["0", "16,7", "33,3", "50 мс"],
-        "frames_caption": "кадры экрана, 60 Гц",
-        "one": {"label": "всё одной транзакцией: 54 мс",
-                "parts": [("yellow", 0, 6.2), ("blue", 6.2, 54.1)]},
-        "two": {"label": "фото отдельной транзакцией: 41 мс",
-                "parts": [("yellow", 0, 1.2), ("dots", 1.2, 9.2), ("blue", 9.2, 41.4)]},
-        "captions": ["1,2 мс — Bolt", "ждём срок WindowServer, ~8 мс", "WindowServer и экран, ~32 мс"],
+        "max": 60, "frames": [0, 50 / 3, 100 / 3, 50],
+        "one": [("yellow", 0, 6.2), ("blue", 6.2, 54.1)],
+        "two": [("yellow", 0, 1.2), ("dots", 1.2, 9.2), ("blue", 9.2, 41.4)],
     },
 }
+T = TEXT["ru"]   # текущий язык, меняется в __main__
 
 PAPER = (244, 240, 231)
 W = 1600
@@ -71,7 +100,7 @@ PITCH = 8
 DOT_DENSITY = 105  # плотность растра, 0..255
 
 def num(v):
-    return f"{v:g}".replace(".", ",")
+    return f"{v:g}".replace(".", T["decimal"])
 
 
 class Sheet:
@@ -127,7 +156,8 @@ class Sheet:
         dx, dy = SHIFT
         blue = blue.transform(self.size, Image.AFFINE, (1, 0, -dx, 0, 1, -dy))
         im = ink(im, blue, BLUE)
-        p = os.path.join(OUT, name)
+        base, ext = os.path.splitext(name)
+        p = os.path.join(OUT, base + T["suffix"] + ext)
         im.save(p)
         print(p)
         return im
@@ -137,9 +167,9 @@ def bar_color(i):
     return "yellow" if i == 0 else "blue"
 
 def names_column(s, rows_y, x=M):
-    for name, y in zip(DATA["programs"], rows_y):
+    for name, y in zip(T["programs"], rows_y):
         s.write((x, y), name, F_NAME, "lm")
-    return max(s.draw("text").textlength(n, font=F_NAME) for n in DATA["programs"])
+    return max(s.draw("text").textlength(n, font=F_NAME) for n in T["programs"])
 
 def axis(s, x0, x1, y, vmax, ticks, labels=None):
     s.line([(x0, y), (x1, y)])
@@ -157,16 +187,16 @@ def key(s, y, x, solid_text, dotted_text):
 
 
 def flip():
-    d = DATA["flip"]
+    d, t = DATA["flip"], T["flip"]
     s = Sheet(900)
-    s.write((M, M), d["title"], F_TITLE, "lt")
+    s.write((M, M), t["title"], F_TITLE, "lt")
     row0, pitch, bh = 274, 110, 60
     rows = [row0 + i * pitch for i in range(5)]
     name_w = names_column(s, rows)
     left = M + name_w + 40
     gap = 84
     pw = (W - M - left - 2 * gap - 64) / 3   # 64: место под число после самой длинной полосы
-    for k, (heading, vals) in enumerate(d["panels"]):
+    for k, (heading, vals) in enumerate(zip(t["panels"], d["panels"])):
         x0 = left + k * (pw + gap)
         s.write((x0, 206), heading, F_HEAD, "ls")
         for i, (v, y) in enumerate(zip(vals, rows)):
@@ -178,9 +208,9 @@ def flip():
 
 
 def hold():
-    d = DATA["hold"]
+    d, t = DATA["hold"], T["hold"]
     s = Sheet(760)
-    s.write((M, M), d["title"], F_TITLE, "lt")
+    s.write((M, M), t["title"], F_TITLE, "lt")
     row0, pitch, bh = 238, 74, 46
     rows = [row0 + i * pitch for i in range(5)]
     name_w = names_column(s, rows)
@@ -192,7 +222,7 @@ def hold():
     # Левая панель: фото в секунду, заливка по доле чётких.
     r = d["rate"]
     x0 = left
-    s.write((x0, 186), r["heading"], F_HEAD, "ls")
+    s.write((x0, 186), t["rate"], F_HEAD, "ls")
     for i, (v, sharp, y) in enumerate(zip(r["values"], r["sharp"], rows)):
         x1 = x0 + pw_l * v / r["max"]
         y0, y1 = y - bh / 2, y + bh / 2
@@ -207,7 +237,7 @@ def hold():
     # Правая панель: после отпускания до чёткого кадра, всё точками.
     r = d["release"]
     x0 = left + pw_l + gap
-    s.write((x0, 186), r["heading"], F_HEAD, "ls")
+    s.write((x0, 186), t["release"], F_HEAD, "ls")
     for v, y in zip(r["values"], rows):
         if v is None:
             s.write((x0 + 10, y), "—", F_NAME, "lm")
@@ -216,7 +246,7 @@ def hold():
         s.dots("blue", x0, y - bh / 2, x1, y + bh / 2)
         s.write((x1 + 10, y), num(v), F_NAME, "lm")
     axis(s, x0, x0 + pw_r, axis_y, r["max"], r["ticks"])
-    key(s, 668, left, *d["key"])
+    key(s, 668, left, *t["key"])
     return s.render("chart-hold.png")
 
 
@@ -229,9 +259,9 @@ def zigzag_right(x, y0, y1, teeth=4, depth=10):
     return pts
 
 def opening():
-    d = DATA["open"]
+    d, t = DATA["open"], T["open"]
     s = Sheet(760)
-    s.write((M, M), d["title"], F_TITLE, "lt")
+    s.write((M, M), t["title"], F_TITLE, "lt")
     row0, pitch, bh = 196, 80, 50
     rows = [row0 + i * pitch for i in range(5)]
     name_w = names_column(s, rows)
@@ -259,33 +289,32 @@ def opening():
             end = xb
         s.write((end + 12, y), num(sharp), F_NAME, "lm")
     axis(s, x0, x0 + pw, rows[-1] + bh / 2 + 20, d["max"], d["ticks"])
-    key(s, 668, x0, *d["key"])
+    key(s, 668, x0, *t["key"])
     return s.render("chart-open.png")
 
 
 def frame():
-    d = DATA["frame"]
+    d, t = DATA["frame"], T["frame"]
     s = Sheet(900)
-    s.write((M, 92), d["kicker"], F_HEAD, "ls")
+    s.write((M, 92), t["kicker"], F_HEAD, "ls")
     big = bold(170)
-    b = s.write((M - 6, 262), d["big"], big, "ls")
-    s.write((b[2] + 36, 262), d["aside"], bold(56), "ls")
+    b = s.write((M - 6, 262), t["big"], big, "ls")
+    s.write((b[2] + 36, 262), t["aside"], bold(56), "ls")
     x0, x1 = M + 24, W - M - 24
     sx = lambda v: x0 + (x1 - x0) * v / d["max"]
     top_one, h_one = 410, 46
     top_two, h_two = 534, 110
     axis_y = 780
     # Кадры экрана: тонкие вертикали и подписи под осью.
-    for t in d["frames"]:
-        s.line([(sx(t), top_one - 12), (sx(t), axis_y)], width=1, plate="thin")
+    for ft in d["frames"]:
+        s.line([(sx(ft), top_one - 12), (sx(ft), axis_y)], width=1, plate="thin")
     s.line([(x0, axis_y), (x1, axis_y)])
-    for t, lab in zip(d["frames"], d["frame_labels"]):
-        s.write((sx(t), axis_y + 16), lab, F_SMALL, "ma")
-    s.write((x1, top_one - 22), d["frames_caption"], F_SMALL, "rs")
+    for ft, lab in zip(d["frames"], t["frame_labels"]):
+        s.write((sx(ft), axis_y + 16), lab, F_SMALL, "ma")
+    s.write((x1, top_one - 22), t["frames_caption"], F_SMALL, "rs")
 
-    def bar(spec, top, h):
-        s.write((x0, top - 22), spec["label"], F_SMALL, "ls")
-        parts = spec["parts"]
+    def bar(label, parts, top, h):
+        s.write((x0, top - 22), label, F_SMALL, "ls")
         for j, (kind, a, z) in enumerate(parts):
             xa, xz = sx(a), sx(z)
             if kind == "yellow":
@@ -296,9 +325,9 @@ def frame():
                 s.rect("blue", xa, top, xz, top + h)
         return [(sx(a), sx(z)) for _, a, z in parts]
 
-    bar(d["one"], top_one, h_one)
-    seg = bar(d["two"], top_two, h_two)
-    c_bolt, c_wait, c_ws = d["captions"]
+    bar(t["one"], d["one"], top_one, h_one)
+    seg = bar(t["two"], d["two"], top_two, h_two)
+    c_bolt, c_wait, c_ws = t["captions"]
     y1, y2 = top_two + h_two + 34, top_two + h_two + 74
     s.write((seg[1][0] + 4, y1), c_wait, F_SMALL, "lm")
     s.write((seg[2][1], y1), c_ws, F_SMALL, "rm")
@@ -307,5 +336,7 @@ def frame():
 
 
 if __name__ == "__main__":
-    for f in (flip, hold, opening, frame):
-        f()
+    for lang in ("ru", "en"):
+        T = TEXT[lang]
+        for f in (flip, hold, opening, frame):
+            f()
