@@ -17,6 +17,8 @@ scripts/build-app.sh            # build/Bolt.app, release
 scripts/build-app.sh debug
 scripts/test.sh                 # 83 unit tests of the core (Swift Testing)
 scripts/ui-smoke.sh             # 19 checks of the built app with real key presses
+scripts/check-strings.py        # strings missing from translations
+scripts/translate.py de fr      # fill them with Claude Haiku
 ```
 
 The script signs the app ad hoc and registers it with Launch Services, so Bolt shows up in "Open With". To distribute it you need a Developer ID: `SIGN_IDENTITY="Developer ID Application: …" scripts/build-app.sh`, then notarize with `notarytool`.
@@ -32,6 +34,8 @@ Test photos: `swift scripts/make-test-photos.swift ~/Desktop/test 400 --broken` 
 **Editing.** Rotate [ ] and flip H only change the Orientation tag, the pixels stay byte for byte the same (a test checks this). Crop C with aspect ratios. Export E with the last preset ("Telegram: JPEG 85%, 2560 px, no location"), ⇧E picks a preset. Batch conversion, resizing and renaming by a template like `{date:yyyy-MM-dd_HHmmss}_{counter:3}`, with a preview. Removing location and serial numbers without re-encoding.
 
 No operation deletes a file without going through the Trash or overwrites an existing one: on a name clash you get " (2)". Edits are saved as a copy next to the original by default. The "replace original" mode first moves the original to the Trash, so ⌘Z brings everything back.
+
+**Languages.** The interface is in 15 languages. Bolt follows the system language, and another one can be picked in Settings → General. Russian was written by hand; the other 13 were translated by Claude Haiku with `scripts/translate.py` and may read awkwardly in places.
 
 ## Keys
 

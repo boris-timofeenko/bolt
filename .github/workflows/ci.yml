@@ -15,4 +15,4 @@ jobs:
       - name: App bundle
         run: scripts/build-app.sh release
       - name: Translations are complete
-        run: scripts/check-strings.py ru
+        run: scripts/check-strings.py

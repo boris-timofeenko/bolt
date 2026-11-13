@@ -23,6 +23,9 @@ private final class SettingsModel {
     var editorName = Preferences.externalEditor.map(FileManager.default.applicationName) ?? "—"
     var defaultViewerMessage: String?
     var buckets: [URL?] = (1...9).map(Preferences.bucket)
+    var language = InterfaceLanguage.chosen {
+        didSet { InterfaceLanguage.chosen = language }
+    }
 }
 
 private struct KeyRow: View {
@@ -136,6 +139,23 @@ private struct GeneralSettings: View {
 
     var body: some View {
         Form {
+            LabeledContent(L("Language:")) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Picker("", selection: Binding(get: { model.language }, set: { model.language = $0 })) {
+                        Text(L("Same as System")).tag("")
+                        Divider()
+                        ForEach(InterfaceLanguage.available, id: \.self) { Text(InterfaceLanguage.name($0)).tag($0) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                    if model.language != InterfaceLanguage.atLaunch {
+                        HStack {
+                            Text(L("Takes effect after a restart.")).font(.caption).foregroundStyle(.secondary)
+                            Button(L("Restart Now"), action: InterfaceLanguage.restart).controlSize(.small)
+                        }
+                    }
+                }
+            }
             Picker(L("Background:"), selection: $background) {
                 ForEach(CanvasBackground.allCases, id: \.rawValue) { Text($0.title).tag($0.rawValue) }
             }

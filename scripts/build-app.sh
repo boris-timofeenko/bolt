@@ -1,5 +1,6 @@
 #!/bin/bash
 # Builds Bolt.app into ./build. Usage: scripts/build-app.sh [debug|release]
+# ARCH=x86_64 builds for Intel Macs (arm64 by default).
 #
 # Signs ad hoc. For distribution, set SIGN_IDENTITY to a Developer ID and notarize the result:
 #   SIGN_IDENTITY="Developer ID Application: …" scripts/build-app.sh release
@@ -7,8 +8,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CONFIG="${1:-release}"
-swift build -c "$CONFIG" --arch arm64
-BIN_DIR="$(swift build -c "$CONFIG" --arch arm64 --show-bin-path)"
+ARCH="${ARCH:-arm64}"
+swift build -c "$CONFIG" --arch "$ARCH"
+BIN_DIR="$(swift build -c "$CONFIG" --arch "$ARCH" --show-bin-path)"
 BIN="$BIN_DIR/Bolt"
 
 APP=build/Bolt.app

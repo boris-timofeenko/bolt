@@ -317,3 +317,7 @@
 "Sorted into date folders" = "Разложено по папкам с датами";
 "Sort into Date Folders" = "Разложить по папкам с датами";
 "%d bit" = "%d бит";
+"Language:" = "Язык:";
+"Same as System" = "Как в системе";
+"Takes effect after a restart." = "Сменится после перезапуска.";
+"Restart Now" = "Перезапустить";
