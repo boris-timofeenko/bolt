@@ -37,6 +37,8 @@ if [ "${1:-}" = --local ]; then
 fi
 
 cp App/embedded.provisionprofile "$APP/Contents/embedded.provisionprofile"
+# A profile downloaded in a browser carries com.apple.quarantine, which the App Store rejects (error 91109).
+xattr -cr "$APP"
 codesign --force --sign "${SIGN_IDENTITY:-Apple Distribution}" --entitlements App/AppStore.entitlements "$APP"
 productbuild --component "$APP" /Applications \
     --sign "${INSTALLER_IDENTITY:-3rd Party Mac Developer Installer}" "$OUT/Bolt.pkg"
