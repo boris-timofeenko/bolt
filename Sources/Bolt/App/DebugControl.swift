@@ -9,6 +9,7 @@ import BoltCore
 ///   snapshot /path/out.png                                  — renders the front viewer window
 ///   state /path/out.json                                    — writes what the viewer shows
 ///   open /path                                              — opens a photo or folder
+///   size 1440 900                                           — sets the front window's frame size (store screenshots)
 ///   bench 200 120 /path/out.json                             — steps forward N times, one step per M ms,
 ///                                                              and records how long each step took
 ///   taps 100 150 /path/out.json [pgdn] [turn=20] [back]      — separate presses, one per M ms; per press: how long
@@ -52,8 +53,18 @@ final class DebugControl {
         case "first": ScrollBench.startFirstPress(argument, in: controller)
         case "convert": convertAll(to: URL(fileURLWithPath: argument))
         case "command": runCommand(argument)
+        case "size": resize(argument)
         default: break
         }
+    }
+
+    private func resize(_ argument: String) {
+        let numbers = argument.split(separator: " ").compactMap { Double($0) }
+        guard numbers.count == 2, let window = controller?.window else { return }
+        var frame = window.frame
+        frame.origin.y += frame.height - numbers[1]
+        frame.size = NSSize(width: numbers[0], height: numbers[1])
+        window.setFrame(frame, display: true)
     }
 
     private var controller: ViewerWindowController? {
