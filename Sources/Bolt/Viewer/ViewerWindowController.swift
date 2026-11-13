@@ -137,7 +137,18 @@ final class ViewerWindowController: NSWindowController, NSWindowDelegate {
         }
         direction = 1
         displayCurrent()
-        scanFolder(folder, focus: focus)
+        if FolderAccess.canRead(folder) {
+            if isFolder { FolderAccess.remember(folder) }
+            scanFolder(folder, focus: focus)
+        } else {
+            // App Store build: a photo from Finder came without its folder. Ask once the photo is on screen.
+            DispatchQueue.main.async { [weak self] in
+                FolderAccess.request(folder, in: self?.visibleWindow) { granted in
+                    guard granted, let self, self.gallery.folder == folder else { return }
+                    self.scanFolder(folder, focus: focus)
+                }
+            }
+        }
         NSDocumentController.shared.noteNewRecentDocumentURL(url)
     }
 

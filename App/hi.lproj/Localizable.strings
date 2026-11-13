@@ -19,6 +19,7 @@
 "After copying:" = "कॉपी करने के बाद:";
 "All Commands" = "सभी कमांड";
 "All Photos" = "सभी फ़ोटो";
+"Allow" = "अनुमति दें";
 "Aperture" = "एपर्चर";
 "Back 10" = "10 पीछे";
 "Background" = "पृष्ठभूमि";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "इस प्रारूप को री-एन्कोड किए बिना नहीं घुमाया जा सकता।";
 "Thumbnail Grid" = "थंबनेल ग्रिड";
 "Thumbnail Strip" = "थंबनेल पट्टी";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "“%@” में बाकी फ़ोटो दिखाने के लिए Bolt को इस फ़ोल्डर तक पहुँच चाहिए। अगर आप इसके ऊपर का कोई फ़ोल्डर, जैसे आपका होम फ़ोल्डर, अनुमति देते हैं, तो Bolt उसके अंदर के फ़ोल्डरों के बारे में दोबारा नहीं पूछेगा।";
 "Type a command" = "कमांड का नाम लिखें";
 "Undo" = "वापस लें";
 "Undo %@" = "%@ वापस लें";

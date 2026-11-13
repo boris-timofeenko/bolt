@@ -19,6 +19,7 @@
 "After copying:" = "بعد النسخ:";
 "All Commands" = "كل الأوامر";
 "All Photos" = "كل الصور";
+"Allow" = "السماح";
 "Aperture" = "فتحة العدسة";
 "Back 10" = "10 للخلف";
 "Background" = "الخلفية";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "لا يمكن تدوير هذا التنسيق دون إعادة ترميز.";
 "Thumbnail Grid" = "شبكة المصغّرات";
 "Thumbnail Strip" = "شريط المصغّرات";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "لعرض الصور الأخرى في “%@”، يحتاج Bolt إلى الوصول إلى المجلد. إذا سمحت بالوصول إلى مجلد أعلى منه، مثل مجلد الصفحة الرئيسية، فلن يسأل Bolt مرة أخرى عن المجلدات الموجودة داخله.";
 "Type a command" = "اكتب اسم الأمر";
 "Undo" = "التراجع";
 "Undo %@" = "التراجع عن %@";

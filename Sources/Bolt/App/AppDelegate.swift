@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
     func applicationWillFinishLaunching(_ notification: Notification) {
         LaunchTimeline.mark("will finish launching")
         Preferences.registerDefaults()
+        FolderAccess.restore()
         session.onKeyMapChange = { [weak self] in self?.rebuildMenu() }
     }
 

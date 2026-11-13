@@ -19,6 +19,7 @@
 "After copying:" = "Depois de copiar:";
 "All Commands" = "Todos os comandos";
 "All Photos" = "Todas as fotos";
+"Allow" = "Permitir";
 "Aperture" = "Abertura";
 "Back 10" = "Voltar 10";
 "Background" = "Fundo";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "Este formato não pode ser girado sem recodificação.";
 "Thumbnail Grid" = "Grade de miniaturas";
 "Thumbnail Strip" = "Faixa de miniaturas";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Para mostrar as outras fotos em “%@”, o Bolt precisa de acesso à pasta. Se você permitir uma pasta acima dela, como a pasta pessoal, o Bolt não vai perguntar de novo sobre as pastas dentro dela.";
 "Type a command" = "Digite o nome do comando";
 "Undo" = "Desfazer";
 "Undo %@" = "Desfazer %@";

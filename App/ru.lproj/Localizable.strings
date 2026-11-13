@@ -321,3 +321,5 @@
 "Same as System" = "Как в системе";
 "Takes effect after a restart." = "Сменится после перезапуска.";
 "Restart Now" = "Перезапустить";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Чтобы показать остальные фото из «%@», Bolt нужен доступ к папке. Если разрешить папку выше, например домашнюю, Bolt больше не спросит про папки внутри неё.";
+"Allow" = "Разрешить";

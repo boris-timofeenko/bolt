@@ -19,6 +19,7 @@
 "After copying:" = "Kopyalandıktan sonra:";
 "All Commands" = "Tüm Komutlar";
 "All Photos" = "Tüm Fotoğraflar";
+"Allow" = "İzin Ver";
 "Aperture" = "Diyafram";
 "Back 10" = "10 geri";
 "Background" = "Arka plan";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "Bu biçim yeniden kodlanmadan döndürülemez.";
 "Thumbnail Grid" = "Küçük Resim Izgarası";
 "Thumbnail Strip" = "Küçük Resim Şeridi";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "“%@” içindeki diğer fotoğrafları göstermek için Bolt’un bu klasöre erişmesi gerekiyor. Ana klasör gibi bunun üst klasörüne izin verirseniz, Bolt içindeki klasörler için bir daha sormaz.";
 "Type a command" = "Komut yazın";
 "Undo" = "Geri Al";
 "Undo %@" = "%@ geri al";

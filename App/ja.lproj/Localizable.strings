@@ -19,6 +19,7 @@
 "After copying:" = "コピー後:";
 "All Commands" = "すべてのコマンド";
 "All Photos" = "すべての写真";
+"Allow" = "許可";
 "Aperture" = "絞り";
 "Back 10" = "10 枚戻る";
 "Background" = "背景";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "この形式は再エンコードせずに回転できません。";
 "Thumbnail Grid" = "サムネイルのグリッド";
 "Thumbnail Strip" = "サムネイルのストリップ";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "「%@」内の他の写真を表示するには、Bolt がこのフォルダへのアクセスを必要とします。ホームフォルダなど上位のフォルダを許可すると、その中のフォルダについて Bolt は今後確認しなくなります。";
 "Type a command" = "コマンド名を入力";
 "Undo" = "取り消す";
 "Undo %@" = "%@を取り消す";

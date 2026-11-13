@@ -19,6 +19,7 @@
 "After copying:" = "拷贝后：";
 "All Commands" = "所有命令";
 "All Photos" = "所有照片";
+"Allow" = "允许";
 "Aperture" = "光圈";
 "Back 10" = "后退 10";
 "Background" = "背景";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "此格式无法在不重新编码的情况下旋转。";
 "Thumbnail Grid" = "缩略图网格";
 "Thumbnail Strip" = "缩略图条";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "要显示“%@”中的其他照片，Bolt 需要访问该文件夹。如果你允许访问上级文件夹，例如主文件夹，Bolt 以后就不会再询问其中的文件夹。";
 "Type a command" = "输入命令名称";
 "Undo" = "撤销";
 "Undo %@" = "撤销%@";

@@ -145,6 +145,7 @@ extension ViewerWindowController {
         panel.prompt = L("Choose")
         panel.beginSheetModal(for: window) { response in
             guard response == .OK, let url = panel.url else { return }
+            FolderAccess.remember(url)
             action(url)
         }
     }

@@ -47,7 +47,8 @@ enum Format {
 
     /// "~/Pictures/Trip" instead of "/Users/name/Pictures/Trip".
     static func path(_ url: URL) -> String {
-        (url.path as NSString).abbreviatingWithTildeInPath
+        let home = FolderAccess.home.path
+        return url.path == home || url.path.hasPrefix(home + "/") ? "~" + url.path.dropFirst(home.count) : url.path
     }
 
     static func exposure(_ seconds: Double) -> String {

@@ -61,8 +61,11 @@ enum FolderPicker {
 
     /// "Picks" goes next to the photo; "~/Pictures/Picks" or "/Volumes/Card/Picks" go where they say.
     static func newFolderURL(for text: String, base: URL?) -> URL? {
-        if text.hasPrefix("/") || text.hasPrefix("~") {
-            return URL(fileURLWithPath: (text as NSString).expandingTildeInPath, isDirectory: true)
+        if text.hasPrefix("~") {
+            return FolderAccess.home.appendingPathComponent(String(text.dropFirst()), isDirectory: true)
+        }
+        if text.hasPrefix("/") {
+            return URL(fileURLWithPath: text, isDirectory: true)
         }
         return base?.appendingPathComponent(text, isDirectory: true)
     }

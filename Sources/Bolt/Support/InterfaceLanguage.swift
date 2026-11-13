@@ -30,14 +30,13 @@ enum InterfaceLanguage {
         return locale.localizedString(forIdentifier: code)?.capitalized(with: locale) ?? code
     }
 
-    /// Quits and opens Bolt again once this process is gone.
+    /// Starts a second copy of Bolt and quits this one. Works in the App Sandbox, unlike a shell script.
     static func restart() {
-        let relaunch = Process()
-        relaunch.executableURL = URL(fileURLWithPath: "/bin/sh")
-        relaunch.arguments = ["-c", "while kill -0 $1 2>/dev/null; do sleep 0.1; done; open \"$0\"",
-                              Bundle.main.bundlePath, "\(ProcessInfo.processInfo.processIdentifier)"]
-        try? relaunch.run()
-        NSApp.terminate(nil)
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.createsNewApplicationInstance = true
+        NSWorkspace.shared.openApplication(at: Bundle.main.bundleURL, configuration: configuration) { _, _ in
+            DispatchQueue.main.async { NSApp.terminate(nil) }
+        }
     }
 
     /// UserDefaults.standard would also return the system-wide list.

@@ -19,6 +19,7 @@
 "After copying:" = "Після копіювання:";
 "All Commands" = "Усі команди";
 "All Photos" = "Усі фото";
+"Allow" = "Дозволити";
 "Aperture" = "Діафрагма";
 "Back 10" = "На 10 назад";
 "Background" = "Фон";
@@ -261,6 +262,7 @@
 "This format can't be rotated without re-encoding." = "Цей формат не можна повернути без перекодування.";
 "Thumbnail Grid" = "Сітка мініатюр";
 "Thumbnail Strip" = "Стрічка мініатюр";
+"To show the other photos in “%@”, Bolt needs access to the folder. If you allow a folder above it, such as your home folder, Bolt won't ask about the folders inside it again." = "Щоб показати інші фото з «%@», Bolt потрібен доступ до папки. Якщо дозволити доступ до папки вище, наприклад до домашньої, Bolt більше не питатиме про папки всередині неї.";
 "Type a command" = "Назва команди";
 "Undo" = "Відмінити";
 "Undo %@" = "Відмінити %@";

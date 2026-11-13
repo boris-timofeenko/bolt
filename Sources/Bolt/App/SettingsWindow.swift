@@ -253,6 +253,7 @@ private struct FolderSettings: View {
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         guard panel.runModal() == .OK, let url = panel.url else { return }
+        FolderAccess.remember(url)
         set(number, url)
     }
 
